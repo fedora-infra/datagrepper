@@ -1,0 +1,1 @@
+DATAGREPPER_CONFIG=../development.cfg python createdb.py

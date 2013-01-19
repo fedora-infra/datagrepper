@@ -1,0 +1,7 @@
+#!/bin/bash
+which ipython > /dev/null 2>&1
+if [ "$?" == "0" ]; then
+	FEDORA_ELECTIONS_CONFIG=../development.cfg ipython
+else
+	FEDORA_ELECTIONS_CONFIG=../development.cfg python
+fi
