@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Log in{% endblock %}
+{% block body %}
+<h2>Log in</h2>
+<form action="" method="post">
+  {% if error %}<p class="error"><strong>Error:</strong> {{ error }}</p>{% endif %}
+  OpenID:
+  <input type="text" name="openid" size="30">
+  <input type="submit" value="Log in">
+  <input type="hidden" name="next" value="{{ next }}">
+</form>
+{% endblock %}
+{# vim: set ts=2 sw=2 sta et: #}
