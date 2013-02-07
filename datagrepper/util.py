@@ -1,6 +1,9 @@
 import flask
 
+import hashlib
+import random
 import simplejson
+import time
 
 
 # http://flask.pocoo.org/snippets/45/
@@ -14,3 +17,9 @@ def request_wants_json():
 
 def json_return(data):
     return flask.Response(simplejson.dumps(data), mimetype='application/json')
+
+
+def generate_api_key():
+    rand = str(random.getrandbits(256))
+    timestamp = str(int(time.time() * 1000))
+    return hashlib.sha224(rand + timestamp).hexdigest()
