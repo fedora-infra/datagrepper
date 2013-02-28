@@ -15,7 +15,7 @@ oid = OpenID(app, app.config['OPENID_STORE'])
 # set up SQLAlchemy
 db = SQLAlchemy(app)
 
-from datagrepper import util
+from datagrepper import forms, util
 from datagrepper.models import User, Job
 
 
@@ -119,7 +119,37 @@ def logout():
 # Edit user information (reset API key, change email)
 @app.route('/user', methods=('GET', 'POST'))
 def user():
-    pass
+    infoform = forms.InformationForm(email=flask.g.user.email)
+    apiform = forms.NullForm()
+    form = None
+
+    if flask.request.method == 'POST':
+        if 'formname' in flask.request.form:
+            if flask.request.form['formname'] == 'infoform':
+                form = infoform
+            elif flask.request.form['formname'] == 'apiform':
+                form = apiform
+
+    if form:
+        if form.validate_on_submit():
+            if form == infoform:
+                flask.g.user.email = form.email.data
+                db.session.add(flask.g.user)
+                db.session.commit()
+                flask.flash(u'Your information was successfully changed')
+            elif form == apiform:
+                # generate API key
+                while True:
+                    apikey = util.generate_api_key()
+                    if User.query.filter_by(apikey=apikey).first() is None:
+                        break
+                flask.g.user.apikey = apikey
+                db.session.add(flask.g.user)
+                db.session.commit()
+                flask.flash(u'Your API key was successfully reset')
+
+    return flask.render_template('user.html', resp=start_resp_object(),
+                                 infoform=infoform, apiform=apiform)
 
 
 # Instant requests

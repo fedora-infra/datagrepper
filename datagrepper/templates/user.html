@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}User settings{% endblock %}
+{% block body %}
+
+<h2>User settings</h2>
+
+<h3>Your information</h3>
+<form action="" method="post">
+  {{ infoform.csrf_token }}
+  <input type="hidden" name="formname" value="infoform">
+  {{ infoform.email.label }} {{ infoform.email(size=32) }}
+  <input type="submit" value="Save">
+</form>
+
+<h3>API key</h3>
+<p>Your current API key is: <code>{{ g.user.apikey }}</code></p>
+<p>You can change your API key by clicking the button below. <strong>This cannot be undone!</strong></p>
+<form action="" method="post">
+  {{ apiform.csrf_token }}
+  <input type="hidden" name="formname" value="apiform">
+  <input type="submit" value="Reset API key">
+</form>
+
+{% endblock %}
+{# vim: set ts=2 sw=2 sta et: #}

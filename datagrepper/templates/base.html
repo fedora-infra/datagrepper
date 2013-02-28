@@ -5,6 +5,15 @@
   </head>
   <body>
     <h1>datagrepper</h1>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    {% endwith %}
     {% if resp.user %}
     <p>Logged in as {{ resp.user }} &mdash; <a href="{{ url_for('logout') }}">Log out</a></p>
     {% else %}
