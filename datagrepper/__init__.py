@@ -34,11 +34,12 @@ fedmsg_config = fedmsg.config.load_config()
 import datanommer.models as dm
 dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
 
+
 # Verify that the user is logged in. We check for an API key first, then for an
 # 'openid' key in the session cookie.
 #
-# If a user submits both an apikey and an openid (which is unsupported), a valid
-# openid will override a valid apikey.
+# If a user submits both an apikey and an openid (which is unsupported), a
+# valid openid will override a valid apikey.
 @app.before_request
 def lookup_current_user():
     flask.g.user = None
@@ -52,7 +53,8 @@ def lookup_current_user():
         flask.g.user = User.query.filter_by(apikey=apikey).first()
     # Look for 'openid' in encrypted session cookie
     if 'openid' in flask.session:
-        flask.g.user = User.query.filter_by(openid=flask.session['openid']).first()
+        flask.g.user = User.query.\
+            filter_by(openid=flask.session['openid']).first()
 
 
 @oid.after_login
@@ -179,8 +181,10 @@ def raw():
     now = datetime_to_seconds(datetime.now())
     end = datetime.fromtimestamp(
         float(flask.request.args.get('end', now)))
-    delta = timedelta(seconds=
-        float(flask.request.args.get('delta', 600)))
+
+    delta = timedelta(
+        seconds=float(flask.request.args.get('delta', 600)))
+
     then = datetime_to_seconds(end - delta)
     start = datetime.fromtimestamp(
         float(flask.request.args.get('start', then))
@@ -192,7 +196,7 @@ def raw():
     categories = flask.request.args.getlist('category')
     topics = flask.request.args.getlist('topic')
 
-    arguments=dict(
+    arguments = dict(
         start=datetime_to_seconds(start),
         delta=delta.total_seconds(),
         end=datetime_to_seconds(end),
@@ -217,16 +221,16 @@ def raw():
         #   (user=='ralph' OR user=='lmacken') AND
         #   (category=='bodhi' OR category=='wiki')
         query = query.filter(or_(
-            *[dm.Message.users.any(dm.User.name==u) for u in users]
+            *[dm.Message.users.any(dm.User.name == u) for u in users]
         ))
         query = query.filter(or_(
-            *[dm.Message.packages.any(dm.Package.name==p) for p in packages]
+            *[dm.Message.packages.any(dm.Package.name == p) for p in packages]
         ))
         query = query.filter(or_(
-            *[dm.Message.category==category for category in categories]
+            *[dm.Message.category == category for category in categories]
         ))
         query = query.filter(or_(
-            *[dm.Message.topic==topic for topic in topics]
+            *[dm.Message.topic == topic for topic in topics]
         ))
 
         # Execute!
