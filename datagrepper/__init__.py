@@ -1,7 +1,7 @@
 import flask
 from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy import and_, between
+from sqlalchemy import and_, or_, between
 
 import time
 from datetime import (
@@ -186,11 +186,11 @@ def raw():
         float(flask.request.args.get('start', then))
     )
 
-    # Currently unimplemented
-    users = []
-    packages = []
-    categories = []
-    topics = []
+    # Further filters, all ANDed together in CNF style.
+    users = flask.request.args.getlist('user')
+    packages = flask.request.args.getlist('package')
+    categories = flask.request.args.getlist('category')
+    topics = flask.request.args.getlist('topic')
 
     arguments=dict(
         start=datetime_to_seconds(start),
@@ -203,9 +203,34 @@ def raw():
     )
 
     try:
-        messages = dm.Message.query\
-            .filter(between(dm.Message.timestamp, start, end))\
-            .all()
+        query = dm.Message.query
+
+        # All queries have a time range applied to them
+        query = query.filter(between(dm.Message.timestamp, start, end))
+
+        # Apply other filters in a conjunctive-normal-form (CNF) kind of way.
+        #
+        # For example, the following::
+        #   users = ['ralph', 'lmacken']
+        #   categories = ['bodhi', 'wiki']
+        # should return messages where
+        #   (user=='ralph' OR user=='lmacken') AND
+        #   (category=='bodhi' OR category=='wiki')
+        query = query.filter(or_(
+            *[dm.Message.users.any(dm.User.name==u) for u in users]
+        ))
+        query = query.filter(or_(
+            *[dm.Message.packages.any(dm.Package.name==p) for p in packages]
+        ))
+        query = query.filter(or_(
+            *[dm.Message.category==category for category in categories]
+        ))
+        query = query.filter(or_(
+            *[dm.Message.topic==topic for topic in topics]
+        ))
+
+        # Execute!
+        messages = query.all()
 
         output = dict(
             raw_messages=messages,
