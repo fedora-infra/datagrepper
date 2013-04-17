@@ -1,0 +1,4 @@
+flask
+Flask-OpenID
+Flask-SQLAlchemy
+Flask-WTF
