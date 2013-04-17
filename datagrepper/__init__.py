@@ -3,6 +3,7 @@ from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy import and_, or_, between
 
+import math
 import time
 from datetime import (
     datetime,
@@ -196,6 +197,10 @@ def raw():
     categories = flask.request.args.getlist('category')
     topics = flask.request.args.getlist('topic')
 
+    # Paging arguments
+    page = int(flask.request.args.get('page', 1))
+    rows_per_page = int(flask.request.args.get('rows_per_page', 20))
+
     arguments = dict(
         start=datetime_to_seconds(start),
         delta=delta.total_seconds(),
@@ -204,7 +209,15 @@ def raw():
         packages=packages,
         categories=categories,
         topics=topics,
+        page=page,
+        rows_per_page=rows_per_page,
     )
+
+    if page < 1:
+        raise ValueError("page must be > 0")
+
+    if rows_per_page > 100:
+        raise valueError("rows_per_page must be <= 100")
 
     try:
         query = dm.Message.query
@@ -233,11 +246,20 @@ def raw():
             *[dm.Message.topic == topic for topic in topics]
         ))
 
+        total = query.count()
+        pages = int(math.ceil(total / float(rows_per_page)))
+
+        query = query.order_by(dm.Message.timestamp)
+
+        query = query.offset(rows_per_page * (page - 1)).limit(rows_per_page)
+
         # Execute!
         messages = query.all()
 
         output = dict(
             raw_messages=messages,
+            total=total,
+            pages=pages,
             count=len(messages),
             arguments=arguments,
         )
