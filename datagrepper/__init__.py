@@ -10,6 +10,9 @@ from datetime import (
 )
 import traceback
 
+import fedmsg.config
+import datanommer.models as dm
+
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
 app.config.from_envvar('DATAGREPPER_CONFIG')
@@ -20,12 +23,10 @@ app.secret_key = app.config['SECRET_KEY']
 # This loads all the openid/user management stuff which is a work in progress.
 #import datagrepper.users
 
-import fedmsg.config
 # Read in the datanommer DB URL from /etc/fedmsg.d/ (or a local fedmsg.d/)
 fedmsg_config = fedmsg.config.load_config()
 
 # Initialize a datanommer session.
-import datanommer.models as dm
 dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
 
 
