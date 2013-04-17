@@ -10,7 +10,7 @@ To install it on Fedora run ``$ sudo yum -y install httpie``.
 
 If you get stuck here, feel free to drop into the ``#fedora-apps``
 channel on `freenode <http://fedoraproject.org/wiki/How_to_use_IRC>`_ to
-ask questions or give us a high five if everything goes well.
+ask questions or even just to give us a high five if everything goes well.
 
 Requesting all messages in the last 2 days
 ------------------------------------------
