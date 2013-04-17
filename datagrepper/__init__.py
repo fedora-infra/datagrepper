@@ -8,6 +8,7 @@ from datetime import (
     datetime,
     timedelta,
 )
+import traceback
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -217,6 +218,11 @@ def raw():
             error=str(e),
             arguments=arguments,
         )
+
+        # :D
+        if app.config.get('DEBUG', False):
+            output['tb'] = traceback.format_exc().split('\n')
+
         status = "500 error"
 
     body = fedmsg.encoding.dumps(output)
