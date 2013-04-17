@@ -1,6 +1,13 @@
 import flask
 from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy import and_, between
+
+import time
+from datetime import (
+    datetime,
+    timedelta,
+)
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -18,6 +25,13 @@ db = SQLAlchemy(app)
 from datagrepper import forms, util
 from datagrepper.models import User, Job
 
+import fedmsg.config
+# Read in the datanommer DB URL from /etc/fedmsg.d/ (or a local fedmsg.d/)
+fedmsg_config = fedmsg.config.load_config()
+
+# Initialize a datanommer session.
+import datanommer.models as dm
+dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
 
 # Verify that the user is logged in. We check for an API key first, then for an
 # 'openid' key in the session cookie.
@@ -152,10 +166,65 @@ def user():
                                  infoform=infoform, apiform=apiform)
 
 
+def datetime_to_seconds(dt):
+    """ Name this, just because its confusing. """
+    return time.mktime(dt.timetuple())
+
+
 # Instant requests
-@app.route('/raw')
+@app.route('/raw/')
 def raw():
-    pass
+    # Complicated combination of default start, end, delta arguments.
+    now = datetime_to_seconds(datetime.now())
+    end = datetime.fromtimestamp(
+        float(flask.request.args.get('end', now)))
+    delta = timedelta(seconds=
+        float(flask.request.args.get('delta', 600)))
+    then = datetime_to_seconds(end - delta)
+    start = datetime.fromtimestamp(
+        float(flask.request.args.get('start', then))
+    )
+
+    # Currently unimplemented
+    users = []
+    packages = []
+    categories = []
+    topics = []
+
+    arguments=dict(
+        start=datetime_to_seconds(start),
+        delta=delta.total_seconds(),
+        end=datetime_to_seconds(end),
+        users=users,
+        packages=packages,
+        categories=categories,
+        topics=topics,
+    )
+
+    try:
+        messages = dm.Message.query\
+            .filter(between(dm.Message.timestamp, start, end))\
+            .all()
+
+        output = dict(
+            raw_messages=messages,
+            count=len(messages),
+            arguments=arguments,
+        )
+        status = "200 OK"
+    except Exception as e:
+        output = dict(
+            error=str(e),
+            arguments=arguments,
+        )
+        status = "500 error"
+
+    body = fedmsg.encoding.dumps(output)
+    return flask.Response(
+        response=body,
+        status=status,
+        mimetype='application/json',
+    )
 
 
 # Add a request job to the queue
