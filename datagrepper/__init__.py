@@ -2,7 +2,11 @@ import flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy import and_, or_, between
 
+import codecs
+import docutils.examples
 import math
+import markupsafe
+import os
 import time
 from datetime import (
     datetime,
@@ -30,9 +34,41 @@ fedmsg_config = fedmsg.config.load_config()
 dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
 
 
+def load_docs():
+    """ Utility to load API.rst and turn it into fancy HTML. """
+
+    here = os.path.dirname(os.path.abspath(__file__))
+    fname = here + '/API.rst'
+    with codecs.open(fname, 'r', 'utf-8') as f:
+        rst = f.read()
+
+    api_docs = docutils.examples.html_body(rst)
+
+    # Some style substitutions where docutils doesn't quite do what we want.
+    substitutions = {
+        '<tt class="docutils literal">': '<code>',
+        '</tt>': '</code>',
+        '<h1>': '<h3>',
+        '</h1>': '</h3>',
+    }
+
+    for old, new in substitutions.items():
+        api_docs = api_docs.replace(old, new)
+
+    api_docs = markupsafe.Markup(api_docs)
+    return api_docs
+
+api_docs = load_docs()
+
+
 def datetime_to_seconds(dt):
     """ Name this, just because its confusing. """
     return time.mktime(dt.timetuple())
+
+
+@app.route('/')
+def index():
+    return flask.render_template('index.html', api_documentation=api_docs)
 
 
 # Instant requests

@@ -5,3 +5,4 @@ Flask-WTF
 kitchen
 datanommer.models
 fedmsg
+docutils
