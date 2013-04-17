@@ -2,7 +2,7 @@ import flask
 
 import hashlib
 import random
-import simplejson
+import json
 import time
 
 
@@ -16,7 +16,7 @@ def request_wants_json():
 
 
 def json_return(data):
-    return flask.Response(simplejson.dumps(data), mimetype='application/json')
+    return flask.Response(json.dumps(data), mimetype='application/json')
 
 
 def generate_api_key():

@@ -1,7 +1,7 @@
 from datagrepper import app, db
 
 from datetime import datetime
-import simplejson
+import json
 
 STATUS_FREE = 0
 STATUS_OPEN = 1
@@ -34,8 +34,8 @@ class Job(db.Model):
 
     @property
     def query(self):
-        return simplejson.loads(self.query_json)
+        return json.loads(self.query_json)
 
     @query.setter
     def set_query(self, value):
-        self.query_json = simplejson.dumps(value)
+        self.query_json = json.dumps(value)
