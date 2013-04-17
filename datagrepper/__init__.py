@@ -4,6 +4,7 @@ from sqlalchemy import and_, or_, between
 
 import codecs
 import docutils.examples
+import jinja2
 import math
 import markupsafe
 import os
@@ -42,7 +43,11 @@ def load_docs():
     with codecs.open(fname, 'r', 'utf-8') as f:
         rst = f.read()
 
+    # TODO -- pull this from the flask config
+    URL = "api.fedoraproject.org/datagrepper"
+
     api_docs = docutils.examples.html_body(rst)
+    api_docs = jinja2.Template(api_docs).render(URL=URL)
 
     # Some style substitutions where docutils doesn't quite do what we want.
     substitutions = {
