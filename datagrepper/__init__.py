@@ -1,11 +1,9 @@
 import flask
 from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy import and_, or_, between
 
 import codecs
 import docutils.examples
 import jinja2
-import math
 import markupsafe
 import os
 import time
@@ -123,41 +121,17 @@ def raw():
         raise valueError("rows_per_page must be <= 100")
 
     try:
-        query = dm.Message.query
-
-        # All queries have a time range applied to them
-        query = query.filter(between(dm.Message.timestamp, start, end))
-
-        # Apply other filters in a conjunctive-normal-form (CNF) kind of way.
-        #
-        # For example, the following::
-        #   users = ['ralph', 'lmacken']
-        #   categories = ['bodhi', 'wiki']
-        # should return messages where
-        #   (user=='ralph' OR user=='lmacken') AND
-        #   (category=='bodhi' OR category=='wiki')
-        query = query.filter(or_(
-            *[dm.Message.users.any(dm.User.name == u) for u in users]
-        ))
-        query = query.filter(or_(
-            *[dm.Message.packages.any(dm.Package.name == p) for p in packages]
-        ))
-        query = query.filter(or_(
-            *[dm.Message.category == category for category in categories]
-        ))
-        query = query.filter(or_(
-            *[dm.Message.topic == topic for topic in topics]
-        ))
-
-        total = query.count()
-        pages = int(math.ceil(total / float(rows_per_page)))
-
-        query = query.order_by(dm.Message.timestamp)
-
-        query = query.offset(rows_per_page * (page - 1)).limit(rows_per_page)
-
-        # Execute!
-        messages = query.all()
+        # This fancy classmethod does all of our search for us.
+        total, pages, messages = dm.Message.grep(
+            start=start,
+            end=end,
+            page=page,
+            rows_per_page=rows_per_page,
+            users=users,
+            packages=packages,
+            categories=categories,
+            topics=topics,
+        )
 
         output = dict(
             raw_messages=messages,
