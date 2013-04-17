@@ -37,6 +37,8 @@ def datetime_to_seconds(dt):
 # Instant requests
 @app.route('/raw/')
 def raw():
+    """ Main API entry point. """
+
     # Complicated combination of default start, end, delta arguments.
     now = datetime_to_seconds(datetime.now())
     end = datetime.fromtimestamp(
