@@ -1,1 +1,0 @@
-DATAGREPPER_CONFIG=../development.cfg python runserver.py
