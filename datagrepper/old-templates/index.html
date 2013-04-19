@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}datagrepper{% endblock %}
+{% block body %}
+
+{% if resp.user %}
+<h2>Latest jobs</h2>
+{% if resp.jobs|length %}
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Status</th>
+      <th>Request time</th>
+      <th>Start time</th>
+      <th>Complete time</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for job in resp.jobs %}
+    <tr>
+      <td>{{ job.id }}</td>
+      <td>{{ job.status }}</td>
+      <td>{{ job.request_time }}</td>
+      <td>{{ job.start_time }}</td>
+      <td>{{ job.complete_time }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>You have not submitted any jobs.</p>
+{% endif %}{# if resp.jobs #}
+{% endif %}{# if resp.user #}
+
+{% endblock %}
+{# vim: set ts=2 sw=2 sta et: #}
