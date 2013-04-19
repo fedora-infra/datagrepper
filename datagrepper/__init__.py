@@ -76,6 +76,7 @@ def index():
 
 # Instant requests
 @app.route('/raw/')
+@app.route('/raw')
 def raw():
     """ Main API entry point. """
 
@@ -162,6 +163,7 @@ def raw():
 
 
 # Add a request job to the queue
+@app.route('/submit/')
 @app.route('/submit')
 def submit():
     pass
