@@ -41,9 +41,9 @@ so you'll need a dump of the database.
    messed it up, you'll need to blow away the old databases with
    ``$ rm -rf /var/lib/pgsql``
 
-Install postgres::
+Install postgres (and fedmsg, while we're at it)::
 
-    $ sudo yum install -y postgresql-server
+    $ sudo yum install -y postgresql-server fedmsg
     $ sudo postgresql-setup initdb
 
 Make sure postgres is set to allow connections over tcp/ip using password
