@@ -1,36 +1,101 @@
-{% extends "base.html" %}
-{% block title %}datagrepper{% endblock %}
-{% block body %}
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Datagrepper</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-{% if resp.user %}
-<h2>Latest jobs</h2>
-{% if resp.jobs|length %}
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Status</th>
-      <th>Request time</th>
-      <th>Start time</th>
-      <th>Complete time</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for job in resp.jobs %}
-    <tr>
-      <td>{{ job.id }}</td>
-      <td>{{ job.status }}</td>
-      <td>{{ job.request_time }}</td>
-      <td>{{ job.start_time }}</td>
-      <td>{{ job.complete_time }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% else %}
-<p>You have not submitted any jobs.</p>
-{% endif %}{# if resp.jobs #}
-{% endif %}{# if resp.user #}
+    <!-- Le styles -->
+    <link href="static/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 40px;
+      }
 
-{% endblock %}
-{# vim: set ts=2 sw=2 sta et: #}
+      /* Custom container */
+      .container-narrow {
+        margin: 0 auto;
+        max-width: 700px;
+      }
+      .container-narrow > hr {
+        margin: 30px 0;
+      }
+
+      /* Main marketing message and sign up button */
+      .jumbotron {
+        margin: 60px 0;
+        text-align: center;
+      }
+      .jumbotron h1 {
+        font-size: 72px;
+        line-height: 1;
+      }
+      .jumbotron .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+      }
+
+      /* Supporting marketing content */
+      .marketing {
+        margin: 60px 0;
+      }
+      .marketing p + h4 {
+        margin-top: 28px;
+      }
+    </style>
+    <link href="static/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="static/favicon.png">
+  </head>
+
+  <body>
+
+    <div class="container-narrow">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a href="#">Docs</a></li>
+          <li><a href="https://github.com/fedora-infra/datagrepper">Source</a></li>
+          <li><a href="https://github.com/fedora-infra/datagrepper/issues">Issues</a></li>
+        </ul>
+        <h3 class="muted">datagrepper</h3>
+      </div>
+
+      <hr>
+
+      <div class="jumbotron">
+          <h1>JSON fedmsg API</h1>
+        <p class="lead">Using HTTP GET requests, you can query for all
+        kinds of historical data from the <a href="http://fedmsg.com">
+        fedmsg bus</a>:  events by username, by package, by message
+        source, by topic.. you name it.</p>
+      </div>
+
+      <hr>
+
+      <div class="row-fluid marketing">
+        <div class="span10 offset1">
+            {{api_documentation}}
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="footer">
+      </div>
+
+    </div> <!-- /container -->
+</body></html>

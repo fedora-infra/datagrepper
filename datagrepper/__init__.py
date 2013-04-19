@@ -1,6 +1,20 @@
 import flask
-from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
+
+import codecs
+import docutils.examples
+import jinja2
+import markupsafe
+import os
+import time
+from datetime import (
+    datetime,
+    timedelta,
+)
+import traceback
+
+import fedmsg.config
+import datanommer.models as dm
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -9,156 +23,147 @@ app.config.from_envvar('DATAGREPPER_CONFIG')
 # Set up session secret key
 app.secret_key = app.config['SECRET_KEY']
 
-# Set up OpenID
-oid = OpenID(app, app.config['OPENID_STORE'])
+# This loads all the openid/user management stuff which is a work in progress.
+#import datagrepper.users
 
-# set up SQLAlchemy
-db = SQLAlchemy(app)
+# Read in the datanommer DB URL from /etc/fedmsg.d/ (or a local fedmsg.d/)
+fedmsg_config = fedmsg.config.load_config()
 
-from datagrepper import forms, util
-from datagrepper.models import User, Job
-
-
-# Verify that the user is logged in. We check for an API key first, then for an
-# 'openid' key in the session cookie.
-#
-# If a user submits both an apikey and an openid (which is unsupported), a valid
-# openid will override a valid apikey.
-@app.before_request
-def lookup_current_user():
-    flask.g.user = None
-    # Look for 'apikey' in POST or GET
-    if flask.request.method == 'POST':
-        if 'apikey' in flask.request.form:
-            apikey = flask.request.form['apikey']
-            flask.g.user = User.query.filter_by(apikey=apikey).first()
-    if 'apikey' in flask.request.args:
-        apikey = flask.request.args['apikey']
-        flask.g.user = User.query.filter_by(apikey=apikey).first()
-    # Look for 'openid' in encrypted session cookie
-    if 'openid' in flask.session:
-        flask.g.user = User.query.filter_by(openid=flask.session['openid']).first()
+# Initialize a datanommer session.
+dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
 
 
-@oid.after_login
-def create_or_login(resp):
-    flask.session['openid'] = resp.identity_url
-    user = User.query.filter_by(openid=resp.identity_url).first()
-    if user is None:
-        # create new user object
-        user = User(openid=resp.identity_url, email=resp.email)
-        # generate API key
-        while True:
-            apikey = util.generate_api_key()
-            if User.query.filter_by(apikey=apikey).first() is None:
-                break
-        user.apikey = apikey
-        # commit user to database
-        db.session.add(user)
-        db.session.commit()
-    if user is not None:
-        flask.flash(u'You are now logged in')
-        flask.g.user = user
-    return flask.redirect(oid.get_next_url())
+def load_docs():
+    """ Utility to load API.rst and turn it into fancy HTML. """
+
+    here = os.path.dirname(os.path.abspath(__file__))
+    fname = here + '/API.rst'
+    with codecs.open(fname, 'r', 'utf-8') as f:
+        rst = f.read()
+
+    # TODO -- pull this from the flask config
+    URL = "api.fedoraproject.org/datagrepper"
+
+    api_docs = docutils.examples.html_body(rst)
+    api_docs = jinja2.Template(api_docs).render(URL=URL)
+
+    # Some style substitutions where docutils doesn't quite do what we want.
+    substitutions = {
+        '<tt class="docutils literal">': '<code>',
+        '</tt>': '</code>',
+        '<h1>': '<h3>',
+        '</h1>': '</h3>',
+    }
+
+    for old, new in substitutions.items():
+        api_docs = api_docs.replace(old, new)
+
+    api_docs = markupsafe.Markup(api_docs)
+    return api_docs
+
+api_docs = load_docs()
 
 
-def start_resp_object():
-    resp = {'user': None}
-    if flask.g.user:
-        resp['user'] = flask.g.user.openid
-    return resp
+def datetime_to_seconds(dt):
+    """ Name this, just because its confusing. """
+    return time.mktime(dt.timetuple())
 
 
-# Provide documentation of all topics from fedmsg.meta.
-# Also provide a list of current tasks owned by the user if logged in.
 @app.route('/')
-@app.route('/page/<int:page>')
-def index(page=1):
-    # TODO: integrate fedmsg.meta for automated documentation
-    resp = start_resp_object()
-    # show jobs
-    if flask.g.user:
-        jobs = flask.g.user.jobs
-        start = (page - 1) * 20
-        if start > jobs.count():
-            return flask.redirect(flask.url_for('index', page=1))
-        resp['jobs'] = flask.g.user.jobs.slice(start, start+20).all()
-        resp['jobs_count'] = jobs.count()
-        if start + 20 < jobs.count():
-            resp['jobs_continue'] = {'page': page + 1}
-    if util.request_wants_json():
-        return util.json_return(resp)
-    else:
-        return flask.render_template('index.html', resp=resp)
-
-
-# Log the user in + woo cookies
-# This is *not* called via the API
-@app.route('/login', methods=('GET', 'POST'))
-@oid.loginhandler
-def login():
-    if flask.g.user is not None:
-        return flask.redirect(oid.get_next_url())
-    if flask.request.method == 'POST':
-        openid = flask.request.form.get('openid')
-        if openid:
-            return oid.try_login(openid, ask_for=['email'])
-    return flask.render_template('login.html', next=oid.get_next_url(),
-                                 error=oid.fetch_error(),
-                                 resp=start_resp_object())
-
-
-# Log the user out
-@app.route('/logout')
-def logout():
-    flask.session.pop('openid', None)
-    flask.flash(u'You are now logged out')
-    return flask.redirect(oid.get_next_url())
-
-
-# Edit user information (reset API key, change email)
-@app.route('/user', methods=('GET', 'POST'))
-def user():
-    infoform = forms.InformationForm(email=flask.g.user.email)
-    apiform = forms.NullForm()
-    form = None
-
-    if flask.request.method == 'POST':
-        if 'formname' in flask.request.form:
-            if flask.request.form['formname'] == 'infoform':
-                form = infoform
-            elif flask.request.form['formname'] == 'apiform':
-                form = apiform
-
-    if form:
-        if form.validate_on_submit():
-            if form == infoform:
-                flask.g.user.email = form.email.data
-                db.session.add(flask.g.user)
-                db.session.commit()
-                flask.flash(u'Your information was successfully changed')
-            elif form == apiform:
-                # generate API key
-                while True:
-                    apikey = util.generate_api_key()
-                    if User.query.filter_by(apikey=apikey).first() is None:
-                        break
-                flask.g.user.apikey = apikey
-                db.session.add(flask.g.user)
-                db.session.commit()
-                flask.flash(u'Your API key was successfully reset')
-
-    return flask.render_template('user.html', resp=start_resp_object(),
-                                 infoform=infoform, apiform=apiform)
+def index():
+    return flask.render_template('index.html', api_documentation=api_docs)
 
 
 # Instant requests
+@app.route('/raw/')
 @app.route('/raw')
 def raw():
-    pass
+    """ Main API entry point. """
+
+    # Complicated combination of default start, end, delta arguments.
+    now = datetime_to_seconds(datetime.now())
+    end = datetime.fromtimestamp(
+        float(flask.request.args.get('end', now)))
+
+    delta = timedelta(
+        seconds=float(flask.request.args.get('delta', 600)))
+
+    then = datetime_to_seconds(end - delta)
+    start = datetime.fromtimestamp(
+        float(flask.request.args.get('start', then))
+    )
+
+    # Further filters, all ANDed together in CNF style.
+    users = flask.request.args.getlist('user')
+    packages = flask.request.args.getlist('package')
+    categories = flask.request.args.getlist('category')
+    topics = flask.request.args.getlist('topic')
+
+    # Paging arguments
+    page = int(flask.request.args.get('page', 1))
+    rows_per_page = int(flask.request.args.get('rows_per_page', 20))
+
+    arguments = dict(
+        start=datetime_to_seconds(start),
+        delta=delta.total_seconds(),
+        end=datetime_to_seconds(end),
+        users=users,
+        packages=packages,
+        categories=categories,
+        topics=topics,
+        page=page,
+        rows_per_page=rows_per_page,
+    )
+
+    if page < 1:
+        raise ValueError("page must be > 0")
+
+    if rows_per_page > 100:
+        raise valueError("rows_per_page must be <= 100")
+
+    try:
+        # This fancy classmethod does all of our search for us.
+        total, pages, messages = dm.Message.grep(
+            start=start,
+            end=end,
+            page=page,
+            rows_per_page=rows_per_page,
+            users=users,
+            packages=packages,
+            categories=categories,
+            topics=topics,
+        )
+
+        output = dict(
+            raw_messages=messages,
+            total=total,
+            pages=pages,
+            count=len(messages),
+            arguments=arguments,
+        )
+        status = "200 OK"
+    except Exception as e:
+        output = dict(
+            error=str(e),
+            arguments=arguments,
+        )
+
+        # :D
+        if app.config.get('DEBUG', False):
+            output['tb'] = traceback.format_exc().split('\n')
+
+        status = "500 error"
+
+    body = fedmsg.encoding.dumps(output)
+    return flask.Response(
+        response=body,
+        status=status,
+        mimetype='application/json',
+    )
 
 
 # Add a request job to the queue
-@app.route('/submit')
-def submit():
-    pass
+#@app.route('/submit/')
+#@app.route('/submit')
+#def submit():
+#    pass
