@@ -71,11 +71,11 @@ mv setup.py.tmp setup.py
 %{__python} setup.py install -O1 --skip-build \
     --install-data=%{_datadir} --root %{buildroot}
 
-%{__mkdir_p} %{buildroot}%{_datadir}/%{modname}/apache
-%{__install} apache/%{modname}.wsgi %{buildroot}%{_datadir}/%{modname}/%{modname}.wsgi
+mkdir -p %{buildroot}%{_datadir}/%{modname}/apache
+install apache/%{modname}.wsgi %{buildroot}%{_datadir}/%{modname}/%{modname}.wsgi
 
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/%{modname}/
-%{__install} apache/%{modname}.cfg %{buildroot}%{_sysconfdir}/%{modname}/%{modname}.cfg
+mkdir -p %{buildroot}%{_sysconfdir}/%{modname}/
+install apache/%{modname}.cfg %{buildroot}%{_sysconfdir}/%{modname}/%{modname}.cfg
 
 %pre
 %{_sbindir}/groupadd -r %{modname} &>/dev/null || :
