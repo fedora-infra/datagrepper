@@ -72,7 +72,7 @@ mv setup.py.tmp setup.py
     --install-data=%{_datadir} --root %{buildroot}
 
 mkdir -p %{buildroot}%{_datadir}/%{modname}/apache
-install apache/%{modname}.wsgi %{buildroot}%{_datadir}/%{modname}/%{modname}.wsgi
+install apache/%{modname}.wsgi %{buildroot}%{_datadir}/%{modname}/apache/%{modname}.wsgi
 
 mkdir -p %{buildroot}%{_sysconfdir}/%{modname}/
 install apache/%{modname}.cfg %{buildroot}%{_sysconfdir}/%{modname}/%{modname}.cfg
