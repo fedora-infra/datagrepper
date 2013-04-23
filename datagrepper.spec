@@ -5,7 +5,7 @@
 %define eggname datagrepper
 
 Name:           datagrepper
-Version:        0.0.1
+Version:        0.1
 Release:        1%{?dist}
 Summary:        A webapp to query fedmsg history
 
@@ -90,5 +90,10 @@ install apache/%{modname}.cfg %{buildroot}%{_sysconfdir}/%{modname}/%{modname}.c
 %{python_sitelib}/%{eggname}-%{version}-py%{pyver}.egg-info/
 
 %changelog
+* Tue Apr 23 2013 Ian Weller <iweller@redhat.com> - 0.1-1
+- Bump version number to 0.1 (0.0.1 never happened)
+- Remove system executable macros
+- Fix install location of apache/datagrepper.cfg
+
 * Mon Apr 22 2013 Ralph Bean <rbean@redhat.com> - 0.0.1-1
 - Initial packaging.
