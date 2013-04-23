@@ -1,0 +1,8 @@
+flask
+Flask-OpenID
+Flask-SQLAlchemy
+Flask-WTF
+kitchen
+datanommer.models
+fedmsg
+docutils

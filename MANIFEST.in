@@ -1,0 +1,10 @@
+include requirements.txt
+include createdb.py
+include runserver.py
+include shell
+include README.rst
+include API.rst
+include datagrepper/API.rst
+graft apache
+graft datagrepper/frontend/static
+recursive-include datagrepper *.py *.mak *.js *.css *.png *.gif *.html
