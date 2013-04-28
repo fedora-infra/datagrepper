@@ -33,11 +33,11 @@ fedmsg_config = fedmsg.config.load_config()
 dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
 
 
-def load_docs():
-    """ Utility to load API.rst and turn it into fancy HTML. """
+def load_docs(doc_name):
+    """ Utility to load an RST file and turn it into fancy HTML. """
 
     here = os.path.dirname(os.path.abspath(__file__))
-    fname = here + '/API.rst'
+    fname = os.path.join(here, 'docs', doc_name + '.rst')
     with codecs.open(fname, 'r', 'utf-8') as f:
         rst = f.read()
 
@@ -61,7 +61,9 @@ def load_docs():
     api_docs = markupsafe.Markup(api_docs)
     return api_docs
 
-api_docs = load_docs()
+htmldocs = dict.fromkeys(['API'])
+for key in htmldocs:
+    htmldocs[key] = load_docs(key)
 
 
 def datetime_to_seconds(dt):
@@ -71,7 +73,8 @@ def datetime_to_seconds(dt):
 
 @app.route('/')
 def index():
-    return flask.render_template('index.html', api_documentation=api_docs)
+    return flask.render_template('index.html',
+                                 api_documentation=htmldocs['API'])
 
 
 # Instant requests
