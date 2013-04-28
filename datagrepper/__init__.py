@@ -61,7 +61,7 @@ def load_docs(doc_name):
     api_docs = markupsafe.Markup(api_docs)
     return api_docs
 
-htmldocs = dict.fromkeys(['API'])
+htmldocs = dict.fromkeys(['API', 'reference'])
 for key in htmldocs:
     htmldocs[key] = load_docs(key)
 
@@ -75,6 +75,13 @@ def datetime_to_seconds(dt):
 def index():
     return flask.render_template('index.html',
                                  api_documentation=htmldocs['API'])
+
+
+@app.route('/reference/')
+@app.route('/reference')
+def reference():
+    return flask.render_template('index.html',
+                                 api_documentation=htmldocs['reference'])
 
 
 # Instant requests
