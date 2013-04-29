@@ -82,7 +82,8 @@
 
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li class="active"><a href="#">Docs</a></li>
+          <li{% if request.endpoint == 'index' %} class="active"{% endif %}><a href="{{ url_for('index') }}">Getting started</a></li>
+          <li{% if request.endpoint == 'reference' %} class="active"{% endif %}><a href="{{ url_for('reference') }}">Reference</a></li>
           <li><a href="https://github.com/fedora-infra/datagrepper">Source</a></li>
           <li><a href="https://github.com/fedora-infra/datagrepper/issues">Issues</a></li>
         </ul>
@@ -91,7 +92,7 @@
 
       <hr>
 
-      {% if show_jumbotron %}
+      {% if request.endpoint == 'index' %}
       <div class="jumbotron">
           <h1>JSON fedmsg API</h1>
         <p class="lead">Using HTTP GET requests, you can query for all
@@ -116,3 +117,4 @@
 
     </div> <!-- /container -->
 </body></html>
+{# vim: set ts=2 sw=2 sta et syn=htmldjango: #}
