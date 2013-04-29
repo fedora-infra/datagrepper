@@ -1,12 +1,11 @@
 Prerequisites
 -------------
 
-If you've never interacted with a JSON API before, you should
-check out the handy command-line tool `HTTPie
+If you've never interacted with a JSON API before, you should check out
+the handy command-line tool `HTTPie
 <https://github.com/jkbr/httpie#httpie-a-cli-curl-like-tool-for-humans>`_.
-All our examples here will use it.
-
-To install it on Fedora run ``$ sudo yum -y install httpie``.
+All our examples here will use it.  To install it on Fedora run ``$ sudo
+yum -y install httpie``.
 
 If you get stuck here, feel free to drop into the ``#fedora-apps``
 channel on `freenode <http://fedoraproject.org/wiki/How_to_use_IRC>`_ to
@@ -25,8 +24,9 @@ like this::
 Paging results
 --------------
 
-You're going to get a large JSON response.. too big to read through.  Try
-limiting the number of results to make it more digestable::
+You're going to get a large JSON response that's too big to read
+through.  Try limiting the number of results to make it more
+digestable::
 
     $ http get {{URL}}raw/ \
         delta==172800 \
