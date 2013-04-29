@@ -24,6 +24,19 @@
         margin: 30px 0;
       }
 
+      /* Smaller heading sizes */
+      .marketing h1 {
+        font-size: 28px;
+      }
+
+      .marketing h2 {
+        font-size: 24.5px;
+      }
+
+      .marketing h3 {
+        font-size: 21px;
+      }
+
       /* Main marketing message and sign up button */
       .jumbotron {
         margin: 60px 0;
@@ -78,6 +91,7 @@
 
       <hr>
 
+      {% if show_jumbotron %}
       <div class="jumbotron">
           <h1>JSON fedmsg API</h1>
         <p class="lead">Using HTTP GET requests, you can query for all
@@ -87,6 +101,7 @@
       </div>
 
       <hr>
+      {% endif %}
 
       <div class="row-fluid marketing">
         <div class="span10 offset1">

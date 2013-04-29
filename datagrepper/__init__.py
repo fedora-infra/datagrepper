@@ -51,8 +51,8 @@ def load_docs(doc_name):
     substitutions = {
         '<tt class="docutils literal">': '<code>',
         '</tt>': '</code>',
-        '<h1>': '<h3>',
-        '</h1>': '</h3>',
+        #'<h1>': '<h3>',
+        #'</h1>': '</h3>',
     }
 
     for old, new in substitutions.items():
@@ -74,7 +74,8 @@ def datetime_to_seconds(dt):
 @app.route('/')
 def index():
     return flask.render_template('index.html',
-                                 api_documentation=htmldocs['API'])
+                                 api_documentation=htmldocs['API'],
+                                 show_jumbotron=True)
 
 
 @app.route('/reference/')
