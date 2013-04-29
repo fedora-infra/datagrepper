@@ -11,37 +11,39 @@ Responses are always served as ``application/json``.
 /raw
 ----
 
-The ``/raw`` endpoint provides limited query support, but does not require your
-query to be put into a job queue.
+The ``/raw`` endpoint provides limited query support, but is "instant" and does
+not require your query to be put into a job queue.
 
 Response format
 ===============
 
-Sample response::
+Sample response:
 
-  {
-    "arguments": {
-      "page": 1,
-      "rows_per_page": 20,
-      ...
-    },
-    "count": 1,
-    "pages": 42,
-    "raw_messages": [
-      {
-        "certificate": "...",
-        "i": 1,
-        "msg": {
-          ...
-        },
-        "signature": "...",
-        "timestamp": 1361414385.0,
-        "topic": "org.fedoraproject.prod.sample"
+.. code-block:: javascript
+
+    {
+      "arguments": {
+        "page": 1,
+        "rows_per_page": 20,
+        ...
       },
-      ...
-    ],
-    "total": 851
-  }
+      "count": 1,
+      "pages": 42,
+      "raw_messages": [
+        {
+          "certificate": "...",
+          "i": 1,
+          "msg": {
+            ...
+          },
+          "signature": "...",
+          "timestamp": 1361414385.0,
+          "topic": "org.fedoraproject.prod.sample"
+        },
+        ...
+      ],
+      "total": 851
+    }
 
 The ``arguments`` item in the root dictionary contains all possible arguments,
 and displays the value used (the default if the argument was not provided).
