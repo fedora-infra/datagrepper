@@ -74,8 +74,7 @@ def datetime_to_seconds(dt):
 @app.route('/')
 def index():
     return flask.render_template('index.html',
-                                 api_documentation=htmldocs['API'],
-                                 show_jumbotron=True)
+                                 api_documentation=htmldocs['API'])
 
 
 @app.route('/reference/')
