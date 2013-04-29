@@ -24,6 +24,19 @@
         margin: 30px 0;
       }
 
+      /* Smaller heading sizes */
+      .marketing h1 {
+        font-size: 28px;
+      }
+
+      .marketing h2 {
+        font-size: 24.5px;
+      }
+
+      .marketing h3 {
+        font-size: 21px;
+      }
+
       /* Main marketing message and sign up button */
       .jumbotron {
         margin: 60px 0;
@@ -69,7 +82,8 @@
 
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li class="active"><a href="#">Docs</a></li>
+          <li{% if request.endpoint == 'index' %} class="active"{% endif %}><a href="{{ url_for('index') }}">Getting started</a></li>
+          <li{% if request.endpoint == 'reference' %} class="active"{% endif %}><a href="{{ url_for('reference') }}">Reference</a></li>
           <li><a href="https://github.com/fedora-infra/datagrepper">Source</a></li>
           <li><a href="https://github.com/fedora-infra/datagrepper/issues">Issues</a></li>
         </ul>
@@ -78,19 +92,21 @@
 
       <hr>
 
+      {% if request.endpoint == 'index' %}
       <div class="jumbotron">
           <h1>JSON fedmsg API</h1>
         <p class="lead">Using HTTP GET requests, you can query for all
         kinds of historical data from the <a href="http://fedmsg.com">
         fedmsg bus</a>:  events by username, by package, by message
-        source, by topic.. you name it.</p>
+        source, by topic&hellip; you name it.</p>
       </div>
 
       <hr>
+      {% endif %}
 
       <div class="row-fluid marketing">
-        <div class="span10 offset1">
-            {{api_documentation}}
+        <div class="span12">
+          {{ docs }}
         </div>
       </div>
 
@@ -101,3 +117,4 @@
 
     </div> <!-- /container -->
 </body></html>
+{# vim: set ts=2 sw=2 sta et syn=htmldjango: #}
