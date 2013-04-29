@@ -33,26 +33,20 @@ fedmsg_config = fedmsg.config.load_config()
 dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
 
 
-def load_docs(doc_name):
+def preload_docs(endpoint):
     """ Utility to load an RST file and turn it into fancy HTML. """
 
     here = os.path.dirname(os.path.abspath(__file__))
-    fname = os.path.join(here, 'docs', doc_name + '.rst')
+    fname = os.path.join(here, 'docs', endpoint + '.rst')
     with codecs.open(fname, 'r', 'utf-8') as f:
         rst = f.read()
 
-    # TODO -- pull this from the flask config
-    URL = "api.fedoraproject.org/datagrepper"
-
     api_docs = docutils.examples.html_body(rst)
-    api_docs = jinja2.Template(api_docs).render(URL=URL)
 
     # Some style substitutions where docutils doesn't quite do what we want.
     substitutions = {
         '<tt class="docutils literal">': '<code>',
         '</tt>': '</code>',
-        #'<h1>': '<h3>',
-        #'</h1>': '</h3>',
     }
 
     for old, new in substitutions.items():
@@ -61,9 +55,15 @@ def load_docs(doc_name):
     api_docs = markupsafe.Markup(api_docs)
     return api_docs
 
-htmldocs = dict.fromkeys(['API', 'reference'])
+htmldocs = dict.fromkeys(['index', 'reference'])
 for key in htmldocs:
-    htmldocs[key] = load_docs(key)
+    htmldocs[key] = preload_docs(key)
+
+
+def load_docs(request):
+    docs = htmldocs[request.endpoint]
+    docs = jinja2.Template(docs).render(URL=request.url_root)
+    return markupsafe.Markup(docs)
 
 
 def datetime_to_seconds(dt):
@@ -73,15 +73,13 @@ def datetime_to_seconds(dt):
 
 @app.route('/')
 def index():
-    return flask.render_template('index.html',
-                                 api_documentation=htmldocs['API'])
+    return flask.render_template('index.html', docs=load_docs(flask.request))
 
 
 @app.route('/reference/')
 @app.route('/reference')
 def reference():
-    return flask.render_template('index.html',
-                                 api_documentation=htmldocs['reference'])
+    return flask.render_template('index.html', docs=load_docs(flask.request))
 
 
 # Instant requests
