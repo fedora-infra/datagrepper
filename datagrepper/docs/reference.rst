@@ -88,7 +88,7 @@ Filter arguments
 
 ``user``
   FAS user to query for.
-  
+
   This argument can be provided multiple times; returns messages referring to
   any listed user.
 
@@ -96,7 +96,7 @@ Filter arguments
 
 ``package``
   Fedora package to query for.
-  
+
   This argument can be provided multiple times; returns messages referring to
   any listed package.
 
@@ -108,7 +108,7 @@ Filter arguments
   In fedmsg, a *category* is what service emitted the message, e.g. ``git``,
   ``bodhi``, or ``wiki``. The category is usually the third or fourth part of
   the topic.
-  
+
   This argument can be provided multiple times; returns messages referring to
   any listed package.
 
@@ -119,7 +119,7 @@ Filter arguments
 
   In fedmsg, a *topic* is a full reverse-domain description of the type of
   message, such as ``org.fedoraproject.prod.git.receive``.
-  
+
   This argument can be provided multiple times; returns messages referring to
   any listed package.
 
