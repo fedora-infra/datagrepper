@@ -6,14 +6,45 @@ All API calls (currently) permit GET and POST requests with the same arguments.
 A trailing slash is optional on all API endpoints. There is no difference
 between using one and not using one.
 
-JSON response format
---------------------
+Responses are always served as ``application/json``.
 
 /raw
 ----
 
 The ``/raw`` endpoint provides limited query support, but does not require your
 query to be put into a job queue.
+
+Response format
+===============
+
+Sample response::
+
+  {
+    "arguments": {
+      "page": 1,
+      "rows_per_page": 20,
+      ...
+    },
+    "count": 1,
+    "pages": 42,
+    "raw_messages": [
+      {
+        "certificate": "...",
+        "i": 1,
+        "msg": {
+          ...
+        },
+        "signature": "...",
+        "timestamp": 1361414385.0,
+        "topic": "org.fedoraproject.prod.sample"
+      },
+      ...
+    ],
+    "total": 851
+  }
+
+The ``arguments`` item in the root dictionary contains all possible arguments,
+and displays the value used (the default if the argument was not provided).
 
 Time arguments
 ==============
@@ -61,11 +92,15 @@ Filter arguments
   This argument can be provided multiple times; returns messages referring to
   any listed user.
 
+  Default: all users
+
 ``package``
   Fedora package to query for.
   
   This argument can be provided multiple times; returns messages referring to
   any listed package.
+
+  Default: all packages
 
 ``category``
   Category to query for.
@@ -77,11 +112,29 @@ Filter arguments
   This argument can be provided multiple times; returns messages referring to
   any listed package.
 
+  Default: all categories
+
 ``topic``
   Topic to query for.
 
   In fedmsg, a *topic* is a full reverse-domain description of the type of
-  message.
+  message, such as ``org.fedoraproject.prod.git.receive``.
   
   This argument can be provided multiple times; returns messages referring to
   any listed package.
+
+  Default: all topics
+
+Pagination arguments
+====================
+
+``page``
+  Which page to return. Must be greater than 0.
+
+  Default: 1
+
+``rows_per_page``
+  The number of messages to return for each page. Must be less than or equal to
+  100.
+
+  Default: 20
