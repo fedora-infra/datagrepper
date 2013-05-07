@@ -1,11 +1,11 @@
-%{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
+# https://bugzilla.redhat.com/show_bug.cgi?id=955781
 
 %define modname datagrepper
 %define eggname datagrepper
 
 Name:           datagrepper
 Version:        0.1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A webapp to query fedmsg history
 
 License:        GPLv2+
@@ -82,9 +82,12 @@ install -m 644 apache/%{modname}.cfg %{buildroot}%{_sysconfdir}/%{modname}/%{mod
 %config(noreplace) %{_sysconfdir}/%{modname}/
 %{_datadir}/%{modname}/
 %{python_sitelib}/%{modname}/
-%{python_sitelib}/%{eggname}-%{version}-py%{pyver}.egg-info/
+%{python_sitelib}/%{eggname}-%{version}-py%{python_version}.egg-info/
 
 %changelog
+* Mon May 06 2013 Ian Weller <iweller@redhat.com> - 0.1.1-2
+- Replace pyver macro definition with python_version
+
 * Fri May 03 2013 Ian Weller <iweller@redhat.com> - 0.1.1-1
 - Update to upstream 0.1.1 (adds license text)
 - Fix python2-devel BR
