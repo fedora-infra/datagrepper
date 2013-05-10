@@ -116,7 +116,7 @@ def raw():
 
     arguments = dict(
         start=datetime_to_seconds(start),
-        delta=timedelta_to_seconds(start),
+        delta=timedelta_to_seconds(delta),
         end=datetime_to_seconds(end),
         users=users,
         packages=packages,
