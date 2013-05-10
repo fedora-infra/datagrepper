@@ -69,6 +69,17 @@ def datetime_to_seconds(dt):
     return time.mktime(dt.timetuple())
 
 
+def timedelta_to_seconds(td):
+    """ Python 2.7 has a handy total_seconds method.
+    If we're on 2.6 though, we have to roll our own.
+    """
+
+    if hasattr(td, 'total_seconds'):
+        return td.total_seconds()
+    else:
+        return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) / 1e6
+
+
 @app.route('/')
 def index():
     return flask.render_template('index.html', api_documentation=api_docs)
@@ -105,7 +116,7 @@ def raw():
 
     arguments = dict(
         start=datetime_to_seconds(start),
-        delta=delta.total_seconds(),
+        delta=timedelta_to_seconds(start),
         end=datetime_to_seconds(end),
         users=users,
         packages=packages,
