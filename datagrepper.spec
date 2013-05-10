@@ -4,8 +4,8 @@
 %define eggname datagrepper
 
 Name:           datagrepper
-Version:        0.1.1
-Release:        2%{?dist}
+Version:        0.1.2
+Release:        1%{?dist}
 Summary:        A webapp to query fedmsg history
 
 License:        GPLv2+
@@ -85,6 +85,10 @@ install -m 644 apache/%{modname}.cfg %{buildroot}%{_sysconfdir}/%{modname}/%{mod
 %{python_sitelib}/%{eggname}-%{version}-py%{python_version}.egg-info/
 
 %changelog
+* Fri May 10 2013 Ralph Bean <rbean@redhat.com> - 0.1.2-1
+- Added configurable base_url for docs.
+- Fix timedelta.total_seconds for python2.6.
+
 * Mon May 06 2013 Ian Weller <iweller@redhat.com> - 0.1.1-2
 - Replace pyver macro definition with python_version
 
