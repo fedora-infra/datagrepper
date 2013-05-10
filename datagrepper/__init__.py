@@ -58,6 +58,8 @@ def preload_docs(endpoint):
     with codecs.open(fname, 'r', 'utf-8') as f:
         rst = f.read()
 
+    URL = app.config['DATAGREPPER_BASE_URL']
+
     api_docs = docutils.examples.html_body(rst)
 
     # Some style substitutions where docutils doesn't quite do what we want.
