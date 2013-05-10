@@ -41,8 +41,7 @@ def load_docs():
     with codecs.open(fname, 'r', 'utf-8') as f:
         rst = f.read()
 
-    # TODO -- pull this from the flask config
-    URL = "api.fedoraproject.org/datagrepper"
+    URL = app.config['DATAGREPPER_BASE_URL']
 
     api_docs = docutils.examples.html_body(rst)
     api_docs = jinja2.Template(api_docs).render(URL=URL)
