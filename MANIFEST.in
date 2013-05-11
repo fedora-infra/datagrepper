@@ -8,4 +8,5 @@ include datagrepper/API.rst
 include COPYING
 graft apache
 graft datagrepper/frontend/static
+graft datagrepper/docs
 recursive-include datagrepper *.py *.mak *.js *.css *.png *.gif *.html
