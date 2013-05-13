@@ -71,7 +71,7 @@ def modify_rst(rst):
     substitutions = {
         '.. code-block:: javascript': '::',
     }
-    for old, new in substitions.items():
+    for old, new in substitutions.items():
         rst = rst.replace(old, new)
 
     return rst
