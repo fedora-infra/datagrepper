@@ -58,8 +58,6 @@ def preload_docs(endpoint):
     with codecs.open(fname, 'r', 'utf-8') as f:
         rst = f.read()
 
-    URL = app.config['DATAGREPPER_BASE_URL']
-
     api_docs = docutils.examples.html_body(rst)
 
     # Some style substitutions where docutils doesn't quite do what we want.
@@ -80,8 +78,9 @@ for key in htmldocs:
 
 
 def load_docs(request):
+    URL = app.config.get('DATAGREPPER_BASE_URL', request.url_root)
     docs = htmldocs[request.endpoint]
-    docs = jinja2.Template(docs).render(URL=request.url_root)
+    docs = jinja2.Template(docs).render(URL=URL)
     return markupsafe.Markup(docs)
 
 
