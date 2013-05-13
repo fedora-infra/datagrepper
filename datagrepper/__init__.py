@@ -19,6 +19,7 @@ import flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
 import codecs
+import docutils
 import docutils.examples
 import jinja2
 import markupsafe
@@ -50,6 +51,41 @@ fedmsg_config = fedmsg.config.load_config()
 dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
 
 
+def modify_rst(rst):
+    """ Downgrade some of our rst directives if docutils is too old. """
+
+    # The rst features we need were introduced in this version
+    minimum = [0, 9]
+    version = map(int, docutils.__version__.split('.'))
+
+    # If we're at or later than that version, no need to downgrade our content
+    if version >= minimum:
+        return rst
+
+    # Otherwise, make code-blocks into just literal blocks.
+    substitutions = {
+        '.. code-block:: javascript': '::',
+    }
+    for old, new in substitions.items():
+        rst = rst.replace(old, new)
+
+    return rst
+
+
+def modify_html(html):
+    """ Perform style substitutions where docutils doesn't do what we want.
+    """
+
+    substitutions = {
+        '<tt class="docutils literal">': '<code>',
+        '</tt>': '</code>',
+    }
+    for old, new in substitutions.items():
+        html = html.replace(old, new)
+
+    return html
+
+
 def preload_docs(endpoint):
     """ Utility to load an RST file and turn it into fancy HTML. """
 
@@ -60,16 +96,11 @@ def preload_docs(endpoint):
 
     URL = app.config['DATAGREPPER_BASE_URL']
 
+    rst = modify_rst(rst)
+
     api_docs = docutils.examples.html_body(rst)
 
-    # Some style substitutions where docutils doesn't quite do what we want.
-    substitutions = {
-        '<tt class="docutils literal">': '<code>',
-        '</tt>': '</code>',
-    }
-
-    for old, new in substitutions.items():
-        api_docs = api_docs.replace(old, new)
+    api_docs = modify_html(api_docs)
 
     api_docs = markupsafe.Markup(api_docs)
     return api_docs
