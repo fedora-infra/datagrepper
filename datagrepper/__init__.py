@@ -78,12 +78,7 @@ for key in htmldocs:
 
 
 def load_docs(request):
-
-    if 'DATAGREPPER_BASE_URL' in app.config:
-        URL = app.config['DATAGREPPER_BASE_URL']
-    else:
-        URL = request.url_root
-
+    URL = app.config.get('DATAGREPPER_BASE_URL', request.url_root)
     docs = htmldocs[request.endpoint]
     docs = jinja2.Template(docs).render(URL=URL)
     return markupsafe.Markup(docs)
