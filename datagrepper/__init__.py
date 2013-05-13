@@ -177,6 +177,9 @@ def raw():
     page = int(flask.request.args.get('page', 1))
     rows_per_page = int(flask.request.args.get('rows_per_page', 20))
 
+    # Response formatting arguments
+    callback = flask.request.args.get('callback', None)
+
     arguments = dict(
         start=datetime_to_seconds(start),
         delta=timedelta_to_seconds(delta),
@@ -229,10 +232,17 @@ def raw():
         status = "500 error"
 
     body = fedmsg.encoding.dumps(output)
+
+    mimetype = 'application/json'
+
+    if callback:
+        mimetype = 'application/javascript'
+        body = "%s(%s);" % (callback, body)
+
     return flask.Response(
         response=body,
         status=status,
-        mimetype='application/json',
+        mimetype=mimetype,
     )
 
 
