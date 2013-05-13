@@ -138,7 +138,7 @@ and multiple ``package`` filters, they are merged together in a way that looks
 like `Conjunctive Normal Form (CNF)
 <http://en.wikipedia.org/wiki/Conjunctive_normal_form>`_.
 
-For example, this query will retrun all messages from the past 2 days where
+For example, this query will return all messages from the past 2 days where
 *(category==bodhi OR category==wiki) AND (user==toshio OR user==pingou)*::
 
     $ http get {{URL}}raw/ \
