@@ -1,12 +1,11 @@
 Prerequisites
 -------------
 
-If you've never interacted with a JSON API before, you should
-check out the handy command-line tool `HTTPie
+If you've never interacted with a JSON API before, you should check out
+the handy command-line tool `HTTPie
 <https://github.com/jkbr/httpie#httpie-a-cli-curl-like-tool-for-humans>`_.
-All our examples here will use it.
-
-To install it on Fedora run ``$ sudo yum -y install httpie``.
+All our examples here will use it.  To install it on Fedora run ``$ sudo
+yum -y install httpie``.
 
 If you get stuck here, feel free to drop into the ``#fedora-apps``
 channel on `freenode <http://fedoraproject.org/wiki/How_to_use_IRC>`_ to
@@ -20,15 +19,16 @@ convert 2 days to 172800 seconds first.  Then we can use `HTTPie
 <https://github.com/jkbr/httpie#httpie-a-cli-curl-like-tool-for-humans>`_
 like this::
 
-    $ http get {{URL}}/raw/ delta==172800
+    $ http get {{URL}}raw/ delta==172800
 
 Paging results
 --------------
 
-You're going to get a large JSON response.. too big to read through.  Try
-limiting the number of results to make it more digestable::
+You're going to get a large JSON response that's too big to read
+through.  Try limiting the number of results to make it more
+digestable::
 
-    $ http get {{URL}}/raw/ \
+    $ http get {{URL}}raw/ \
         delta==172800 \
         rows_per_page==1
 
@@ -64,7 +64,7 @@ Your ``rows_per_page`` is there.  It has a sibling value ``page`` which
 is a pointer to which "page" of data you are on.  You could issue the
 following query to get the next one::
 
-    $ http get {{URL}}/raw/ \
+    $ http get {{URL}}raw/ \
         delta==172800 \
         rows_per_page==1 \
         page==2
@@ -99,7 +99,7 @@ messages that come across the Fedora Infrastructure's message bus.
 You can limit the scope of your query to only one kind of message
 by specifying a ``category``::
 
-    $ http get {{URL}}/raw/ \
+    $ http get {{URL}}raw/ \
         delta==172800 \
         category==bodhi
 
@@ -108,7 +108,7 @@ the ``arguments`` dict as *categories* (plural!)  You can specify more
 than one category and messages that match *either* category will be returned.
 They are **OR**'d together::
 
-    $ http get {{URL}}/raw/ \
+    $ http get {{URL}}raw/ \
         delta==172800 \
         category==bodhi \
         category==wiki
@@ -119,14 +119,14 @@ Messages for a particular users and packages
 Just like categories, you can search for events relating to one or multiple
 users::
 
-    $ http get {{URL}}/raw/ \
+    $ http get {{URL}}raw/ \
         delta==172800 \
         user==toshio \
         user==pingou
 
 Same goes for packages::
 
-    $ http get {{URL}}/raw/ \
+    $ http get {{URL}}raw/ \
         delta==172800 \
         package==nethack
 
@@ -141,7 +141,7 @@ like `Conjunctive Normal Form (CNF)
 For example, this query will retrun all messages from the past 2 days where
 *(category==bodhi OR category==wiki) AND (user==toshio OR user==pingou)*::
 
-    $ http get {{URL}}/raw/ \
+    $ http get {{URL}}raw/ \
         delta==172800 \
         category==bodhi \
         category==wiki \

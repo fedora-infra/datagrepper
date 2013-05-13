@@ -1,20 +1,19 @@
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get _python_lib; print get_python_lib()")}
-%{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
+# https://bugzilla.redhat.com/show_bug.cgi?id=955781
 
 %define modname datagrepper
 %define eggname datagrepper
 
 Name:           datagrepper
-Version:        0.1
+Version:        0.1.3
 Release:        1%{?dist}
 Summary:        A webapp to query fedmsg history
 
 License:        GPLv2+
 URL:            https://github.com/fedora-infra/datagrepper
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://pypi.python.org/packages/source/d/%{name}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 
-BuildRequires:  python-devel
+BuildRequires:  python2-devel
 BuildRequires:  python-setuptools
 
 %if %{?rhel}%{!?rhel:0} >= 6
@@ -44,7 +43,7 @@ Requires:  python-flask
 Requires:  python-flask-sqlalchemy
 Requires:  python-flask-wtf
 Requires:  python-kitchen
-Requires:  python-datanommer-models
+Requires:  python-datanommer-models >= 0.4.3
 Requires:  python-docutils
 Requires:  fedmsg
 
@@ -71,25 +70,43 @@ mv setup.py.tmp setup.py
 %{__python} setup.py install -O1 --skip-build \
     --install-data=%{_datadir} --root %{buildroot}
 
-mkdir -p %{buildroot}%{_datadir}/%{modname}/apache
-install apache/%{modname}.wsgi %{buildroot}%{_datadir}/%{modname}/apache/%{modname}.wsgi
+mkdir -p %{buildroot}%{_datadir}/%{modname}/apache/
+install -m 644 apache/%{modname}.wsgi %{buildroot}%{_datadir}/%{modname}/apache/%{modname}.wsgi
+install -m 644 apache/%{modname}.conf %{buildroot}%{_datadir}/%{modname}/apache/%{modname}.conf
 
 mkdir -p %{buildroot}%{_sysconfdir}/%{modname}/
-install apache/%{modname}.cfg %{buildroot}%{_sysconfdir}/%{modname}/%{modname}.cfg
-
-%pre
-%{_sbindir}/groupadd -r %{modname} &>/dev/null || :
-%{_sbindir}/useradd  -r -s /sbin/nologin -d %{_datadir}/%{modname} -M \
-              -c 'DataGrepper' -g %{modname} %{modname} &>/dev/null || :
+install -m 644 apache/%{modname}.cfg %{buildroot}%{_sysconfdir}/%{modname}/%{modname}.cfg
 
 %files
-%doc README.rst
-%config %{_sysconfdir}/%{modname}/
+%doc README.rst COPYING
+%config(noreplace) %{_sysconfdir}/%{modname}/
 %{_datadir}/%{modname}/
 %{python_sitelib}/%{modname}/
-%{python_sitelib}/%{eggname}-%{version}-py%{pyver}.egg-info/
+%{python_sitelib}/%{eggname}-%{version}-py%{python_version}.egg-info/
 
 %changelog
+* Mon May 13 2013 Ralph Bean <rbean@redhat.com> - 0.1.3-1
+- Fix to configurable base url.
+- Support old docutils and code-block directive.
+- Support a callback querystring argument to allow JSONP responses.
+
+* Fri May 10 2013 Ralph Bean <rbean@redhat.com> - 0.1.2-1
+- Added configurable base_url for docs.
+- Fix timedelta.total_seconds for python2.6.
+
+* Mon May 06 2013 Ian Weller <iweller@redhat.com> - 0.1.1-2
+- Replace pyver macro definition with python_version
+
+* Fri May 03 2013 Ian Weller <iweller@redhat.com> - 0.1.1-1
+- Update to upstream 0.1.1 (adds license text)
+- Fix python2-devel BR
+- Mark config file as noreplace
+- Remove useradd commands in post
+- Install sample httpd configuration file
+- Add version to requires on datanommer.models
+- Remove python_sitelib macro definition
+- Fix file permissions for config files
+
 * Tue Apr 23 2013 Ian Weller <iweller@redhat.com> - 0.1-1
 - Bump version number to 0.1 (0.0.1 never happened)
 - Remove system executable macros

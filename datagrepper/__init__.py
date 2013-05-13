@@ -19,6 +19,7 @@ import flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
 import codecs
+import docutils
 import docutils.examples
 import jinja2
 import markupsafe
@@ -50,35 +51,73 @@ fedmsg_config = fedmsg.config.load_config()
 dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
 
 
-def load_docs():
-    """ Utility to load API.rst and turn it into fancy HTML. """
+def modify_rst(rst):
+    """ Downgrade some of our rst directives if docutils is too old. """
 
-    here = os.path.dirname(os.path.abspath(__file__))
-    fname = here + '/API.rst'
-    with codecs.open(fname, 'r', 'utf-8') as f:
-        rst = f.read()
+    try:
+        # The rst features we need were introduced in this version
+        minimum = [0, 9]
+        version = map(int, docutils.__version__.split('.'))
 
-    # TODO -- pull this from the flask config
-    URL = "api.fedoraproject.org/datagrepper"
+        # If we're at or later than that version, no need to downgrade
+        if version >= minimum:
+            return rst
+    except Exception:
+        # If there was some error parsing or comparing versions, run the
+        # substitutions just to be safe.
+        pass
 
-    api_docs = docutils.examples.html_body(rst)
-    api_docs = jinja2.Template(api_docs).render(URL=URL)
+    # Otherwise, make code-blocks into just literal blocks.
+    substitutions = {
+        '.. code-block:: javascript': '::',
+    }
+    for old, new in substitions.items():
+        rst = rst.replace(old, new)
 
-    # Some style substitutions where docutils doesn't quite do what we want.
+    return rst
+
+
+def modify_html(html):
+    """ Perform style substitutions where docutils doesn't do what we want.
+    """
+
     substitutions = {
         '<tt class="docutils literal">': '<code>',
         '</tt>': '</code>',
-        '<h1>': '<h3>',
-        '</h1>': '</h3>',
     }
-
     for old, new in substitutions.items():
-        api_docs = api_docs.replace(old, new)
+        html = html.replace(old, new)
+
+    return html
+
+
+def preload_docs(endpoint):
+    """ Utility to load an RST file and turn it into fancy HTML. """
+
+    here = os.path.dirname(os.path.abspath(__file__))
+    fname = os.path.join(here, 'docs', endpoint + '.rst')
+    with codecs.open(fname, 'r', 'utf-8') as f:
+        rst = f.read()
+
+    rst = modify_rst(rst)
+
+    api_docs = docutils.examples.html_body(rst)
+
+    api_docs = modify_html(api_docs)
 
     api_docs = markupsafe.Markup(api_docs)
     return api_docs
 
-api_docs = load_docs()
+htmldocs = dict.fromkeys(['index', 'reference'])
+for key in htmldocs:
+    htmldocs[key] = preload_docs(key)
+
+
+def load_docs(request):
+    URL = app.config.get('DATAGREPPER_BASE_URL', request.url_root)
+    docs = htmldocs[request.endpoint]
+    docs = jinja2.Template(docs).render(URL=URL)
+    return markupsafe.Markup(docs)
 
 
 def datetime_to_seconds(dt):
@@ -86,9 +125,26 @@ def datetime_to_seconds(dt):
     return time.mktime(dt.timetuple())
 
 
+def timedelta_to_seconds(td):
+    """ Python 2.7 has a handy total_seconds method.
+    If we're on 2.6 though, we have to roll our own.
+    """
+
+    if hasattr(td, 'total_seconds'):
+        return td.total_seconds()
+    else:
+        return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) / 1e6
+
+
 @app.route('/')
 def index():
-    return flask.render_template('index.html', api_documentation=api_docs)
+    return flask.render_template('index.html', docs=load_docs(flask.request))
+
+
+@app.route('/reference/')
+@app.route('/reference')
+def reference():
+    return flask.render_template('index.html', docs=load_docs(flask.request))
 
 
 # Instant requests
@@ -120,9 +176,12 @@ def raw():
     page = int(flask.request.args.get('page', 1))
     rows_per_page = int(flask.request.args.get('rows_per_page', 20))
 
+    # Response formatting arguments
+    callback = flask.request.args.get('callback', None)
+
     arguments = dict(
         start=datetime_to_seconds(start),
-        delta=delta.total_seconds(),
+        delta=timedelta_to_seconds(delta),
         end=datetime_to_seconds(end),
         users=users,
         packages=packages,
@@ -172,10 +231,17 @@ def raw():
         status = "500 error"
 
     body = fedmsg.encoding.dumps(output)
+
+    mimetype = 'application/json'
+
+    if callback:
+        mimetype = 'application/javascript'
+        body = "%s(%s);" % (callback, body)
+
     return flask.Response(
         response=body,
         status=status,
-        mimetype='application/json',
+        mimetype=mimetype,
     )
 
 
