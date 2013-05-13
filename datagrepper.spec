@@ -4,7 +4,7 @@
 %define eggname datagrepper
 
 Name:           datagrepper
-Version:        0.1.2
+Version:        0.1.3
 Release:        1%{?dist}
 Summary:        A webapp to query fedmsg history
 
@@ -85,6 +85,11 @@ install -m 644 apache/%{modname}.cfg %{buildroot}%{_sysconfdir}/%{modname}/%{mod
 %{python_sitelib}/%{eggname}-%{version}-py%{python_version}.egg-info/
 
 %changelog
+* Mon May 13 2013 Ralph Bean <rbean@redhat.com> - 0.1.3-1
+- Fix to configurable base url.
+- Support old docutils and code-block directive.
+- Support a callback querystring argument to allow JSONP responses.
+
 * Fri May 10 2013 Ralph Bean <rbean@redhat.com> - 0.1.2-1
 - Added configurable base_url for docs.
 - Fix timedelta.total_seconds for python2.6.
