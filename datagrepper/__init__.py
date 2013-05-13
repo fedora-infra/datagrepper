@@ -54,13 +54,18 @@ dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
 def modify_rst(rst):
     """ Downgrade some of our rst directives if docutils is too old. """
 
-    # The rst features we need were introduced in this version
-    minimum = [0, 9]
-    version = map(int, docutils.__version__.split('.'))
+    try:
+        # The rst features we need were introduced in this version
+        minimum = [0, 9]
+        version = map(int, docutils.__version__.split('.'))
 
-    # If we're at or later than that version, no need to downgrade our content
-    if version >= minimum:
-        return rst
+        # If we're at or later than that version, no need to downgrade
+        if version >= minimum:
+            return rst
+    except Exception:
+        # If there was some error parsing or comparing versions, run the
+        # substitutions just to be safe.
+        pass
 
     # Otherwise, make code-blocks into just literal blocks.
     substitutions = {
