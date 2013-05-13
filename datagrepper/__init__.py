@@ -98,7 +98,9 @@ def timedelta_to_seconds(td):
     if hasattr(td, 'total_seconds'):
         return td.total_seconds()
     else:
-        return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) / 1e6
+        return (
+            td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6
+        ) / 1e6
 
 
 @app.route('/')
