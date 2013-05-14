@@ -195,7 +195,7 @@ def raw():
         raise ValueError("page must be > 0")
 
     if rows_per_page > 100:
-        raise valueError("rows_per_page must be <= 100")
+        raise ValueError("rows_per_page must be <= 100")
 
     try:
         # This fancy classmethod does all of our search for us.
