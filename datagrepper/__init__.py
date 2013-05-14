@@ -175,6 +175,7 @@ def raw():
     # Paging arguments
     page = int(flask.request.args.get('page', 1))
     rows_per_page = int(flask.request.args.get('rows_per_page', 20))
+    order = flask.request.args.get('order', 'asc')
 
     # Response formatting arguments
     callback = flask.request.args.get('callback', None)
@@ -189,6 +190,7 @@ def raw():
         topics=topics,
         page=page,
         rows_per_page=rows_per_page,
+        order=order,
     )
 
     if page < 1:
@@ -197,6 +199,9 @@ def raw():
     if rows_per_page > 100:
         raise ValueError("rows_per_page must be <= 100")
 
+    if order not in ['desc', 'asc']:
+        raise ValueError("order must be either 'desc' or 'asc'")
+
     try:
         # This fancy classmethod does all of our search for us.
         total, pages, messages = dm.Message.grep(
@@ -204,6 +209,7 @@ def raw():
             end=end,
             page=page,
             rows_per_page=rows_per_page,
+            order=order,
             users=users,
             packages=packages,
             categories=categories,

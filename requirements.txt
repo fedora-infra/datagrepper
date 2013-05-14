@@ -3,6 +3,6 @@ Flask-OpenID
 Flask-SQLAlchemy
 Flask-WTF
 kitchen
-datanommer.models
+datanommer.models>=0.4.4
 fedmsg
 docutils
