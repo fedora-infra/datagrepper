@@ -140,3 +140,10 @@ Pagination arguments
   100.
 
   Default: 20
+
+``order``
+  The "order" in which messages should be returned.  Must be one of either
+  "asc" or "desc".  "asc" means ascending, i.e. from oldest to newest.
+  "desc" means descending, i.e. from newest to oldest.
+
+  Default: "asc"

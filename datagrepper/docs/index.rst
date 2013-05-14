@@ -42,6 +42,7 @@ digestable::
             "packages": [],
             "page": 1,
             "rows_per_page": 1,
+            "order": "asc",
             "start": 1364493938.0,
             "topics": [],
             "users": []
@@ -79,6 +80,7 @@ following query to get the next one::
             "packages": [],
             "page": 2,
             "rows_per_page": 1,
+            "order": "asc",
             "start": 1364493938.0,
             "topics": [],
             "users": []
