@@ -93,6 +93,12 @@ following query to get the next one::
         "total": 2052
     }
 
+
+By default, the order of rows retrieved is from oldest to newest ("ascending").
+There is an ``order`` argument you can specify to set that how you like.  The
+default is "asc", but you can set it to "desc" for descending order, a.k.a.
+from newest to oldest.
+
 Only Bodhi messages (OR wiki)
 -----------------------------
 
