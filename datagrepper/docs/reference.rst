@@ -51,13 +51,13 @@ and displays the value used (the default if the argument was not provided).
 Time arguments
 ==============
 
-Below is a table describing what timeframe messages are received from depending
-on what combination of time options you provide.
+Below is a table describing what timeframe messages are received from
+depending on what combination of time options you provide.
 
 ========= ========= ======= =================
 ``delta`` ``start`` ``end`` Message timeframe
 ========= ========= ======= =================
-no        no        no      last 600 seconds
+no        no        no      last ``rows_per_page`` items
 **yes**   no        no      last ``delta`` seconds
 no        **yes**   no      from ``start`` until now
 **yes**   **yes**   no      from ``start`` until now (``delta`` is ignored)
@@ -71,19 +71,19 @@ no        **yes**   **yes** between ``start`` and ``end``
 ``delta``
   Return results from the last ``delta`` seconds.
 
-  Default: 600
+  Default: None
 
 ``start``
   Return results starting at time ``start`` (in `UNIX time
   <https://en.wikipedia.org/wiki/Unix_time>`_).
 
-  Default: (``end`` minus ``delta``)
+  Default: None or (``end`` minus ``delta``)
 
 ``end``
   Return results ending at time ``end`` (in `UNIX time
   <https://en.wikipedia.org/wiki/Unix_time>`_).
 
-  Default: current time
+  Default: None or current
 
 Filter arguments
 ================

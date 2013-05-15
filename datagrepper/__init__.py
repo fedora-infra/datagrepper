@@ -157,16 +157,29 @@ def raw():
 
     # Complicated combination of default start, end, delta arguments.
     now = datetime_to_seconds(datetime.now())
-    end = datetime.fromtimestamp(
-        float(flask.request.args.get('end', now)))
 
-    delta = timedelta(
-        seconds=float(flask.request.args.get('delta', 600)))
+    start = flask.request.args.get('start', None)
+    end = flask.request.args.get('end', None)
+    delta = flask.request.args.get('delta', None)
 
-    then = datetime_to_seconds(end - delta)
-    start = datetime.fromtimestamp(
-        float(flask.request.args.get('start', then))
-    )
+    if delta:
+        if end is None:
+            end = float(now)
+        end = datetime.fromtimestamp(end)
+        delta = timedelta(seconds=float(delta))
+        then = datetime_to_seconds(end - delta)
+        if start is None:
+            start = float(then)
+        start = datetime.fromtimestamp(start)
+    else:
+        if end is None and start is not None:
+            end = float(now)
+        end = datetime.fromtimestamp(end)
+        delta = timedelta(seconds=float(delta))
+        then = datetime_to_seconds(end - delta)
+        if start is None:
+            start = float(then)
+        start = datetime.fromtimestamp(start)
 
     # Further filters, all ANDed together in CNF style.
     users = flask.request.args.getlist('user')
