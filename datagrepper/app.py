@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 # datagrepper - HTTP API for datanommer and the fedmsg bus
 # Copyright (C) 2013  Red Hat, Inc. and others
 #
@@ -25,13 +27,15 @@ import jinja2
 import markupsafe
 import os
 import time
+from datetime import (
+    datetime,
+    timedelta,
+)
 import traceback
 
 import fedmsg.config
+import fedmsg.meta
 import datanommer.models as dm
-
-from util import assemble_timerange
-
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -119,6 +123,22 @@ def load_docs(request):
     return markupsafe.Markup(docs)
 
 
+def datetime_to_seconds(dt):
+    """ Name this, just because its confusing. """
+    return time.mktime(dt.timetuple())
+
+
+def timedelta_to_seconds(td):
+    """ Python 2.7 has a handy total_seconds method.
+    If we're on 2.6 though, we have to roll our own.
+    """
+
+    if hasattr(td, 'total_seconds'):
+        return td.total_seconds()
+    else:
+        return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) / 1e6
+
+
 @app.route('/')
 def index():
     return flask.render_template('index.html', docs=load_docs(flask.request))
@@ -136,11 +156,18 @@ def reference():
 def raw():
     """ Main API entry point. """
 
-    start = flask.request.args.get('start', None)
-    end = flask.request.args.get('end', None)
-    delta = flask.request.args.get('delta', None)
+    # Complicated combination of default start, end, delta arguments.
+    now = datetime_to_seconds(datetime.now())
+    end = datetime.fromtimestamp(
+        float(flask.request.args.get('end', now)))
 
-    start, end, delta = massage_datetime(start, end, delta)
+    delta = timedelta(
+        seconds=float(flask.request.args.get('delta', 600)))
+
+    then = datetime_to_seconds(end - delta)
+    start = datetime.fromtimestamp(
+        float(flask.request.args.get('start', then))
+    )
 
     # Further filters, all ANDed together in CNF style.
     users = flask.request.args.getlist('user')
@@ -155,11 +182,14 @@ def raw():
 
     # Response formatting arguments
     callback = flask.request.args.get('callback', None)
+    meta = flask.request.args.get('meta', [])
+    if meta and isinstance(meta, (str, unicode)):
+                meta = [meta]
 
     arguments = dict(
-        start=start,
-        delta=delta,
-        end=end,
+        start=datetime_to_seconds(start),
+        delta=timedelta_to_seconds(delta),
+        end=datetime_to_seconds(end),
         users=users,
         packages=packages,
         categories=categories,
@@ -178,6 +208,12 @@ def raw():
     if order not in ['desc', 'asc']:
         raise ValueError("order must be either 'desc' or 'asc'")
 
+    meta_expected = set('title', 'subtitle', 'icon', 'secondary_icon',
+                        'link', 'username', 'packages', 'objects')
+    if set(meta).intersection(meta_expected) < 1:
+        raise ValueError("meta must be in %s"
+                         % ','.join(list(meta_expected)))
+
     try:
         # This fancy classmethod does all of our search for us.
         total, pages, messages = dm.Message.grep(
@@ -191,6 +227,15 @@ def raw():
             categories=categories,
             topics=topics,
         )
+
+        if meta:
+            for message in messages:
+                metas = {}
+                for metadata in meta:
+                    cmd = 'msg2%s' % metadata
+                    metas[metadata] = getattr(
+                        fedmsg.meta, cmd)(message, **fedmsg_config)
+                message['meta'] = metas
 
         output = dict(
             raw_messages=messages,
@@ -226,9 +271,9 @@ def raw():
         mimetype=mimetype,
     )
 
-
 # Add a request job to the queue
 #@app.route('/submit/')
 #@app.route('/submit')
 #def submit():
 #    pass
+>>>>>>> Add option to return metadata with the raw message
