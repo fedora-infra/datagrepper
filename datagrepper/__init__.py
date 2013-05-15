@@ -99,8 +99,8 @@ def timedelta_to_seconds(td):
         return td.total_seconds()
     else:
         return (
-            td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6
-        ) / 1e6
+            (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) /
+                1e6)
 
 
 @app.route('/')
