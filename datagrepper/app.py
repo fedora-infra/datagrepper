@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # datagrepper - HTTP API for datanommer and the fedmsg bus
 # Copyright (C) 2013  Red Hat, Inc. and others
 #
@@ -208,8 +206,8 @@ def raw():
     if order not in ['desc', 'asc']:
         raise ValueError("order must be either 'desc' or 'asc'")
 
-    meta_expected = set('title', 'subtitle', 'icon', 'secondary_icon',
-                        'link', 'username', 'packages', 'objects')
+    meta_expected = set(['title', 'subtitle', 'icon', 'secondary_icon',
+                         'link', 'username', 'packages', 'objects'])
     if set(meta).intersection(meta_expected) < 1:
         raise ValueError("meta must be in %s"
                          % ','.join(list(meta_expected)))
@@ -276,4 +274,3 @@ def raw():
 #@app.route('/submit')
 #def submit():
 #    pass
->>>>>>> Add option to return metadata with the raw message
