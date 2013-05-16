@@ -6,7 +6,10 @@ All API calls (currently) permit GET and POST requests with the same arguments.
 A trailing slash is optional on all API endpoints. There is no difference
 between using one and not using one.
 
-Responses are always served as ``application/json``.
+Responses are always served as ``application/json`` (unless ``JSONP`` is
+explicitly requested, in which case datagrepper returns the appropriate
+``application/javascript``).
+
 
 /raw
 ----
