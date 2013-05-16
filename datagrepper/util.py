@@ -1,5 +1,9 @@
 import flask
 
+from datetime import (
+    datetime,
+    timedelta,
+)
 import hashlib
 import random
 import json
@@ -23,3 +27,59 @@ def generate_api_key():
     rand = str(random.getrandbits(256))
     timestamp = str(int(time.time() * 1000))
     return hashlib.sha224(rand + timestamp).hexdigest()
+
+
+def datetime_to_seconds(dt):
+    """ Name this, just because its confusing. """
+    return time.mktime(dt.timetuple())
+
+
+def timedelta_to_seconds(td):
+    """ Python 2.7 has a handy total_seconds method.
+    If we're on 2.6 though, we have to roll our own.
+    """
+
+    if hasattr(td, 'total_seconds'):
+        return td.total_seconds()
+    else:
+        return (
+            (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) /
+                1e6)
+
+
+def assemble_timerange(start, end, delta):
+    """ Util to handle our complicated datetime logic. """
+
+    # Complicated combination of default start, end, delta arguments.
+    now = datetime_to_seconds(datetime.now())
+
+    if not delta and not start and not end:
+        pass
+    elif delta:
+        if end is None:
+            end = float(now)
+        end = datetime.fromtimestamp(end)
+        delta = timedelta(seconds=float(delta))
+        then = datetime_to_seconds(end - delta)
+        if start is None:
+            start = float(then)
+
+        # Convert back to seconds for datanommer.models
+        delta = timedelta_to_seconds(delta)
+        end = datetime_to_seconds(end)
+    else:
+        if end is None:
+            end = float(now)
+        end = datetime.fromtimestamp(end)
+        delta = timedelta(seconds=600.0)
+        then = datetime_to_seconds(end - delta)
+        if start is None:
+            start = float(then)
+
+        # Convert back to seconds for datanommer.models
+        delta = timedelta_to_seconds(delta)
+        end = datetime_to_seconds(end)
+
+    return start, end, delta
+
+
