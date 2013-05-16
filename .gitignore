@@ -5,3 +5,4 @@
 *.sqlite
 *.egg-info
 dist
+*.egg
