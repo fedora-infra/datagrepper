@@ -60,7 +60,7 @@ depending on what combination of time options you provide.
 no        no        no      last ``rows_per_page`` items
 **yes**   no        no      last ``delta`` seconds
 no        **yes**   no      from ``start`` until now
-**yes**   **yes**   no      from ``start`` until now (``delta`` is ignored)
+**yes**   **yes**   no      from ``start`` until ``delta`` seconds from ``start``
 no        no        **yes** the 600 seconds before ``end``
 **yes**   no        **yes** the ``delta`` seconds before ``end``
 no        **yes**   **yes** between ``start`` and ``end``
