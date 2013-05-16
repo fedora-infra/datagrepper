@@ -57,28 +57,38 @@ def assemble_timerange(start, end, delta):
         pass
     elif delta:
         if end is None:
-            end = float(now)
+            if start is None:
+                end = float(now)
+            else:
+                end = float(start) + float(delta)
+
         end = datetime.fromtimestamp(end)
-        delta = timedelta(seconds=float(delta))
-        then = datetime_to_seconds(end - delta)
+
         if start is None:
+            delta = timedelta(seconds=float(delta))
+            then = datetime_to_seconds(end - delta)
             start = float(then)
 
         # Convert back to seconds for datanommer.models
-        delta = timedelta_to_seconds(delta)
         end = datetime_to_seconds(end)
+        delta = end - start
     else:
         if end is None:
             end = float(now)
+
         end = datetime.fromtimestamp(end)
-        delta = timedelta(seconds=600.0)
-        then = datetime_to_seconds(end - delta)
+
         if start is None:
-            start = float(then)
+            delta = timedelta(seconds=600.0)
+            start = datetime_to_seconds(end - delta)
+
+        start = datetime.fromtimestamp(float(start))
+        delta = end - start
 
         # Convert back to seconds for datanommer.models
-        delta = timedelta_to_seconds(delta)
+        start = datetime_to_seconds(start)
         end = datetime_to_seconds(end)
+        delta = timedelta_to_seconds(delta)
 
     return start, end, delta
 
