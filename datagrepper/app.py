@@ -182,7 +182,7 @@ def raw():
     callback = flask.request.args.get('callback', None)
     meta = flask.request.args.get('meta', [])
     if meta and isinstance(meta, (str, unicode)):
-                meta = [meta]
+        meta = [meta]
 
     arguments = dict(
         start=datetime_to_seconds(start),
