@@ -91,5 +91,3 @@ def assemble_timerange(start, end, delta):
         delta = timedelta_to_seconds(delta)
 
     return start, end, delta
-
-
