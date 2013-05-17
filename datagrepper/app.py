@@ -236,6 +236,14 @@ def raw():
                     cmd = 'msg2%s' % metadata
                     metas[metadata] = getattr(
                         fedmsg.meta, cmd)(message, **fedmsg_config)
+
+                    # We have to do this because 'set' is not
+                    # JSON-serializable.  In the next version of fedmsg, this
+                    # will be handled automatically and we can just remove this
+                    # statement https://github.com/fedora-infra/fedmsg/pull/139
+                    if isinstance(metas[metadata], set):
+                        metas[metadata] = list(metas[metadata])
+
                 message['meta'] = metas
 
         output = dict(
