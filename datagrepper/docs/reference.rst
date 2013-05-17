@@ -150,3 +150,21 @@ Pagination arguments
   "desc" means descending, i.e. from newest to oldest.
 
   Default: "asc"
+
+Formatting arguments
+====================
+
+``callback``
+  To be specified when querying datagrepper via JavaScript/ajax, it will
+  return a "jsonp" output with the MIME type 'application/javascript'
+  instead of the traditionnal "json".
+
+  Default: None
+
+``meta``
+  Argument to specify what meta information to return with the raw
+  message from fedmsg.
+  Options are: title, subtitle, icon, secondary_icon, link, usernames,
+               packages, objects
+
+  Default: None
