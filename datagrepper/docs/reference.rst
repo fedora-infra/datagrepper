@@ -6,7 +6,10 @@ All API calls (currently) permit GET and POST requests with the same arguments.
 A trailing slash is optional on all API endpoints. There is no difference
 between using one and not using one.
 
-Responses are always served as ``application/json``.
+Responses are always served as ``application/json`` (unless ``JSONP`` is
+explicitly requested, in which case datagrepper returns the appropriate
+``application/javascript``).
+
 
 /raw
 ----
@@ -51,16 +54,16 @@ and displays the value used (the default if the argument was not provided).
 Time arguments
 ==============
 
-Below is a table describing what timeframe messages are received from depending
-on what combination of time options you provide.
+Below is a table describing what timeframe messages are received from
+depending on what combination of time options you provide.
 
 ========= ========= ======= =================
 ``delta`` ``start`` ``end`` Message timeframe
 ========= ========= ======= =================
-no        no        no      last 600 seconds
+no        no        no      last ``rows_per_page`` items
 **yes**   no        no      last ``delta`` seconds
 no        **yes**   no      from ``start`` until now
-**yes**   **yes**   no      from ``start`` until now (``delta`` is ignored)
+**yes**   **yes**   no      from ``start`` until ``delta`` seconds from ``start``
 no        no        **yes** the 600 seconds before ``end``
 **yes**   no        **yes** the ``delta`` seconds before ``end``
 no        **yes**   **yes** between ``start`` and ``end``
@@ -71,19 +74,19 @@ no        **yes**   **yes** between ``start`` and ``end``
 ``delta``
   Return results from the last ``delta`` seconds.
 
-  Default: 600
+  Default: None
 
 ``start``
   Return results starting at time ``start`` (in `UNIX time
   <https://en.wikipedia.org/wiki/Unix_time>`_).
 
-  Default: (``end`` minus ``delta``)
+  Default: None or (``end`` minus ``delta``)
 
 ``end``
   Return results ending at time ``end`` (in `UNIX time
   <https://en.wikipedia.org/wiki/Unix_time>`_).
 
-  Default: current time
+  Default: None or current
 
 Filter arguments
 ================
@@ -140,3 +143,28 @@ Pagination arguments
   100.
 
   Default: 20
+
+``order``
+  The "order" in which messages should be returned.  Must be one of either
+  "asc" or "desc".  "asc" means ascending, i.e. from oldest to newest.
+  "desc" means descending, i.e. from newest to oldest.
+
+  Default: "asc"
+
+Formatting arguments
+====================
+
+``callback``
+  To be specified when querying datagrepper via JavaScript/ajax, it will
+  return a "jsonp" output with the MIME type 'application/javascript'
+  instead of the traditionnal "json".
+
+  Default: None
+
+``meta``
+  Argument to specify what meta information to return with the raw
+  message from fedmsg.
+  Options are: title, subtitle, icon, secondary_icon, link, usernames,
+               packages, objects
+
+  Default: None
