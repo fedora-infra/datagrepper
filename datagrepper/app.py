@@ -47,6 +47,7 @@ app.secret_key = app.config['SECRET_KEY']
 
 # Read in the datanommer DB URL from /etc/fedmsg.d/ (or a local fedmsg.d/)
 fedmsg_config = fedmsg.config.load_config()
+fedmsg.meta.make_processors(**fedmsg_config)
 
 # Initialize a datanommer session.
 dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
