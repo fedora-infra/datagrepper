@@ -208,7 +208,7 @@ def raw():
         raise ValueError("order must be either 'desc' or 'asc'")
 
     meta_expected = set(['title', 'subtitle', 'icon', 'secondary_icon',
-                         'link', 'username', 'packages', 'objects'])
+                         'link', 'usernames', 'packages', 'objects'])
     if len(set(meta).intersection(meta_expected)) != len(set(meta)):
         raise ValueError("meta must be in %s"
                          % ','.join(list(meta_expected)))
