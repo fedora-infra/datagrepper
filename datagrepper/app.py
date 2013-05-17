@@ -27,11 +27,13 @@ import os
 import time
 import traceback
 
+from datetime import datetime
+
 import fedmsg.config
+import fedmsg.meta
 import datanommer.models as dm
 
-from util import assemble_timerange
-
+from datagrepper.util import assemble_timerange
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -45,6 +47,7 @@ app.secret_key = app.config['SECRET_KEY']
 
 # Read in the datanommer DB URL from /etc/fedmsg.d/ (or a local fedmsg.d/)
 fedmsg_config = fedmsg.config.load_config()
+fedmsg.meta.make_processors(**fedmsg_config)
 
 # Initialize a datanommer session.
 dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
@@ -136,11 +139,11 @@ def reference():
 def raw():
     """ Main API entry point. """
 
+    # Perform our complicated datetime logic
     start = flask.request.args.get('start', None)
     end = flask.request.args.get('end', None)
     delta = flask.request.args.get('delta', None)
-
-    start, end, delta = massage_datetime(start, end, delta)
+    start, end, delta = assemble_timerange(start, end, delta)
 
     # Further filters, all ANDed together in CNF style.
     users = flask.request.args.getlist('user')
@@ -155,6 +158,7 @@ def raw():
 
     # Response formatting arguments
     callback = flask.request.args.get('callback', None)
+    meta = flask.request.args.getlist('meta')
 
     arguments = dict(
         start=start,
@@ -167,6 +171,7 @@ def raw():
         page=page,
         rows_per_page=rows_per_page,
         order=order,
+        meta=meta,
     )
 
     if page < 1:
@@ -178,11 +183,17 @@ def raw():
     if order not in ['desc', 'asc']:
         raise ValueError("order must be either 'desc' or 'asc'")
 
+    meta_expected = set(['title', 'subtitle', 'icon', 'secondary_icon',
+                         'link', 'usernames', 'packages', 'objects'])
+    if len(set(meta).intersection(meta_expected)) != len(set(meta)):
+        raise ValueError("meta must be in %s"
+                         % ','.join(list(meta_expected)))
+
     try:
         # This fancy classmethod does all of our search for us.
         total, pages, messages = dm.Message.grep(
-            start=start,
-            end=end,
+            start=datetime.fromtimestamp(start),
+            end=datetime.fromtimestamp(end),
             page=page,
             rows_per_page=rows_per_page,
             order=order,
@@ -191,6 +202,26 @@ def raw():
             categories=categories,
             topics=topics,
         )
+
+        # Convert our messages from sqlalchemy objects to json-like dicts
+        messages = map(dm.Message.__json__, messages)
+
+        if meta:
+            for message in messages:
+                metas = {}
+                for metadata in meta:
+                    cmd = 'msg2%s' % metadata
+                    metas[metadata] = getattr(
+                        fedmsg.meta, cmd)(message, **fedmsg_config)
+
+                    # We have to do this because 'set' is not
+                    # JSON-serializable.  In the next version of fedmsg, this
+                    # will be handled automatically and we can just remove this
+                    # statement https://github.com/fedora-infra/fedmsg/pull/139
+                    if isinstance(metas[metadata], set):
+                        metas[metadata] = list(metas[metadata])
+
+                message['meta'] = metas
 
         output = dict(
             raw_messages=messages,
@@ -225,7 +256,6 @@ def raw():
         status=status,
         mimetype=mimetype,
     )
-
 
 # Add a request job to the queue
 #@app.route('/submit/')
