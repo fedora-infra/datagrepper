@@ -192,8 +192,8 @@ def raw():
     try:
         # This fancy classmethod does all of our search for us.
         total, pages, messages = dm.Message.grep(
-            start=datetime.fromtimestamp(start),
-            end=datetime.fromtimestamp(end),
+            start=start and datetime.fromtimestamp(start),
+            end=end and datetime.fromtimestamp(end),
             page=page,
             rows_per_page=rows_per_page,
             order=order,
