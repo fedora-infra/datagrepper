@@ -25,15 +25,15 @@ import jinja2
 import markupsafe
 import os
 import time
-from datetime import (
-    datetime,
-    timedelta,
-)
 import traceback
+
+from datetime import datetime
 
 import fedmsg.config
 import fedmsg.meta
 import datanommer.models as dm
+
+from datagrepper.util import assemble_timerange
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -122,22 +122,6 @@ def load_docs(request):
     return markupsafe.Markup(docs)
 
 
-def datetime_to_seconds(dt):
-    """ Name this, just because its confusing. """
-    return time.mktime(dt.timetuple())
-
-
-def timedelta_to_seconds(td):
-    """ Python 2.7 has a handy total_seconds method.
-    If we're on 2.6 though, we have to roll our own.
-    """
-
-    if hasattr(td, 'total_seconds'):
-        return td.total_seconds()
-    else:
-        return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) / 1e6
-
-
 @app.route('/')
 def index():
     return flask.render_template('index.html', docs=load_docs(flask.request))
@@ -155,18 +139,11 @@ def reference():
 def raw():
     """ Main API entry point. """
 
-    # Complicated combination of default start, end, delta arguments.
-    now = datetime_to_seconds(datetime.now())
-    end = datetime.fromtimestamp(
-        float(flask.request.args.get('end', now)))
-
-    delta = timedelta(
-        seconds=float(flask.request.args.get('delta', 600)))
-
-    then = datetime_to_seconds(end - delta)
-    start = datetime.fromtimestamp(
-        float(flask.request.args.get('start', then))
-    )
+    # Perform our complicated datetime logic
+    start = flask.request.args.get('start', None)
+    end = flask.request.args.get('end', None)
+    delta = flask.request.args.get('delta', None)
+    start, end, delta = assemble_timerange(start, end, delta)
 
     # Further filters, all ANDed together in CNF style.
     users = flask.request.args.getlist('user')
@@ -184,9 +161,9 @@ def raw():
     meta = flask.request.args.getlist('meta')
 
     arguments = dict(
-        start=datetime_to_seconds(start),
-        delta=timedelta_to_seconds(delta),
-        end=datetime_to_seconds(end),
+        start=start,
+        delta=delta,
+        end=end,
         users=users,
         packages=packages,
         categories=categories,
@@ -215,8 +192,8 @@ def raw():
     try:
         # This fancy classmethod does all of our search for us.
         total, pages, messages = dm.Message.grep(
-            start=start,
-            end=end,
+            start=datetime.fromtimestamp(start),
+            end=datetime.fromtimestamp(end),
             page=page,
             rows_per_page=rows_per_page,
             order=order,
