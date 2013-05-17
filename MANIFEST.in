@@ -1,4 +1,5 @@
 include requirements.txt
+include test-requirements.txt
 include createdb.py
 include runserver.py
 include shell
@@ -6,6 +7,7 @@ include README.rst
 include API.rst
 include datagrepper/API.rst
 include COPYING
+graft tests
 graft apache
 graft datagrepper/frontend/static
 graft datagrepper/docs
