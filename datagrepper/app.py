@@ -209,7 +209,7 @@ def raw():
 
     meta_expected = set(['title', 'subtitle', 'icon', 'secondary_icon',
                          'link', 'username', 'packages', 'objects'])
-    if set(meta).intersection(meta_expected) < 1:
+    if len(set(meta).intersection(meta_expected)) != len(set(meta)):
         raise ValueError("meta must be in %s"
                          % ','.join(list(meta_expected)))
 
