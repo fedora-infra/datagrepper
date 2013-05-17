@@ -226,13 +226,16 @@ def raw():
             topics=topics,
         )
 
+        # Convert our messages from sqlalchemy objects to json-like dicts
+        messages = map(dm.Message.__json__, messages)
+
         if meta:
             for message in messages:
                 metas = {}
                 for metadata in meta:
                     cmd = 'msg2%s' % metadata
                     metas[metadata] = getattr(
-                        fedmsg.meta, cmd)(message.__json__(), **fedmsg_config)
+                        fedmsg.meta, cmd)(message, **fedmsg_config)
                 message['meta'] = metas
 
         output = dict(
