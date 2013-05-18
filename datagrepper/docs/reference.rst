@@ -164,7 +164,7 @@ Formatting arguments
 ``meta``
   Argument to specify what meta information to return with the raw
   message from fedmsg.
-  Options are: title, subtitle, icon, secondary_icon, link, usernames,
-               packages, objects
+  Options are: `title, subtitle, icon, secondary_icon, link, usernames,
+  packages, objects`
 
   Default: None
