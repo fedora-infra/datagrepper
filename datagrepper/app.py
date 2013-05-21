@@ -262,4 +262,26 @@ def raw():
 @app.route('/submit/')
 @app.route('/submit')
 def submit():
-    raise NotImplementedError()
+    try:
+        dqobj = DataQuery.parse_from_request(flask.request.args)
+        # FIXME create database model and use the output of this with it
+        dqrepr = dqobj.database_repr()
+        # FIXME commit to db; return job ID
+        status = 200
+        msg = {'job_id': 0}
+    except (ValueError, UnicodeDecodeError), e:
+        if isinstance(e, UnicodeDecodeError):
+            msg = {'error': 'unicode_decode',
+                   'value': e.object,
+                   'reason': e.reason,
+                   'start': e.start,
+                   'end': e.end}
+        else:
+            msg = {'error': 'invalid_arg',
+                   'value': e.message}
+        status = 400
+    return flask.Response(
+        response=fedmsg.encoding.dumps(msg),
+        status=status,
+        mimetype='application/json',
+    )
