@@ -257,8 +257,9 @@ def raw():
         mimetype=mimetype,
     )
 
+
 # Add a request job to the queue
-#@app.route('/submit/')
-#@app.route('/submit')
-#def submit():
-#    pass
+@app.route('/submit/')
+@app.route('/submit')
+def submit():
+    raise NotImplementedError()
