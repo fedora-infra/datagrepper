@@ -78,7 +78,7 @@ def index(page=1):
         start = (page - 1) * 20
         if start > jobs.count():
             return flask.redirect(flask.url_for('index', page=1))
-        resp['jobs'] = flask.g.user.jobs.slice(start, start+20).all()
+        resp['jobs'] = flask.g.user.jobs.slice(start, start + 20).all()
         resp['jobs_count'] = jobs.count()
         if start + 20 < jobs.count():
             resp['jobs_continue'] = {'page': page + 1}
