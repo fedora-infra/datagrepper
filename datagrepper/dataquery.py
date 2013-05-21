@@ -48,16 +48,16 @@ class DataQuery(object):
     @classmethod
     def parse_from_request(cls, request_args):
         obj = cls()
-        args, invalid = dict(), list()
+        args, opts = dict(), dict()
 
         for arg in OPTIONS:
-            setattr(obj, arg, request_args.get(arg, None))
+            opts[arg] = request_args.get(arg, None)
 
         for arg in LIST_OPTIONS:
-            setattr(obj, arg, request_args.getlist(arg))
+            opts[arg] = request_args.getlist(arg)
 
-        obj.start, obj.end, obj.delta = \
-            assemble_timerange(obj.start, obj.end, obj.delta)
+        obj['start'], obj['end'], obj['delta'] = \
+            assemble_timerange(obj['start'], obj['end'], obj['delta'])
 
         for arg in (urllib.unquote(x) for x in request_args):
             # skip if this is an option
@@ -66,7 +66,7 @@ class DataQuery(object):
             # this can throw an exception, should be handled by caller
             args[key] = self.parse_request_arg(arg)
         obj.args = args
-        obj.invalid = invalid
+        obj.options = opts
         return obj
 
     @classmethod
