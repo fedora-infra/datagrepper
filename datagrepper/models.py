@@ -10,21 +10,10 @@ STATUS_FAILED = 3
 STATUS_DELETED = 4
 
 
-class User(db.Model):
-    __tablename__ = 'user'
-
-    id = db.Column(db.Integer, primary_key=True)
-    openid = db.Column(db.Unicode, unique=True, nullable=False)
-    email = db.Column(db.Unicode, nullable=False)
-    apikey = db.Column(db.Unicode(56), unique=True, nullable=False)
-
-
 class Job(db.Model):
     __tablename__ = 'job'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', backref=db.backref('jobs', lazy='dynamic'))
     query_json = db.Column(db.UnicodeText, nullable=False)
     status = db.Column(db.Integer, nullable=False, default=STATUS_FREE)
     filename = db.Column(db.Unicode, nullable=True)
