@@ -33,7 +33,7 @@ import fedmsg.config
 import fedmsg.meta
 import datanommer.models as dm
 
-from datagrepper.models import Job
+from datagrepper.dataquery import DataQuery
 from datagrepper.util import assemble_timerange
 
 app = flask.Flask(__name__)
@@ -43,8 +43,9 @@ app.config.from_envvar('DATAGREPPER_CONFIG')
 # Set up session secret key
 app.secret_key = app.config['SECRET_KEY']
 
-# This loads all the openid/user management stuff which is a work in progress.
-#import datagrepper.users
+# Set up datagrepper database
+db = SQLAlchemy(app)
+from datagrepper.models import Job
 
 # Read in the datanommer DB URL from /etc/fedmsg.d/ (or a local fedmsg.d/)
 fedmsg_config = fedmsg.config.load_config()
@@ -269,7 +270,9 @@ def submit():
         db.session.commit()
         # FIXME emit fedmsg message
         status = 200
-        msg = {'job_id': 0}
+        msg = {'job_id': job.id,
+               'options': job.dataquery['options'],
+               'args': job.dataquery['args']}
     except (ValueError, UnicodeDecodeError), e:
         if isinstance(e, UnicodeDecodeError):
             msg = {'error': 'unicode_decode',

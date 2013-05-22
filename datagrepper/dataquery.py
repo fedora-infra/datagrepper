@@ -36,7 +36,7 @@ OPERATORS = {
     '!*': lambda a, b: b not in a,
 }
 OPTIONS = ('start', 'end', 'delta')
-LIST_OPTIONS = ('users', 'packages', 'categories', 'topics', 'meta')
+LIST_OPTIONS = ('user', 'package', 'category', 'topic', 'meta')
 
 
 class DataQuery(object):
@@ -56,15 +56,17 @@ class DataQuery(object):
         for arg in LIST_OPTIONS:
             opts[arg] = request_args.getlist(arg)
 
-        obj['start'], obj['end'], obj['delta'] = \
-            assemble_timerange(obj['start'], obj['end'], obj['delta'])
+        opts['start'], opts['end'], opts['delta'] = \
+            assemble_timerange(opts['start'], opts['end'], opts['delta'])
 
-        for arg in (urllib.unquote(x) for x in request_args):
+        #for arg in (urllib.unquote(x) for x in request_args):
+        for arg in request_args:
             # skip if this is an option
             if arg in OPTIONS + LIST_OPTIONS:
                 continue
             # this can throw an exception, should be handled by caller
-            args[key] = self.parse_request_arg(arg)
+            key, oper, value = cls.parse_request_arg(arg)
+            args[key] = (oper, value)
         obj.args = args
         obj.options = opts
         return obj
@@ -84,7 +86,7 @@ class DataQuery(object):
             if arg[i:i + 2] in OPERATORS:
                 key, value = (urllib.unquote(x).decode('utf-8') for x in
                               arg.split(arg[i:i + 2], 1))
-                return (arg[i:i + 2], value)
+                return (key, arg[i:i + 2], value)
         # we couldn't find an operator
         raise ValueError(arg)
 

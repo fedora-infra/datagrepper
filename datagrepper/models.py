@@ -1,4 +1,4 @@
-from datagrepper import app, db
+from datagrepper.app import db
 
 from datetime import datetime
 import json
@@ -14,7 +14,7 @@ class Job(db.Model):
     __tablename__ = 'job'
 
     id = db.Column(db.Integer, primary_key=True)
-    query_json = db.Column(db.UnicodeText, nullable=False)
+    dataquery_json = db.Column(db.UnicodeText, nullable=False)
     status = db.Column(db.Integer, nullable=False, default=STATUS_FREE)
     filename = db.Column(db.Unicode, nullable=True)
     request_time = db.Column(db.DateTime, nullable=False)
@@ -22,12 +22,13 @@ class Job(db.Model):
     complete_time = db.Column(db.DateTime, nullable=True)
 
     def __init__(self, dataquery):
-        self.query = dataquery.database_repr()
+        self.dataquery = dataquery.database_repr()
+        self.request_time = datetime.now()
 
-    @property
-    def query(self):
-        return json.loads(self.query_json)
+    def get_dataquery(self):
+        return json.loads(self.dataquery_json)
 
-    @query.setter
-    def set_query(self, value):
-        self.query_json = json.dumps(value)
+    def set_dataquery(self, value):
+        self.dataquery_json = json.dumps(value)
+
+    dataquery = property(get_dataquery, set_dataquery)
