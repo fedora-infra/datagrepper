@@ -21,6 +21,9 @@ class Job(db.Model):
     start_time = db.Column(db.DateTime, nullable=True)
     complete_time = db.Column(db.DateTime, nullable=True)
 
+    def __init__(self, dataquery):
+        self.query = dataquery.database_repr()
+
     @property
     def query(self):
         return json.loads(self.query_json)

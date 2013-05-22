@@ -33,6 +33,7 @@ import fedmsg.config
 import fedmsg.meta
 import datanommer.models as dm
 
+from datagrepper.models import Job
 from datagrepper.util import assemble_timerange
 
 app = flask.Flask(__name__)
@@ -263,10 +264,10 @@ def raw():
 @app.route('/submit')
 def submit():
     try:
-        dqobj = DataQuery.parse_from_request(flask.request.args)
-        # FIXME create database model and use the output of this with it
-        dqrepr = dqobj.database_repr()
-        # FIXME commit to db; return job ID
+        job = Job(DataQuery.parse_from_request(flask.request.args))
+        db.session.add(job)
+        db.session.commit()
+        # FIXME emit fedmsg message
         status = 200
         msg = {'job_id': 0}
     except (ValueError, UnicodeDecodeError), e:

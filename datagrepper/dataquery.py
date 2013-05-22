@@ -71,7 +71,10 @@ class DataQuery(object):
 
     @classmethod
     def parse_from_database(cls, job_obj):
-        raise NotImplementedError()
+        obj = cls()
+        obj.args = job_obj.query['args']
+        obj.options = job_obj.query['options']
+        return obj
 
     @staticmethod
     def parse_request_arg(arg):
@@ -86,7 +89,8 @@ class DataQuery(object):
         raise ValueError(arg)
 
     def database_repr(self):
-        raise NotImplementedError()
+        return {'args': self.args,
+                'options': self.options}
 
     def run_query(self):
         raise NotImplementedError()
