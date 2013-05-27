@@ -9,6 +9,14 @@ STATUS_DONE = 2
 STATUS_FAILED = 3
 STATUS_DELETED = 4
 
+STRSTATUS = {
+    STATUS_FREE: 'free',
+    STATUS_OPEN: 'open',
+    STATUS_DONE: 'done',
+    STATUS_FAILED: 'failed',
+    STATUS_DELETED: 'deleted',
+}
+
 
 class Job(db.Model):
     __tablename__ = 'job'

@@ -289,6 +289,7 @@ Response format
 .. code-block:: javascript
 
     {
+        "id": 1,
         "state": "done",
         "url": "http://..."
     }

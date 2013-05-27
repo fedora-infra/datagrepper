@@ -45,7 +45,7 @@ app.secret_key = app.config['SECRET_KEY']
 
 # Set up datagrepper database
 db = SQLAlchemy(app)
-from datagrepper.models import Job
+from datagrepper.models import Job, STRSTATUS
 
 # Read in the datanommer DB URL from /etc/fedmsg.d/ (or a local fedmsg.d/)
 fedmsg_config = fedmsg.config.load_config()
@@ -232,7 +232,7 @@ def raw():
             count=len(messages),
             arguments=arguments,
         )
-        status = "200 OK"
+        status = 200
     except Exception as e:
         output = dict(
             error=str(e),
@@ -243,7 +243,7 @@ def raw():
         if app.config.get('DEBUG', False):
             output['tb'] = traceback.format_exc().split('\n')
 
-        status = "500 error"
+        status = 500
 
     body = fedmsg.encoding.dumps(output)
 
@@ -287,5 +287,35 @@ def submit():
     return flask.Response(
         response=fedmsg.encoding.dumps(msg),
         status=status,
+        mimetype='application/json',
+    )
+
+
+@app.route('/status/')
+@app.route('/status')
+def status():
+    if 'id' not in flask.request.args:
+        return flask.Response(
+            response=fedmsg.encoding.dumps({'error': 'missing_argument',
+                                            'argument': 'id'}),
+            status=400,
+            mimetype='application/json',
+        )
+    job = Job.query.get_or_404(flask.request.args['id'])
+    msg = {'id': job.id, 'status': STRSTATUS[job.status]}
+    if job.filename:
+        msg['filename'] = job.filename
+    return flask.Response(
+        response=fedmsg.encoding.dumps(msg),
+        status=200,
+        mimetype='application/json',
+    )
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return flask.Response(
+        response=fedmsg.encoding.dumps({'error': 'not_found'}),
+        status=404,
         mimetype='application/json',
     )
