@@ -46,7 +46,7 @@ class DataQuery(object):
     """
 
     @classmethod
-    def parse_from_request(cls, request_args):
+    def from_request(cls, request_args):
         obj = cls()
         args, opts = dict(), dict()
 
@@ -72,7 +72,7 @@ class DataQuery(object):
         return obj
 
     @classmethod
-    def parse_from_database(cls, job_obj):
+    def from_database(cls, job_obj):
         obj = cls()
         obj.args = job_obj.query['args']
         obj.options = job_obj.query['options']

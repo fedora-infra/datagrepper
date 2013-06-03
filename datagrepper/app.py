@@ -265,7 +265,7 @@ def raw():
 @app.route('/submit')
 def submit():
     try:
-        job = Job(DataQuery.parse_from_request(flask.request.args))
+        job = Job(DataQuery.from_request(flask.request.args))
         db.session.add(job)
         db.session.commit()
         # FIXME emit fedmsg message
