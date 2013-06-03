@@ -1,3 +1,5 @@
+.. |crarr| unicode:: U+021B5 .. DOWNWARDS ARROW WITH CORNER LEFTWARDS
+
 Prerequisites
 -------------
 
@@ -155,3 +157,60 @@ For example, this query will return all messages from the past 2 days where
         category==wiki \
         user==toshio \
         user==pingou
+
+Advanced queries
+----------------
+
+The ``/submit`` endpoint allows you to make more complex queries. For example,
+to query for changes to specfiles in Fedora, one could use the following query:
+
+- ``topic = git``
+- ``commit->stats->files->* =* .spec``
+
+In plain speak, the above means "search for all messages in the ``git`` topic
+where the string ``*.spec`` is a substring of the keys in
+``msg['commit']['stats']['files']``. ``=*`` is an operator defined by
+datagrepper -- for a list of all the other operators, check `the reference page
+<{{URL}}reference>`_.
+
+For basic query arguments (delta, start, end, meta, user, package, category,
+and topic), the argument is provided normally in the request
+(``topic=git&...``). For advanced query arguments, the request argument is
+divined from this system::
+
+    arg = urlencode( urlencode(key) + operator + urlencode(value) )
+
+The argument is appended to the query string with no value. The URL for the
+above query is therefore::
+
+    {{URL}}submit?topic=git&commit-%253Estats-%253Efiles-%253E%252A%3D%2A.spec
+
+You'll get a response like this:
+
+.. code-block:: javascript
+
+    {
+        "args": {
+            "commit->stats->files->*": [
+                "=*",
+                ".spec"
+            ]
+        },
+        "job_id": 1,
+        "options": {
+            "category": [ ],
+            "delta": null,
+            "end": null,
+            "meta": [ ],
+            "package": [ ],
+            "start": null,
+            "topic": [
+                "git"
+            ],
+            "user": [ ]
+        }
+    }
+
+You can check on your job's status with the ``/status`` endpoint::
+
+    $ http get {{URL}}job/ id==1

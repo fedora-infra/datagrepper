@@ -168,3 +168,131 @@ Formatting arguments
   packages, objects`
 
   Default: None
+
+
+/submit
+-------
+
+The ``/submit`` endpoint allows you to submit a job for a data query more
+complex than what ``/raw`` can provide.
+
+The status of a job (including a URL where you can download the data, if the
+job is complete) is available from the ``/status`` endpoint.
+
+Arguments inherited from /raw
+=============================
+
+The following arguments can be used in the same way as in ``/raw``:
+
+- ``delta``
+- ``start``
+- ``end``
+- ``meta``
+- ``user``
+- ``package``
+- ``category``
+- ``topic``
+
+Advanced filter arguments
+=========================
+
+Advanced filter arguments allow you to filter based on values inside the
+message body. Each argument consists of a key, an operator, and a value.
+
+The key references a key in the message. A path of keys can be specified by
+joining each part of the path with ``->``. A single part of the path may be a
+single asterisk (``*``) to allow for any key in that part.
+
+There are various operators. In the following table, *value* is the value in
+the job request and *message value* is the value in the message for the key.
+
+======== =================================================================================
+Operator Conditions to return message
+======== =================================================================================
+``==``   *message value* is equal to *value*
+``!=``   *message value* is not equal to *value*
+``<``    *message value* is less than *value*
+``<=``   *message value* is less than or equal to *value*
+``>``    *message value* is greater than *value*
+``>=``   *message value* is greater than or equal to *value*
+``=~``   *message value* is a string and the regular expression *value* is found in *message value*
+``!~``   *message value* is a string and the regular expression *value* is not found in *message value*
+``=*``   - if *message value* is a string, *value* is a substring of *message value*;
+         - if *message value* is a list, *value* is an item in *message value*;
+         - if *message value* is a dictionary, *value* is a key in *message value*
+``!*``   - if *message value* is a string, *value* is not a substring of *message value*;
+         - if *message value* is a list, *value* is not an item in *message value*;
+         - if *message value* is a dictionary, *value* is not a key in *message value*
+======== =================================================================================
+
+
+Advanced filter arguments are added to the query string by the following
+mechanism::
+
+    arg = urlencode( urlencode(key) + operator + urlencode(value) )
+
+Response format
+===============
+
+Successful response:
+
+.. code-block:: javascript
+
+    {
+        "args": {
+            ...
+        },
+        "job_id": 1,
+        "options": {
+            "category": [ ],
+            "delta": null,
+            ...
+        }
+    }
+
+Error response:
+
+.. code-block:: javascript
+
+    {
+        "error": "error_type",
+        ...
+    }
+
+Errors
+======
+
+``invalid_arg``
+  An advanced filter argument couldn't be parsed.
+
+  ``value`` is the value of the argument
+
+``unicode_decode``
+  A ``UnicodeDecodeError`` occurred when trying to parse the argument.
+
+  ``value``, ``reason``, ``start``, and ``end`` are from the raised exception.
+
+Implementation notes
+====================
+
+For the ``=*`` and ``!*`` operators, we simply use Python's ``in`` operator.
+
+
+/status
+-------
+
+Returns the status of a job. If the job is finished, also returns the filename.
+
+Response format
+===============
+
+.. code-block:: javascript
+
+    {
+        "id": 1,
+        "state": "done",
+        "url": "http://..."
+    }
+
+Valid states include ``free``, ``open``, ``done``, ``failed``, and ``deleted``.
+``url`` is displayed for the ``done`` state only.
