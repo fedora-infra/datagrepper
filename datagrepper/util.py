@@ -44,7 +44,7 @@ def timedelta_to_seconds(td):
     else:
         return (
             (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) /
-                1e6)
+            1e6)
 
 
 def assemble_timerange(start, end, delta):
@@ -62,7 +62,7 @@ def assemble_timerange(start, end, delta):
             else:
                 end = float(start) + float(delta)
 
-        end = datetime.fromtimestamp(end)
+        end = datetime.fromtimestamp(float(end))
 
         if start is None:
             delta = timedelta(seconds=float(delta))
@@ -76,7 +76,7 @@ def assemble_timerange(start, end, delta):
         if end is None:
             end = float(now)
 
-        end = datetime.fromtimestamp(end)
+        end = datetime.fromtimestamp(float(end))
 
         if start is None:
             delta = timedelta(seconds=600.0)
