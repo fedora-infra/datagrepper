@@ -29,6 +29,7 @@ import traceback
 
 from datetime import datetime
 
+import fedmsg
 import fedmsg.config
 import fedmsg.meta
 import datanommer.models as dm
@@ -268,7 +269,11 @@ def submit():
         job = Job(DataQuery.from_request(flask.request.args))
         db.session.add(job)
         db.session.commit()
-        # FIXME emit fedmsg message
+        fedmsg.publish(modname='datagrepper', topic='job.new', msg={
+            'job_id': job.id,
+            'options': job.dataquery['options'],
+            'args': job.dataquery['args'],
+        })
         status = 200
         msg = {'job_id': job.id,
                'options': job.dataquery['options'],
@@ -319,3 +324,8 @@ def not_found(error):
         status=404,
         mimetype='application/json',
     )
+
+
+fedmsg.publish(modname='datagrepper', topic='test', msg={
+    'test': 'Hello, world!',
+})
