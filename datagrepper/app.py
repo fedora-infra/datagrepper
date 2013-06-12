@@ -324,8 +324,3 @@ def not_found(error):
         status=404,
         mimetype='application/json',
     )
-
-
-fedmsg.publish(modname='datagrepper', topic='test', msg={
-    'test': 'Hello, world!',
-})
