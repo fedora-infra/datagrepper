@@ -213,4 +213,4 @@ You'll get a response like this:
 
 You can check on your job's status with the ``/status`` endpoint::
 
-    $ http get {{URL}}job/ id==1
+    $ http get {{URL}}status/ id==1
