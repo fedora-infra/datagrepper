@@ -18,23 +18,9 @@
 import re
 import urllib
 
+import datanommer.models as dm
 from datagrepper.util import assemble_timerange
 
-# In these functions, "a" is the value from the datanommer message, and "b" is
-# the value from the query definition. All of these functions must return True
-# or False.
-OPERATORS = {
-    '==': lambda a, b: a == b,
-    '!=': lambda a, b: a != b,
-    '<': lambda a, b: a < b,
-    '<=': lambda a, b: a <= b,
-    '>': lambda a, b: a > b,
-    '>=': lambda a, b: a >= b,
-    '=~': lambda a, b: re.search(b, a) is not None,
-    '!~': lambda a, b: re.search(b, a) is None,
-    '=*': lambda a, b: b in a,
-    '!*': lambda a, b: b not in a,
-}
 OPTIONS = ('start', 'end', 'delta')
 LIST_OPTIONS = ('user', 'package', 'category', 'topic', 'meta')
 
@@ -74,8 +60,8 @@ class DataQuery(object):
     @classmethod
     def from_database(cls, job_obj):
         obj = cls()
-        obj.args = job_obj.query['args']
-        obj.options = job_obj.query['options']
+        obj.args = job_obj.dataquery['args']
+        obj.options = job_obj.dataquery['options']
         return obj
 
     @staticmethod
@@ -95,4 +81,4 @@ class DataQuery(object):
                 'options': self.options}
 
     def run_query(self):
-        raise NotImplementedError()
+        raise NotImplementedError

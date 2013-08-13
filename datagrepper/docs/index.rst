@@ -161,53 +161,36 @@ For example, this query will return all messages from the past 2 days where
 Advanced queries
 ----------------
 
-The ``/submit`` endpoint allows you to make more complex queries. For example,
-to query for changes to specfiles in Fedora, one could use the following query:
+The ``/submit`` endpoint allows you to make more complex queries.
 
-- ``topic = git``
-- ``commit->stats->files->* =* .spec``
-
-In plain speak, the above means "search for all messages in the ``git`` topic
-where the string ``*.spec`` is a substring of the keys in
-``msg['commit']['stats']['files']``. ``=*`` is an operator defined by
-datagrepper -- for a list of all the other operators, check `the reference page
-<{{URL}}reference>`_.
-
-For basic query arguments (delta, start, end, meta, user, package, category,
-and topic), the argument is provided normally in the request
-(``topic=git&...``). For advanced query arguments, the request argument is
-divined from this system::
-
-    arg = urlencode( urlencode(key) + operator + urlencode(value) )
-
-The argument is appended to the query string with no value. The URL for the
-above query is therefore::
-
-    {{URL}}submit?topic=git&commit-%253Estats-%253Efiles-%253E%252A%3D%2A.spec
+FIXME: Docs need to be written for the new YAML query system.
 
 You'll get a response like this:
 
 .. code-block:: javascript
 
     {
-        "args": {
-            "commit->stats->files->*": [
-                "=*",
-                ".spec"
-            ]
-        },
         "job_id": 1,
-        "options": {
-            "category": [ ],
-            "delta": null,
-            "end": null,
-            "meta": [ ],
-            "package": [ ],
-            "start": null,
-            "topic": [
-                "git"
-            ],
-            "user": [ ]
+        "category": [ ],
+        "delta": null,
+        "end": null,
+        "meta": [ ],
+        "package": [ ],
+        "start": null,
+        "topic": [
+            "org.fedoraproject.prod.git.receive"
+        ],
+        "user": [ ],
+        "filter": {
+            "commit": {
+                "stats": {
+                    "files": {
+                        "__key__": {
+                            "re_match": "\.spec$"
+                        }
+                    }
+                }
+            }
         }
     }
 
