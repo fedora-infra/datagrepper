@@ -271,7 +271,7 @@ def submit():
         db.session.commit()
         fedmsg.publish(topic='job.new', msg=job)
         status = 200
-        msg = {'job_id': job.id,
+        msg = {'id': job.id,
                'options': job.dataquery['options']}
     except ValueError as exc:
         msg = {'error': 'invalid_arg',
