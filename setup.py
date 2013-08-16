@@ -46,5 +46,7 @@ setup(
     tests_require=get_requires(filename='test-requirements.txt'),
     test_suite='nose.collector',
     entry_points='''
+    [moksha.consumer]
+    datagrepperconsumer = datagrepper.runner:DatagrepperRunnerConsumer
     '''
 )
