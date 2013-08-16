@@ -15,10 +15,22 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+import fedmsg.encoding
+import os
 import re
+import shutil
+import tarfile
+import tempfile
+import time
 import urllib
 
+try:
+    import lzma
+except ImportError:
+    import backports.lzma as lzma
+
 import datanommer.models as dm
+import datagrepper.app
 from datagrepper.util import assemble_timerange
 
 OPTIONS = ('start', 'end', 'delta')
@@ -34,7 +46,7 @@ class DataQuery(object):
     @classmethod
     def from_request(cls, request_args):
         obj = cls()
-        args, opts = dict(), dict()
+        opts = dict()
 
         for arg in OPTIONS:
             opts[arg] = request_args.get(arg, None)
@@ -45,40 +57,73 @@ class DataQuery(object):
         opts['start'], opts['end'], opts['delta'] = \
             assemble_timerange(opts['start'], opts['end'], opts['delta'])
 
-        #for arg in (urllib.unquote(x) for x in request_args):
-        for arg in request_args:
-            # skip if this is an option
-            if arg in OPTIONS + LIST_OPTIONS:
-                continue
-            # this can throw an exception, should be handled by caller
-            key, oper, value = cls.parse_request_arg(arg)
-            args[key] = (oper, value)
-        obj.args = args
         obj.options = opts
         return obj
 
     @classmethod
     def from_database(cls, job_obj):
         obj = cls()
-        obj.args = job_obj.dataquery['args']
         obj.options = job_obj.dataquery['options']
         return obj
 
-    @staticmethod
-    def parse_request_arg(arg):
-        """This method expects a request argument that has already been
-        unescaped once (such that the operator is unescaped)."""
-        for i in range(len(arg) - 1):
-            if arg[i:i + 2] in OPERATORS:
-                key, value = (urllib.unquote(x).decode('utf-8') for x in
-                              arg.split(arg[i:i + 2], 1))
-                return (key, arg[i:i + 2], value)
-        # we couldn't find an operator
-        raise ValueError(arg)
-
     def database_repr(self):
-        return {'args': self.args,
-                'options': self.options}
+        return {'options': self.options}
 
-    def run_query(self):
-        raise NotImplementedError
+    def run_query(self, output_prefix):
+        """
+        Returns the location of the output file, which is either a .json.xz or
+        a .tar.xz. The output filename will start with output_prefix.
+        """
+        def output_file(messages, dir):
+            earliest = int(time.mktime(messages[0].timestamp.timetuple()))
+            latest = int(time.mktime(messages[-1].timestamp.timetuple()))
+            filename = 'messages_{0}_{1}.json'.format(earliest, latest)
+            with open(os.path.join(dir, filename), 'w') as f:
+                f.write(fedmsg.encoding.dumps(messages))
+            return filename
+
+        dir = tempfile.mkdtemp(prefix='datagrepper-tmp')
+        total, pages, query = dm.Message.grep(
+            start=(self.options['start'] and
+                   datetime.fromtimestamp(self.options['start'])),
+            end=(self.options['end'] and
+                 datetime.fromtimestamp(self.options['end'])),
+            rows_per_page=None,
+            users=self.options['user'],
+            packages=self.options['package'],
+            categories=self.options['category'],
+            topics=self.options['topic'],
+            defer=True,
+        )
+
+        messages = []
+        files = []
+        for message in query.yield_per(10):
+            messages.append(message)
+            if len(messages) >= 10000:
+                files.append(output_file(messages, dir))
+                messages = []
+        files.append(output_file(messages, dir))
+
+        if len(files) > 1:
+            extension = '.tar.xz'
+            fname = os.path.join(datagrepper.app.app.config['JOB_OUTPUT_DIR'],
+                                 output_prefix + extension)
+            with lzma.open(fname, 'w') as lzmaobj:
+                with tarfile.open(fileobj=lzmaobj, mode='w') as tar:
+                    for filename in files:
+                        tar.add(os.path.join(dir, filename), arcname=filename)
+        else:
+            extension = '.json.xz'
+            fname = os.path.join(datagrepper.app.app.config['JOB_OUTPUT_DIR'],
+                                 output_prefix + extension)
+            with lzma.open(fname, 'w') as lzmaobj:
+                with open(os.path.join(dir, files[0]), 'r') as f:
+                    while True:
+                        line = f.readline(int(10e6))  # limit to 10 MB per read
+                        if not line:
+                            break
+                        lzmaobj.write(line)
+
+        shutil.rmtree(dir, ignore_errors=True)
+        return output_prefix + extension

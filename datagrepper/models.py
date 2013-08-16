@@ -1,6 +1,7 @@
 from datagrepper.app import db
 
 from datetime import datetime
+import fedmsg
 import json
 
 STATUS_FREE = 0
@@ -33,10 +34,32 @@ class Job(db.Model):
         self.dataquery = dataquery.database_repr()
         self.request_time = datetime.now()
 
+    def __json__(self):
+        return dict(
+            id=self.id,
+            dataquery=self.dataquery,
+            status=STRSTATUS[self.status],
+            filename=self.filename,
+            request_time=self.request_time,
+            start_time=self.start_time,
+            complete_time=self.complete_time,
+        )
+
     def get_dataquery(self):
         return json.loads(self.dataquery_json)
 
     def set_dataquery(self, value):
         self.dataquery_json = json.dumps(value)
+
+    def set_status(self, status, commit=True):
+        if status == STATUS_OPEN:
+            self.start_time = datetime.now()
+        elif status in (STATUS_DONE, STATUS_FAILED):
+            self.complete_time = datetime.now()
+        self.status = status
+        fedmsg.publish(topic='job.status.change',
+                       msg={'status': STRSTATUS[status], 'job': self})
+        db.session.add(self)
+        db.session.commit()
 
     dataquery = property(get_dataquery, set_dataquery)

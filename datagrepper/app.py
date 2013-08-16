@@ -269,25 +269,13 @@ def submit():
         job = Job(DataQuery.from_request(flask.request.args))
         db.session.add(job)
         db.session.commit()
-        fedmsg.publish(modname='datagrepper', topic='job.new', msg={
-            'job_id': job.id,
-            'options': job.dataquery['options'],
-            'args': job.dataquery['args'],
-        })
+        fedmsg.publish(topic='job.new', msg=job)
         status = 200
         msg = {'job_id': job.id,
-               'options': job.dataquery['options'],
-               'args': job.dataquery['args']}
-    except (ValueError, UnicodeDecodeError), e:
-        if isinstance(e, UnicodeDecodeError):
-            msg = {'error': 'unicode_decode',
-                   'value': e.object,
-                   'reason': e.reason,
-                   'start': e.start,
-                   'end': e.end}
-        else:
-            msg = {'error': 'invalid_arg',
-                   'value': e.message}
+               'options': job.dataquery['options']}
+    except ValueError as exc:
+        msg = {'error': 'invalid_arg',
+               'value': exc.message}
         status = 400
     return flask.Response(
         response=fedmsg.encoding.dumps(msg),
@@ -309,7 +297,7 @@ def status():
     job = Job.query.get_or_404(flask.request.args['id'])
     msg = {'id': job.id, 'status': STRSTATUS[job.status]}
     if job.filename:
-        msg['filename'] = job.filename
+        msg['url'] = app.config['JOB_OUTPUT_URL'] + '/' + job.filename
     return flask.Response(
         response=fedmsg.encoding.dumps(msg),
         status=200,

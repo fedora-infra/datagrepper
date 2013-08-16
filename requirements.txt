@@ -6,3 +6,4 @@ kitchen
 datanommer.models>=0.4.4
 fedmsg
 docutils
+backports.lzma
