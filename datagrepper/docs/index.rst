@@ -158,41 +158,14 @@ For example, this query will return all messages from the past 2 days where
         user==toshio \
         user==pingou
 
-Advanced queries
-----------------
+Bulk queries
+------------
 
-The ``/submit`` endpoint allows you to make more complex queries.
+The ``/submit`` endpoint does not limit you to the number of messages you can
+fetch. You can submit a job, then listen to the fedmsg bus for a
+``datagrepper.job.status.change`` message for when your job is done.
 
-FIXME: Docs need to be written for the new YAML query system.
-
-You'll get a response like this:
-
-.. code-block:: javascript
-
-    {
-        "job_id": 1,
-        "category": [ ],
-        "delta": null,
-        "end": null,
-        "meta": [ ],
-        "package": [ ],
-        "start": null,
-        "topic": [
-            "org.fedoraproject.prod.git.receive"
-        ],
-        "user": [ ],
-        "filter": {
-            "commit": {
-                "stats": {
-                    "files": {
-                        "__key__": {
-                            "re_match": "\.spec$"
-                        }
-                    }
-                }
-            }
-        }
-    }
+The arguments are the same as ``/raw``.
 
 You can check on your job's status with the ``/status`` endpoint::
 

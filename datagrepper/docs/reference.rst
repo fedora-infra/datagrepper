@@ -173,13 +173,28 @@ Formatting arguments
 /submit
 -------
 
-The ``/submit`` endpoint allows you to submit a job for a data query more
-complex than what ``/raw`` can provide.
+The ``/submit`` endpoint allows you to submit a job for more data than ``/raw``
+allows.
+
+The arguments are the same as ``/raw``.
 
 The status of a job (including a URL where you can download the data, if the
 job is complete) is available from the ``/status`` endpoint.
 
-FIXME: actually document the YAML upload system
+Response format
+===============
+
+.. code-block:: javascript
+
+    {
+        "job_id": 1,
+        "options": {
+            "category": [ ... ],
+            "topic": [ ... ],
+            "start": null,
+            ...
+        }
+    }
 
 /status
 -------
