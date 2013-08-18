@@ -266,7 +266,7 @@ def raw():
 @app.route('/submit')
 def submit():
     try:
-        job = Job(DataQuery.from_request(flask.request.args))
+        job = Job(DataQuery.from_request_args(flask.request.args))
         db.session.add(job)
         db.session.commit()
         fedmsg.publish(topic='job.new', msg=job)

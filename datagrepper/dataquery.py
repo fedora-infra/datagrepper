@@ -44,7 +44,7 @@ class DataQuery(object):
     """
 
     @classmethod
-    def from_request(cls, request_args):
+    def from_request_args(cls, request_args):
         obj = cls()
         opts = dict()
 
