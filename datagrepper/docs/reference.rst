@@ -214,3 +214,10 @@ Response format
 
 Valid states include ``free``, ``open``, ``done``, ``failed``, and ``deleted``.
 ``url`` is displayed for the ``done`` state only.
+
+/topic
+------
+
+Returns a list of all topics in the datanommer database. Takes no arguments.
+
+This is cached hourly, so sometimes it will take a while to generate.

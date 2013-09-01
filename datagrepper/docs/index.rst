@@ -158,6 +158,14 @@ For example, this query will return all messages from the past 2 days where
         user==toshio \
         user==pingou
 
+Topics list
+-----------
+
+If you don't know what topics are available for you to query, you can use the
+``/topics`` endpoint with no arguments::
+
+    $ http get {{URL}}topics/
+
 Bulk queries
 ------------
 
