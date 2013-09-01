@@ -8,8 +8,7 @@ A webapp to retrieve historical information about messages on the `fedmsg
 Production Instance
 -------------------
 
-datagrepper is still in development and does not currently have a production
-URL.  When it *does* have one, we'll be sure to link to it here.
+https://apps.fedoraproject.org/datagrepper/
 
 Hacking on datagrepper
 ----------------------
