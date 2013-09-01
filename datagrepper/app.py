@@ -305,6 +305,17 @@ def status():
     )
 
 
+@app.route('/topics/')
+@app.route('/topics')
+def topics():
+    msg = [i.topic for i in dm.Message.query.distinct(dm.Message.topic)]
+    return flask.Response(
+        response=fedmsg.encoding.dumps(msg),
+        status=200,
+        mimetype='application/json',
+    )
+
+
 @app.errorhandler(404)
 def not_found(error):
     return flask.Response(
