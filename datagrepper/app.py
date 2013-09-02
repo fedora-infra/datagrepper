@@ -22,7 +22,6 @@ import codecs
 import docutils
 import docutils.examples
 import dogpile.cache
-import functools
 import jinja2
 import markupsafe
 import os
