@@ -8,3 +8,4 @@ fedmsg
 docutils
 backports.lzma
 lockfile
+dogpile.cache

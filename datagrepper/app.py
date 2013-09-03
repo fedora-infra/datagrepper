@@ -21,6 +21,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 import codecs
 import docutils
 import docutils.examples
+import dogpile.cache
 import jinja2
 import markupsafe
 import os
@@ -54,6 +55,13 @@ fedmsg.meta.make_processors(**fedmsg_config)
 
 # Initialize a datanommer session.
 dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
+
+
+# Initialize the cache.
+cache = dogpile.cache.make_region().configure(
+    app.config.get('DATAGREPPER_CACHE_BACKEND', 'dogpile.cache.memory'),
+    **app.config.get('DATAGREPPER_CACHE_KWARGS', {})
+)
 
 
 def modify_rst(rst):
@@ -300,6 +308,22 @@ def status():
         msg['url'] = app.config['JOB_OUTPUT_URL'] + '/' + job.filename
     return flask.Response(
         response=fedmsg.encoding.dumps(msg),
+        status=200,
+        mimetype='application/json',
+    )
+
+
+@cache.cache_on_arguments(expiration_time=3600)
+def topics_cached():
+    msg = [i.topic for i in dm.Message.query.distinct(dm.Message.topic)]
+    return fedmsg.encoding.dumps(msg)
+
+
+@app.route('/topics/')
+@app.route('/topics')
+def topics():
+    return flask.Response(
+        response=topics_cached(),
         status=200,
         mimetype='application/json',
     )
