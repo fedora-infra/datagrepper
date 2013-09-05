@@ -393,7 +393,7 @@ def auth_status():
 def openid_login():
     if flask.g.auth.logged_in:
         return flask.redirect(flask.url_for('auth_status'))
-    return oid.try_login('https://id.fedoraproject.org/')
+    return oid.try_login(app.config['DATAGREPPER_OPENID_ENDPOINT'])
 
 
 @app.route('/auth/logout/')
