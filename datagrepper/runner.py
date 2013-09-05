@@ -1,6 +1,8 @@
+from datetime import datetime
 import fedmsg
 import fedmsg.consumers
 from lockfile import LockFile
+import os
 
 from datagrepper.app import app, db
 from datagrepper.dataquery import DataQuery
@@ -32,4 +34,13 @@ class DatagrepperRunnerConsumer(fedmsg.consumers.FedmsgConsumer):
                     job.filename = dq.run_query(
                         'datagrepper_{0}'.format(job.id))
                     job.set_status(dgrepm.STATUS_DONE)
+            # get list of completed jobs to be deleted
+            jobs = Job.query.filter(
+                Job.status == dgrepm.STATUS_DONE,
+                Job.complete_time < (datetime.now() - app.config['JOB_EXPIRY'])
+            )
+            for job in jobs:
+                os.remove(os.path.join(app.config['JOB_OUTPUT_DIR'],
+                                       job.filename))
+                job.set_status(dgrepm.STATUS_DELETED)
         print "****** FINISHING CONSUME"
