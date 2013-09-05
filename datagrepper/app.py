@@ -100,7 +100,6 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not flask.g.auth.logged_in:
-            print "NOT LOGGED IN"
             return flask.Response(
                 response=fedmsg.encoding.dumps({'error': 'no_auth'}),
                 status=400,
