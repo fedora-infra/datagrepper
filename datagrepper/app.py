@@ -84,8 +84,8 @@ def after_openid_login(resp):
             mimetype='application/json',
         )
     flask.session['openid'] = resp.identity_url
-    flask.g.openid = flask.session.get('openid', None)
-    return flask.redirect(flask.url_for('openid_login'))
+    flask.g.openid = resp.identity_url
+    return flask.redirect(oid.get_next_url())
 
 
 def modify_rst(rst):
@@ -159,6 +159,8 @@ def load_docs(request):
 
 @app.route('/')
 def index():
+    if flask.g.openid:
+        print 'Logged in OpenID: ' + flask.g.openid
     return flask.render_template('index.html', docs=load_docs(flask.request))
 
 
@@ -359,24 +361,15 @@ def topics():
 @oid.loginhandler
 def openid_login():
     if flask.g.openid is not None:
-        msg = {'authenticated': True, 'openid': flask.g.openid}
-    openid = flask.request.args.get('openid')
-    if openid:
-        return oid.try_login(openid)
-    else:
-        msg = {'authenticated': False}
-    return flask.Response(
-        response=fedmsg.encoding.dumps(msg),
-        status=200,
-        mimetype='application/json',
-    )
+        return flask.redirect(oid.get_next_url())
+    return oid.try_login('https://id.fedoraproject.org/')
 
 
 @app.route('/openid_logout/')
 @app.route('/openid_logout')
 def openid_logout():
     flask.session.pop('openid')
-    return flask.redirect(flask.url_for('openid_login'))
+    return flask.redirect(oid.get_next_url())
 
 
 @app.errorhandler(404)
