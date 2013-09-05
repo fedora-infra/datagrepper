@@ -19,10 +19,12 @@ import flask
 from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
 
+from bunch import Bunch
 import codecs
 import docutils
 import docutils.examples
 import dogpile.cache
+from functools import wraps
 import jinja2
 import markupsafe
 import os
@@ -68,24 +70,44 @@ cache = dogpile.cache.make_region().configure(
 
 
 @app.before_request
-def lookup_current_openid():
-    flask.g.openid = flask.session.get('openid', None)
+def check_auth():
+    flask.g.auth = Bunch(
+        logged_in=False,
+        method=None,
+        id=None,
+    )
+    if 'openid' in flask.session:
+        flask.g.auth.logged_in = True
+        flask.g.auth.method = u'openid'
+        flask.g.auth.id = flask.session.get('openid', None)
 
 
 @oid.after_login
 def after_openid_login(resp):
     if 'openid_error' in flask.session:
+        message = dict(flask.g.auth)
+        message['error'] = flask.session
         return flask.Response(
-            response=fedmsg.encoding.dumps({
-                'authenticated': False,
-                'error': flask.session['openid_error'],
-            }),
+            response=fedmsg.encoding.dumps(message),
             status=400,
             mimetype='application/json',
         )
     flask.session['openid'] = resp.identity_url
-    flask.g.openid = resp.identity_url
-    return flask.redirect(oid.get_next_url())
+    return flask.redirect(flask.url_for('auth_status'))
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not flask.g.auth.logged_in:
+            print "NOT LOGGED IN"
+            return flask.Response(
+                response=fedmsg.encoding.dumps({'error': 'no_auth'}),
+                status=400,
+                mimetype='application/json',
+            )
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 def modify_rst(rst):
@@ -159,8 +181,6 @@ def load_docs(request):
 
 @app.route('/')
 def index():
-    if flask.g.openid:
-        print 'Logged in OpenID: ' + flask.g.openid
     return flask.render_template('index.html', docs=load_docs(flask.request))
 
 
@@ -298,9 +318,10 @@ def raw():
 # Add a request job to the queue
 @app.route('/submit/')
 @app.route('/submit')
+@login_required
 def submit():
     try:
-        job = Job(flask.g.openid,
+        job = Job(flask.g.auth,
                   DataQuery.from_request_args(flask.request.args))
         db.session.add(job)
         db.session.commit()
@@ -356,20 +377,30 @@ def topics():
     )
 
 
-@app.route('/openid_login/')
-@app.route('/openid_login')
+@app.route('/auth/')
+@app.route('/auth')
+def auth_status():
+    return flask.Response(
+        response=fedmsg.encoding.dumps(flask.g.auth),
+        status=200,
+        mimetype='application/json',
+    )
+
+
+@app.route('/auth/openid/')
+@app.route('/auth/openid')
 @oid.loginhandler
 def openid_login():
-    if flask.g.openid is not None:
-        return flask.redirect(oid.get_next_url())
+    if flask.g.auth.logged_in:
+        return flask.redirect(flask.url_for('auth_status'))
     return oid.try_login('https://id.fedoraproject.org/')
 
 
-@app.route('/openid_logout/')
-@app.route('/openid_logout')
+@app.route('/auth/logout/')
+@app.route('/auth/logout')
 def openid_logout():
     flask.session.pop('openid')
-    return flask.redirect(oid.get_next_url())
+    return flask.redirect(flask.url_for('auth_status'))
 
 
 @app.errorhandler(404)
