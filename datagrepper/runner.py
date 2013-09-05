@@ -37,7 +37,7 @@ class DatagrepperRunnerConsumer(fedmsg.consumers.FedmsgConsumer):
             # get list of completed jobs to be deleted
             jobs = Job.query.filter(
                 Job.status == dgrepm.STATUS_DONE,
-                Job.complete_time < (datetime.now() + app.config['JOB_EXPIRY'])
+                Job.complete_time < (datetime.now() - app.config['JOB_EXPIRY'])
             )
             for job in jobs:
                 os.remove(os.path.join(app.config['JOB_OUTPUT_DIR'],
