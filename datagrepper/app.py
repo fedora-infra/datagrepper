@@ -86,7 +86,7 @@ def check_auth():
 def after_openid_login(resp):
     if 'openid_error' in flask.session:
         message = dict(flask.g.auth)
-        message['error'] = flask.session
+        message['error'] = flask.session['openid_error']
         return flask.Response(
             response=fedmsg.encoding.dumps(message),
             status=400,
