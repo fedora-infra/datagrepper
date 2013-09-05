@@ -23,6 +23,7 @@ class Job(db.Model):
     __tablename__ = 'job'
 
     id = db.Column(db.Integer, primary_key=True)
+    openid = db.Column(db.Unicode, nullable=False)
     dataquery_json = db.Column(db.UnicodeText, nullable=False)
     status = db.Column(db.Integer, nullable=False, default=STATUS_FREE)
     filename = db.Column(db.Unicode, nullable=True)
@@ -30,7 +31,7 @@ class Job(db.Model):
     start_time = db.Column(db.DateTime, nullable=True)
     complete_time = db.Column(db.DateTime, nullable=True)
 
-    def __init__(self, dataquery):
+    def __init__(self, openid, dataquery):
         self.dataquery = dataquery.database_repr()
         self.request_time = datetime.now()
 

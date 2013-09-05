@@ -16,6 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import flask
+from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
 
 import codecs
@@ -49,6 +50,9 @@ app.secret_key = app.config['SECRET_KEY']
 db = SQLAlchemy(app)
 from datagrepper.models import Job, STRSTATUS
 
+# Set up OpenID
+oid = OpenID(app)
+
 # Read in the datanommer DB URL from /etc/fedmsg.d/ (or a local fedmsg.d/)
 fedmsg_config = fedmsg.config.load_config()
 fedmsg.meta.make_processors(**fedmsg_config)
@@ -56,12 +60,32 @@ fedmsg.meta.make_processors(**fedmsg_config)
 # Initialize a datanommer session.
 dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
 
-
 # Initialize the cache.
 cache = dogpile.cache.make_region().configure(
     app.config.get('DATAGREPPER_CACHE_BACKEND', 'dogpile.cache.memory'),
     **app.config.get('DATAGREPPER_CACHE_KWARGS', {})
 )
+
+
+@app.before_request
+def lookup_current_openid():
+    flask.g.openid = flask.session.get('openid', None)
+
+
+@oid.after_login
+def after_openid_login(resp):
+    if 'openid_error' in flask.session:
+        return flask.Response(
+            response=fedmsg.encoding.dumps({
+                'authenticated': False,
+                'error': flask.session['openid_error'],
+            }),
+            status=400,
+            mimetype='application/json',
+        )
+    flask.session['openid'] = resp.identity_url
+    flask.g.openid = flask.session.get('openid', None)
+    return flask.redirect(flask.url_for('openid_login'))
 
 
 def modify_rst(rst):
@@ -274,7 +298,8 @@ def raw():
 @app.route('/submit')
 def submit():
     try:
-        job = Job(DataQuery.from_request_args(flask.request.args))
+        job = Job(flask.g.openid,
+                  DataQuery.from_request_args(flask.request.args))
         db.session.add(job)
         db.session.commit()
         fedmsg.publish(topic='job.new', msg=job)
@@ -327,6 +352,31 @@ def topics():
         status=200,
         mimetype='application/json',
     )
+
+
+@app.route('/openid_login/')
+@app.route('/openid_login')
+@oid.loginhandler
+def openid_login():
+    if flask.g.openid is not None:
+        msg = {'authenticated': True, 'openid': flask.g.openid}
+    openid = flask.request.args.get('openid')
+    if openid:
+        return oid.try_login(openid)
+    else:
+        msg = {'authenticated': False}
+    return flask.Response(
+        response=fedmsg.encoding.dumps(msg),
+        status=200,
+        mimetype='application/json',
+    )
+
+
+@app.route('/openid_logout/')
+@app.route('/openid_logout')
+def openid_logout():
+    flask.session.pop('openid')
+    return flask.redirect(flask.url_for('openid_login'))
 
 
 @app.errorhandler(404)
