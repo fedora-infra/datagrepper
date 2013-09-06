@@ -1,7 +1,6 @@
-flask
+Flask
 Flask-OpenID
 Flask-SQLAlchemy
-Flask-WTF
 kitchen
 datanommer.models>=0.4.4
 fedmsg
@@ -9,3 +8,4 @@ docutils
 backports.lzma
 lockfile
 dogpile.cache
+bunch
