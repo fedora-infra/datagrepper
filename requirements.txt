@@ -2,8 +2,8 @@ Flask
 Flask-OpenID
 Flask-SQLAlchemy
 kitchen
-datanommer.models>=0.4.4
-fedmsg
+datanommer.models>=0.6.0
+fedmsg>=0.7.0
 docutils
 backports.lzma
 lockfile
