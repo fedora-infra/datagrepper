@@ -35,7 +35,7 @@ def get_requires(filename="requirements.txt"):
 setup(
     name='datagrepper',
     description='A webapp to query fedmsg history',
-    version='0.1.4',
+    version='0.2.0',
     author='Ian Weller and Ralph Bean',
     author_email='ianweller@fedoraproject.org, ralph@fedoraproject.org',
     license='GPLv2+',
@@ -46,5 +46,7 @@ setup(
     tests_require=get_requires(filename='test-requirements.txt'),
     test_suite='nose.collector',
     entry_points='''
+    [moksha.consumer]
+    datagrepperconsumer = datagrepper.runner:DatagrepperRunnerConsumer
     '''
 )

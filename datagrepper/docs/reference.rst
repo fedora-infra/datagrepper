@@ -164,7 +164,60 @@ Formatting arguments
 ``meta``
   Argument to specify what meta information to return with the raw
   message from fedmsg.
-  Options are: title, subtitle, icon, secondary_icon, link, usernames,
-               packages, objects
+  Options are: `title, subtitle, icon, secondary_icon, link, usernames,
+  packages, objects`
 
   Default: None
+
+
+/submit
+-------
+
+The ``/submit`` endpoint allows you to submit a job for more data than ``/raw``
+allows.
+
+The arguments are the same as ``/raw``.
+
+The status of a job (including a URL where you can download the data, if the
+job is complete) is available from the ``/status`` endpoint.
+
+Response format
+===============
+
+.. code-block:: javascript
+
+    {
+        "job_id": 1,
+        "options": {
+            "category": [ ... ],
+            "topic": [ ... ],
+            "start": null,
+            ...
+        }
+    }
+
+/status
+-------
+
+Returns the status of a job. If the job is finished, also returns the filename.
+
+Response format
+===============
+
+.. code-block:: javascript
+
+    {
+        "id": 1,
+        "state": "done",
+        "url": "http://..."
+    }
+
+Valid states include ``free``, ``open``, ``done``, ``failed``, and ``deleted``.
+``url`` is displayed for the ``done`` state only.
+
+/topics
+-------
+
+Returns a list of all topics in the datanommer database. Takes no arguments.
+
+This is cached hourly, so sometimes it will take a while to generate.

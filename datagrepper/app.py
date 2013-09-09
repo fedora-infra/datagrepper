@@ -16,11 +16,15 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import flask
+from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
 
+from bunch import Bunch
 import codecs
 import docutils
 import docutils.examples
+import dogpile.cache
+from functools import wraps
 import jinja2
 import markupsafe
 import os
@@ -29,10 +33,12 @@ import traceback
 
 from datetime import datetime
 
+import fedmsg
 import fedmsg.config
 import fedmsg.meta
 import datanommer.models as dm
 
+from datagrepper.dataquery import DataQuery
 from datagrepper.util import assemble_timerange
 
 app = flask.Flask(__name__)
@@ -42,8 +48,12 @@ app.config.from_envvar('DATAGREPPER_CONFIG')
 # Set up session secret key
 app.secret_key = app.config['SECRET_KEY']
 
-# This loads all the openid/user management stuff which is a work in progress.
-#import datagrepper.users
+# Set up datagrepper database
+db = SQLAlchemy(app)
+from datagrepper.models import Job, STRSTATUS
+
+# Set up OpenID
+oid = OpenID(app)
 
 # Read in the datanommer DB URL from /etc/fedmsg.d/ (or a local fedmsg.d/)
 fedmsg_config = fedmsg.config.load_config()
@@ -51,6 +61,52 @@ fedmsg.meta.make_processors(**fedmsg_config)
 
 # Initialize a datanommer session.
 dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
+
+# Initialize the cache.
+cache = dogpile.cache.make_region().configure(
+    app.config.get('DATAGREPPER_CACHE_BACKEND', 'dogpile.cache.memory'),
+    **app.config.get('DATAGREPPER_CACHE_KWARGS', {})
+)
+
+
+@app.before_request
+def check_auth():
+    flask.g.auth = Bunch(
+        logged_in=False,
+        method=None,
+        id=None,
+    )
+    if 'openid' in flask.session:
+        flask.g.auth.logged_in = True
+        flask.g.auth.method = u'openid'
+        flask.g.auth.id = flask.session.get('openid', None)
+
+
+@oid.after_login
+def after_openid_login(resp):
+    if 'openid_error' in flask.session:
+        message = dict(flask.g.auth)
+        message['error'] = flask.session['openid_error']
+        return flask.Response(
+            response=fedmsg.encoding.dumps(message),
+            status=400,
+            mimetype='application/json',
+        )
+    flask.session['openid'] = resp.identity_url
+    return flask.redirect(flask.url_for('auth_status'))
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not flask.g.auth.logged_in:
+            return flask.Response(
+                response=fedmsg.encoding.dumps({'error': 'no_auth'}),
+                status=400,
+                mimetype='application/json',
+            )
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 def modify_rst(rst):
@@ -192,8 +248,8 @@ def raw():
     try:
         # This fancy classmethod does all of our search for us.
         total, pages, messages = dm.Message.grep(
-            start=datetime.fromtimestamp(start),
-            end=datetime.fromtimestamp(end),
+            start=start and datetime.fromtimestamp(start),
+            end=end and datetime.fromtimestamp(end),
             page=page,
             rows_per_page=rows_per_page,
             order=order,
@@ -230,7 +286,7 @@ def raw():
             count=len(messages),
             arguments=arguments,
         )
-        status = "200 OK"
+        status = 200
     except Exception as e:
         output = dict(
             error=str(e),
@@ -241,7 +297,7 @@ def raw():
         if app.config.get('DEBUG', False):
             output['tb'] = traceback.format_exc().split('\n')
 
-        status = "500 error"
+        status = 500
 
     body = fedmsg.encoding.dumps(output)
 
@@ -257,8 +313,99 @@ def raw():
         mimetype=mimetype,
     )
 
+
 # Add a request job to the queue
-#@app.route('/submit/')
-#@app.route('/submit')
-#def submit():
-#    pass
+@app.route('/submit/')
+@app.route('/submit')
+@login_required
+def submit():
+    try:
+        job = Job(flask.g.auth,
+                  DataQuery.from_request_args(flask.request.args))
+        db.session.add(job)
+        db.session.commit()
+        fedmsg.publish(topic='job.new', msg=job)
+        status = 200
+        msg = {'id': job.id,
+               'options': job.dataquery['options']}
+    except ValueError as exc:
+        msg = {'error': 'invalid_arg',
+               'value': exc.message}
+        status = 400
+    return flask.Response(
+        response=fedmsg.encoding.dumps(msg),
+        status=status,
+        mimetype='application/json',
+    )
+
+
+@app.route('/status/')
+@app.route('/status')
+def status():
+    if 'id' not in flask.request.args:
+        return flask.Response(
+            response=fedmsg.encoding.dumps({'error': 'missing_argument',
+                                            'argument': 'id'}),
+            status=400,
+            mimetype='application/json',
+        )
+    job = Job.query.get_or_404(flask.request.args['id'])
+    msg = {'id': job.id, 'status': STRSTATUS[job.status]}
+    if job.filename:
+        msg['url'] = app.config['JOB_OUTPUT_URL'] + '/' + job.filename
+    return flask.Response(
+        response=fedmsg.encoding.dumps(msg),
+        status=200,
+        mimetype='application/json',
+    )
+
+
+@cache.cache_on_arguments(expiration_time=3600)
+def topics_cached():
+    msg = [i.topic for i in dm.Message.query.distinct(dm.Message.topic)]
+    return fedmsg.encoding.dumps(msg)
+
+
+@app.route('/topics/')
+@app.route('/topics')
+def topics():
+    return flask.Response(
+        response=topics_cached(),
+        status=200,
+        mimetype='application/json',
+    )
+
+
+@app.route('/auth/')
+@app.route('/auth')
+def auth_status():
+    return flask.Response(
+        response=fedmsg.encoding.dumps(flask.g.auth),
+        status=200,
+        mimetype='application/json',
+    )
+
+
+@app.route('/auth/openid/')
+@app.route('/auth/openid')
+@oid.loginhandler
+def openid_login():
+    if flask.g.auth.logged_in:
+        return flask.redirect(flask.url_for('auth_status'))
+    return oid.try_login(app.config['DATAGREPPER_OPENID_ENDPOINT'])
+
+
+@app.route('/auth/logout/')
+@app.route('/auth/logout')
+def openid_logout():
+    flask.session.pop('openid')
+    return flask.redirect(flask.url_for('auth_status'))
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return flask.Response(
+        response=fedmsg.encoding.dumps({'error': 'not_found'}),
+        status=404,
+        mimetype='application/json',
+    )

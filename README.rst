@@ -8,8 +8,7 @@ A webapp to retrieve historical information about messages on the `fedmsg
 Production Instance
 -------------------
 
-datagrepper is still in development and does not currently have a production
-URL.  When it *does* have one, we'll be sure to link to it here.
+https://apps.fedoraproject.org/datagrepper/
 
 Hacking on datagrepper
 ----------------------
@@ -26,6 +25,10 @@ Install dependencies::
 
     $ pip install -r requirements.txt
     $ pip install psycopg2
+
+Set up the fedmsg consumer for the job runner::
+
+    $ python setup.py develop
 
 Configuring Postgresql (and getting some data)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -75,8 +78,8 @@ shell to setup the DB, the user, and privileges::
 Back in the bash shell (but still as the `postgres` user), grab a DB dump and
 restore it::
 
-    $ wget http://threebean.org/datanommer-2013-04-10.dump.xz
-    $ xzcat datanommer-2013-04-10.dump.xz | psql datanommer
+    $ wget http://ianweller.fedorapeople.org/datanommer-2013-04-10-0.5.0.dump.xz
+    $ xzcat datanommer-2013-04-10-0.5.0.dump.xz | psql datanommer
 
 Last step, run datagrepper
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -90,6 +93,7 @@ postgres (by default, it looks for a sqlite database).  Edit
     config = {
         'datanommer.enabled': False,
         'datanommer.sqlalchemy.url': 'postgresql+psycopg2://datanommer:bunbunbun@localhost:5432/datanommer',
+        'fedmsg.consumers.datagrepper-runner.enabled': True,
     }
 
 As your normal old user self, run the development server::
@@ -103,3 +107,11 @@ You can quick test that you can get data by running::
 
     $ sudo yum install -y httpie
     $ http get localhost:5000/raw/ delta==1000000 rows_per_page==1
+
+Running the job runner
+~~~~~~~~~~~~~~~~~~~~~~
+
+Without starting ``fedmsg-hub``, the job runner won't actually run jobs::
+
+    $ workon datagrepper
+    $ fedmsg-hub

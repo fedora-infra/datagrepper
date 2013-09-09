@@ -1,3 +1,5 @@
+.. |crarr| unicode:: U+021B5 .. DOWNWARDS ARROW WITH CORNER LEFTWARDS
+
 Prerequisites
 -------------
 
@@ -155,3 +157,24 @@ For example, this query will return all messages from the past 2 days where
         category==wiki \
         user==toshio \
         user==pingou
+
+Topics list
+-----------
+
+If you don't know what topics are available for you to query, you can use the
+``/topics`` endpoint with no arguments::
+
+    $ http get {{URL}}topics/
+
+Bulk queries
+------------
+
+The ``/submit`` endpoint does not limit you to the number of messages you can
+fetch. You can submit a job, then listen to the fedmsg bus for a
+``datagrepper.job.status.change`` message for when your job is done.
+
+The arguments are the same as ``/raw``.
+
+You can check on your job's status with the ``/status`` endpoint::
+
+    $ http get {{URL}}status/ id==1
