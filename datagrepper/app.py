@@ -260,7 +260,7 @@ def raw():
         )
 
         # Convert our messages from sqlalchemy objects to json-like dicts
-        messages = map(dm.Message.__json__, messages)
+        messages = [msg.__json__() for msg in messages]
 
         if meta:
             for message in messages:
