@@ -1,7 +1,10 @@
 from datetime import datetime
 import fedmsg
 import fedmsg.consumers
-from lockfile import LockFile
+try:
+    from lockfile import LockFile
+except ImportError:
+    from lockfile import FileLock as LockFile
 import os
 
 from datagrepper.app import app, db
