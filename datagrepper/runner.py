@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import fedmsg
 import fedmsg.consumers
 from lockfile import LockFile
@@ -38,11 +38,11 @@ class DatagrepperRunnerConsumer(fedmsg.consumers.FedmsgConsumer):
                         'datagrepper_{0}'.format(job.id))
                     job.set_status(dgrepm.STATUS_DONE)
             # get list of completed jobs to be deleted
+            cutoff = datetime.now() - timedelta(
+                seconds=fedmsg_config['datagrepper.runner.job_expiry'])
             jobs = Job.query.filter(
                 Job.status == dgrepm.STATUS_DONE,
-                (Job.complete_time <
-                 (datetime.now() -
-                  fedmsg_config['datagrepper.runner.job_expiry']))
+                (Job.complete_time < cutoff)
             )
             for job in jobs:
                 os.remove(os.path.join(
