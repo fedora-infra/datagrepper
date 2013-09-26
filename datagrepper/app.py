@@ -39,33 +39,31 @@ import fedmsg.meta
 import datanommer.models as dm
 
 from datagrepper.dataquery import DataQuery
-from datagrepper.util import assemble_timerange
+from datagrepper.util import assemble_timerange, load_config
+
+fedmsg_config = load_config()
 
 app = flask.Flask(__name__)
-app.config.from_object('datagrepper.default_config')
-app.config.from_envvar('DATAGREPPER_CONFIG')
 
 # Set up session secret key
-app.secret_key = app.config['SECRET_KEY']
+app.secret_key = fedmsg_config['datagrepper.flask.secret_key']
 
 # Set up datagrepper database
+app.config['SQLALCHEMY_DATABASE_URI'] = \
+        fedmsg_config['datagrepper.sqlalchemy.url']
 db = SQLAlchemy(app)
 from datagrepper.models import Job, STRSTATUS
 
 # Set up OpenID
 oid = OpenID(app)
 
-# Read in the datanommer DB URL from /etc/fedmsg.d/ (or a local fedmsg.d/)
-fedmsg_config = fedmsg.config.load_config()
-fedmsg.meta.make_processors(**fedmsg_config)
-
 # Initialize a datanommer session.
 dm.init(fedmsg_config['datanommer.sqlalchemy.url'])
 
 # Initialize the cache.
 cache = dogpile.cache.make_region().configure(
-    app.config.get('DATAGREPPER_CACHE_BACKEND', 'dogpile.cache.memory'),
-    **app.config.get('DATAGREPPER_CACHE_KWARGS', {})
+    fedmsg_config.get('datagrepper.cache.backend', 'dogpile.cache.memory'),
+    **fedmsg_config.get('datagrepper.cache.kwargs', {})
 )
 
 
@@ -172,7 +170,7 @@ for key in htmldocs:
 
 
 def load_docs(request):
-    URL = app.config.get('DATAGREPPER_BASE_URL', request.url_root)
+    URL = fedmsg_config.get('datagrepper.flask.base_url', request.url_root)
     docs = htmldocs[request.endpoint]
     docs = jinja2.Template(docs).render(URL=URL)
     return markupsafe.Markup(docs)
@@ -352,7 +350,8 @@ def status():
     job = Job.query.get_or_404(flask.request.args['id'])
     msg = {'id': job.id, 'status': STRSTATUS[job.status]}
     if job.filename:
-        msg['url'] = app.config['JOB_OUTPUT_URL'] + '/' + job.filename
+        msg['url'] = fedmsg.config['datagrepper.runner.output_url'] + \
+                '/' + job.filename
     return flask.Response(
         response=fedmsg.encoding.dumps(msg),
         status=200,
@@ -392,7 +391,7 @@ def auth_status():
 def openid_login():
     if flask.g.auth.logged_in:
         return flask.redirect(flask.url_for('auth_status'))
-    return oid.try_login(app.config['DATAGREPPER_OPENID_ENDPOINT'])
+    return oid.try_login(fedmsg_config['datagrepper.openid.endpoint'])
 
 
 @app.route('/auth/logout/')

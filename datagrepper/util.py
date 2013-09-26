@@ -4,10 +4,17 @@ from datetime import (
     datetime,
     timedelta,
 )
+import fedmsg.config
 import hashlib
 import random
 import json
 import time
+
+
+def load_config():
+    fedmsg_config = fedmsg.config.load_config()
+    fedmsg.meta.make_processors(**fedmsg_config)
+    return fedmsg_config
 
 
 # http://flask.pocoo.org/snippets/45/

@@ -31,7 +31,9 @@ except ImportError:
 
 import datanommer.models as dm
 import datagrepper.app
-from datagrepper.util import assemble_timerange
+from datagrepper.util import assemble_timerange, load_config
+
+fedmsg_config = load_config()
 
 OPTIONS = ('start', 'end', 'delta')
 LIST_OPTIONS = ('user', 'package', 'category', 'topic', 'meta')
@@ -107,16 +109,18 @@ class DataQuery(object):
 
         if len(files) > 1:
             extension = '.tar.xz'
-            fname = os.path.join(datagrepper.app.app.config['JOB_OUTPUT_DIR'],
-                                 output_prefix + extension)
+            fname = os.path.join(
+                fedmsg_config['datagrepper.runner.output_dir'],
+                output_prefix + extension)
             with lzma.open(fname, 'w') as lzmaobj:
                 with tarfile.open(fileobj=lzmaobj, mode='w') as tar:
                     for filename in files:
                         tar.add(os.path.join(dir, filename), arcname=filename)
         else:
             extension = '.json.xz'
-            fname = os.path.join(datagrepper.app.app.config['JOB_OUTPUT_DIR'],
-                                 output_prefix + extension)
+            fname = os.path.join(
+                fedmsg_config['datagrepper.runner.output_dir'],
+                output_prefix + extension)
             with lzma.open(fname, 'w') as lzmaobj:
                 with open(os.path.join(dir, files[0]), 'r') as f:
                     while True:

@@ -8,6 +8,9 @@ from datagrepper.app import app, db
 from datagrepper.dataquery import DataQuery
 import datagrepper.models as dgrepm
 from datagrepper.models import Job
+from datagrepper.util import load_config
+
+fedmsg_config = load_config()
 
 
 class DatagrepperRunnerConsumer(fedmsg.consumers.FedmsgConsumer):
@@ -20,7 +23,7 @@ class DatagrepperRunnerConsumer(fedmsg.consumers.FedmsgConsumer):
     def consume(self, msg):
         print "****** STARTING CONSUME"
         # ignore the message, we do what we want
-        lock = LockFile(app.config['RUNNER_LOCKFILE'])
+        lock = LockFile(fedmsg_config['datagrepper.runner.lockfile'])
         with lock:
             # get list of open jobs
             while True:
@@ -37,10 +40,13 @@ class DatagrepperRunnerConsumer(fedmsg.consumers.FedmsgConsumer):
             # get list of completed jobs to be deleted
             jobs = Job.query.filter(
                 Job.status == dgrepm.STATUS_DONE,
-                Job.complete_time < (datetime.now() - app.config['JOB_EXPIRY'])
+                (Job.complete_time <
+                 (datetime.now() -
+                  fedmsg_config['datagrepper.runner.job_expiry']))
             )
             for job in jobs:
-                os.remove(os.path.join(app.config['JOB_OUTPUT_DIR'],
-                                       job.filename))
+                os.remove(os.path.join(
+                    fedmsg_config['datagrepper.runner.output_dir']),
+                    job.filename)
                 job.set_status(dgrepm.STATUS_DELETED)
         print "****** FINISHING CONSUME"
