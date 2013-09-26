@@ -110,9 +110,10 @@ class DataQuery(object):
             fname = os.path.join(datagrepper.app.app.config['JOB_OUTPUT_DIR'],
                                  output_prefix + extension)
             with lzma.open(fname, 'w') as lzmaobj:
-                with tarfile.open(fileobj=lzmaobj, mode='w') as tar:
-                    for filename in files:
-                        tar.add(os.path.join(dir, filename), arcname=filename)
+                tar = tarfile.open(fileobj=lzmaobj, mode='w')
+                for filename in files:
+                    tar.add(os.path.join(dir, filename), arcname=filename)
+                tar.close()
         else:
             extension = '.json.xz'
             fname = os.path.join(datagrepper.app.app.config['JOB_OUTPUT_DIR'],
