@@ -114,16 +114,17 @@ class DataQuery(object):
                     tar = tarfile.open(fileobj=lzmaobj, mode='w')
                     try:
                         for filename in files:
-                            tar.add(os.path.join(dir, filename), arcname=filename)
+                            tar.add(os.path.join(dir, filename),
+                                    arcname=filename)
                     finally:
                         # No matter what, we want this to happen
                         tar.close()
-                        # Re-raise the exception so we can mark the job as failed
+                        # Re-raise the exception so we can mark the job failed
                         raise
             except:
                 # Delete the file, since we can't track it if we fail the job
                 os.remove(fname)
-                # Re-raise the exception so we can mark the job as failed
+                # Re-raise the exception so we can mark the job failed
                 raise
         else:
             extension = '.json.xz'
