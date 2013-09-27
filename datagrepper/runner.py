@@ -14,11 +14,14 @@ from datagrepper.models import Job
 
 
 class DatagrepperRunnerConsumer(fedmsg.consumers.FedmsgConsumer):
-    topic = 'org.fedoraproject.dev.datagrepper.job.new'
     config_key = 'fedmsg.consumers.datagrepper-runner.enabled'
 
-    def __init__(self, *args, **kwargs):
-        super(DatagrepperRunnerConsumer, self).__init__(*args, **kwargs)
+    def __init__(self, hub):
+        self.hub = hub
+        self.topic = self.hub.config.get('topic_prefix', 'org.fedoraproject')
+        self.topic += '.' + self.hub.config.get('environment')
+        self.topic += '.datagrepper.job.new'
+        super(DatagrepperRunnerConsumer, self).__init__(hub)
 
     def consume(self, msg):
         print "****** STARTING CONSUME"
