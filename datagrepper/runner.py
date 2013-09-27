@@ -14,11 +14,14 @@ from datagrepper.models import Job
 
 
 class DatagrepperRunnerConsumer(fedmsg.consumers.FedmsgConsumer):
-    topic = 'org.fedoraproject.dev.datagrepper.job.new'
     config_key = 'fedmsg.consumers.datagrepper-runner.enabled'
 
-    def __init__(self, *args, **kwargs):
-        super(DatagrepperRunnerConsumer, self).__init__(*args, **kwargs)
+    def __init__(self, hub):
+        self.hub = hub
+        self.topic = self.hub.config.get('topic_prefix', 'org.fedoraproject')
+        self.topic += '.' + self.hub.config.get('environment')
+        self.topic += '.datagrepper.job.new'
+        super(DatagrepperRunnerConsumer, self).__init__(hub)
 
     def consume(self, msg):
         print "****** STARTING CONSUME"
@@ -34,9 +37,13 @@ class DatagrepperRunnerConsumer(fedmsg.consumers.FedmsgConsumer):
                     # run query on jobs
                     dq = DataQuery.from_database(job)
                     job.set_status(dgrepm.STATUS_OPEN)
-                    job.filename = dq.run_query(
-                        'datagrepper_{0}'.format(job.id))
-                    job.set_status(dgrepm.STATUS_DONE)
+                    try:
+                        job.filename = dq.run_query(
+                            'datagrepper_{0}'.format(job.id))
+                    except:
+                        job.set_status(dgrepm.STATUS_FAILED)
+                    else:
+                        job.set_status(dgrepm.STATUS_DONE)
             # get list of completed jobs to be deleted
             jobs = Job.query.filter(
                 Job.status == dgrepm.STATUS_DONE,
