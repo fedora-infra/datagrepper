@@ -319,7 +319,7 @@ def raw():
 @app.route('/id')
 def msg_id():
     if 'id' not in flask.request.args:
-        flask.abort(404)
+        flask.abort(400)
     msg = dm.Message.query.filter_by(msg_id=flask.request.args['id']).first()
     if msg:
         return flask.Response(
