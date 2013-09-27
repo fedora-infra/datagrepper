@@ -112,10 +112,23 @@ class DataQuery(object):
             fname = os.path.join(
                 fedmsg_config['datagrepper.runner.output_dir'],
                 output_prefix + extension)
-            with lzma.open(fname, 'w') as lzmaobj:
-                with tarfile.open(fileobj=lzmaobj, mode='w') as tar:
-                    for filename in files:
-                        tar.add(os.path.join(dir, filename), arcname=filename)
+            try:
+                with lzma.open(fname, 'w') as lzmaobj:
+                    tar = tarfile.open(fileobj=lzmaobj, mode='w')
+                    try:
+                        for filename in files:
+                            tar.add(os.path.join(dir, filename),
+                                    arcname=filename)
+                    finally:
+                        # No matter what, we want this to happen
+                        tar.close()
+                        # Re-raise the exception so we can mark the job failed
+                        raise
+            except:
+                # Delete the file, since we can't track it if we fail the job
+                os.remove(fname)
+                # Re-raise the exception so we can mark the job failed
+                raise
         else:
             extension = '.json.xz'
             fname = os.path.join(
