@@ -314,6 +314,23 @@ def raw():
     )
 
 
+# Get a message by msg_id
+@app.route('/id/')
+@app.route('/id')
+def msg_id():
+    if 'id' not in flask.request.args:
+        flask.abort(400)
+    msg = dm.Message.query.filter_by(msg_id=flask.request.args['id']).first()
+    if msg:
+        return flask.Response(
+            response=fedmsg.encoding.dumps(msg),
+            status=200,
+            mimetype='application/json',
+        )
+    else:
+        flask.abort(404)
+
+
 # Add a request job to the queue
 @app.route('/submit/')
 @app.route('/submit')
