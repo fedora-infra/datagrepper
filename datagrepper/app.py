@@ -39,7 +39,7 @@ import fedmsg.meta
 import datanommer.models as dm
 
 from datagrepper.dataquery import DataQuery
-from datagrepper.util import assemble_timerange
+from datagrepper.util import assemble_timerange, request_wants_json
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -300,19 +300,30 @@ def raw():
         status = 500
 
     body = fedmsg.encoding.dumps(output)
-
+	
     mimetype = 'application/json'
 
     if callback:
         mimetype = 'application/javascript'
         body = "%s(%s);" % (callback, body)
 
-    return flask.Response(
-        response=body,
-        status=status,
-        mimetype=mimetype,
-    )
+    
+    # return only if mimetype is other than html
+    # if request_wants_json():
 
+    # return only if content-type is other than HTML
+    if not(flask.request.headers.get('Accept') == 'text/html' or \
+       flask.request.headers.get('Content-Type') == 'text/html'):
+		return flask.Response(
+                response=body,
+                status=status,
+                mimetype=mimetype,
+        )
+    
+    # return user-agent information
+    else:
+	return str(flask.request.headers.get('User-Agent'))+'\n'
+		
 
 # Get a message by msg_id
 @app.route('/id/')
