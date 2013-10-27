@@ -39,7 +39,7 @@ import fedmsg.meta
 import datanommer.models as dm
 
 from datagrepper.dataquery import DataQuery
-from datagrepper.util import assemble_timerange, request_wants_json
+from datagrepper.util import assemble_timerange
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -306,10 +306,6 @@ def raw():
     if callback:
         mimetype = 'application/javascript'
         body = "%s(%s);" % (callback, body)
-
-    
-    # return only if mimetype is other than html
-    # if request_wants_json():
 
     # return only if content-type is other than HTML
     if not(flask.request.headers.get('Accept') == 'text/html' or \
