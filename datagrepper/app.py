@@ -39,7 +39,7 @@ import fedmsg.meta
 import datanommer.models as dm
 
 from datagrepper.dataquery import DataQuery
-from datagrepper.util import assemble_timerange
+from datagrepper.util import assemble_timerange, request_wants_html
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -187,8 +187,8 @@ def index():
 @app.route('/reference')
 def reference():
     return flask.render_template('index.html', docs=load_docs(flask.request))
-
-
+	
+    
 # Instant requests
 @app.route('/raw/')
 @app.route('/raw')
@@ -300,19 +300,23 @@ def raw():
         status = 500
 
     body = fedmsg.encoding.dumps(output)
-
-    mimetype = 'application/json'
+	
+    mimetype = flask.request.headers.get('Accept')
 
     if callback:
         mimetype = 'application/javascript'
         body = "%s(%s);" % (callback, body)
-
-    return flask.Response(
-        response=body,
-        status=status,
-        mimetype=mimetype,
-    )
-
+       
+    # return HTML content else json    
+    if request_wants_html():
+        return "HTML Format"
+    else:
+        return flask.Response(
+               response=body,
+        	   status=status,
+        	   mimetype=mimetype,
+        )
+  
 
 # Get a message by msg_id
 @app.route('/id/')

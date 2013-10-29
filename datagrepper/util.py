@@ -10,15 +10,16 @@ import json
 import time
 
 
-# http://flask.pocoo.org/snippets/45/
-def request_wants_json():
+# returns content according to mimetypes
+def request_wants_html():
     best = flask.request.accept_mimetypes \
-        .best_match(['application/json', 'text/html'])
-    return best == 'application/json' and \
+        .best_match(['application/json', 'text/html', 'text/plain'])
+    return best == 'text/html' and \
         flask.request.accept_mimetypes[best] > \
-        flask.request.accept_mimetypes['text/html']
-
-
+        (flask.request.accept_mimetypes['application/json'] or \
+        flask.request.accept_mimetypes['text/plain'])
+   
+    
 def json_return(data):
     return flask.Response(json.dumps(data), mimetype='application/json')
 
