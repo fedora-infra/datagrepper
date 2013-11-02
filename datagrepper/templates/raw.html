@@ -35,17 +35,11 @@
 	<h1>Raw Messages</h1>
     </div><br/> <br/>
     <div class="container">
-    	{% for msg in response %}
-	<pre>
-        <!--render the key and value pairs-->
-        	{% for key, value in msg.items() %}
-		<div>
-		<p> {{key}} <b> : </b> {{value}} </p>
-		</div>                
-		{% endfor %}
+        {% for msg in response %}
+        <pre>
+            <p> {{msg}} </p>
         </pre>
-    	{% endfor %}
-
+        {% endfor %}
     </div>
   </body>
 </html>
