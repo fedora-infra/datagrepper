@@ -32,7 +32,6 @@ import time
 import traceback
 
 from datetime import datetime
-from flask import render_template
 import fedmsg
 import fedmsg.config
 import fedmsg.meta
@@ -312,12 +311,20 @@ def raw():
         # convert string into python dictionary
         obj = json.loads(body)
         # extract the messages
-        msglist = obj["raw_messages"]
-        
+        messageList = obj["raw_messages"]
+        #using fedmsg.meta function
         config = fedmsg.config.load_config([], None)
         fedmsg.meta.make_processors(**config)
-        text = fedmsg.meta.msg2repr(msglist[15], **config);
-        return flask.Response(response=text)
+        
+        finalMessageList = []
+        
+        for msg in messageList:
+            # convert dict-like fedmsg into human readable form
+            text = fedmsg.meta.msg2repr(msg,legacy=False,**config);
+            finalMessageList.append(text)
+        
+        return flask.render_template("raw.html", response=finalMessageList)
+    
     else:
         return flask.Response(
             response=body,
