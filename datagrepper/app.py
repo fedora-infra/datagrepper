@@ -319,10 +319,16 @@ def raw():
         finalMessageList = []
         
         for msg in messageList:
-            # convert dict-like fedmsg into human readable form
-            text = fedmsg.meta.msg2repr(msg,legacy=False,**config);
-            finalMessageList.append(text)
-        
+            # create primary icon associated with message
+            icon = fedmsg.meta.msg2icon(msg,legacy=False,**config)
+            finalMessageList.append(icon)
+            # create URL associated with message
+            link = fedmsg.meta.msg2link(msg, legacy=False, **config)
+            finalMessageList.append(link)
+            # create title associated with message
+            title = fedmsg.meta.msg2title(msg, legacy=False, **config)
+            finalMessageList.append(title)
+            
         return flask.render_template("raw.html", response=finalMessageList)
     
     else:
