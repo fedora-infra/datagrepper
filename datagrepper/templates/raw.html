@@ -35,11 +35,15 @@
 	<h1>Raw Messages</h1>
     </div><br/> <br/>
     <div class="container">
-        {% for msg in response %}
+        {% for i in range(0, (response.__len__()/3)|int , 3) %}
         <pre>
-            <p> {{msg}} </p>
+            <div>
+                <p><b> {{response[i+2]}} </b></p>
+                <A HREF={{response[i+1]}}><Img SRC= {{response[i]}} WIDTH=30 HEIGHT=40></A>
+            </div>
         </pre>
-        {% endfor %}
+        {% endfor %}    
     </div>
+
   </body>
 </html>
