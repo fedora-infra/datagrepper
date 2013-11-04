@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
+import json
 import flask
 from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -32,7 +32,6 @@ import time
 import traceback
 
 from datetime import datetime
-
 import fedmsg
 import fedmsg.config
 import fedmsg.meta
@@ -187,8 +186,8 @@ def index():
 @app.route('/reference')
 def reference():
     return flask.render_template('index.html', docs=load_docs(flask.request))
-	
-    
+
+
 # Instant requests
 @app.route('/raw/')
 @app.route('/raw')
@@ -306,17 +305,48 @@ def raw():
     if callback:
         mimetype = 'application/javascript'
         body = "%s(%s);" % (callback, body)
-       
-    # return HTML content else json    
+
+    # return HTML content else json 
     if request_wants_html():
-        return "HTML Format"
+        # convert string into python dictionary
+        obj = json.loads(body)
+        # extract the messages
+        messageList = obj["raw_messages"]
+        #using fedmsg.meta function
+        config = fedmsg.config.load_config([], None)
+        fedmsg.meta.make_processors(**config)
+        
+        finalMessageList = []
+         
+        for msg in messageList:
+            d = {}
+            # create primary icon associated with message
+            icon = fedmsg.meta.msg2icon(msg,legacy=False,**config)
+            d['icon'] = icon
+            # create URL associated with message
+            link = fedmsg.meta.msg2link(msg, legacy=False, **config)
+            d['link'] = link
+            # create title associated with message
+            title = fedmsg.meta.msg2title(msg, legacy=False, **config)
+            d['title'] = title
+            # create secondary icon associated with message
+            secondary_icon = fedmsg.meta.msg2secondary_icon(msg, legacy=False, **config)
+            d['secondary_icon'] = secondary_icon
+            subtitle = fedmsg.meta.msg2subtitle(msg, legacy=False, **config)
+            d['subtitle'] = subtitle
+
+            finalMessageList.append(d)
+            
+            
+        return flask.render_template("raw.html", response=finalMessageList)
+    
     else:
         return flask.Response(
-               response=body,
-        	   status=status,
-        	   mimetype=mimetype,
+            response=body,
+            status = status,
+            mimetype = mimetype,
         )
-  
+
 
 # Get a message by msg_id
 @app.route('/id/')
