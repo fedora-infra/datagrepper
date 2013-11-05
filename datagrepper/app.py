@@ -317,17 +317,24 @@ def raw():
         fedmsg.meta.make_processors(**config)
         
         finalMessageList = []
-        
+         
         for msg in messageList:
+            d = {}
             # create primary icon associated with message
             icon = fedmsg.meta.msg2icon(msg,legacy=False,**config)
-            finalMessageList.append(icon)
+            d['icon'] = icon
             # create URL associated with message
             link = fedmsg.meta.msg2link(msg, legacy=False, **config)
-            finalMessageList.append(link)
+            d['link'] = link
             # create title associated with message
             title = fedmsg.meta.msg2title(msg, legacy=False, **config)
-            finalMessageList.append(title)
+            d['title'] = title
+            # create secondary icon associated with message
+            secondary_icon = fedmsg.meta.msg2secondary_icon(msg, legacy=False, **config)
+            d['secondary_icon'] = secondary_icon
+            
+            finalMessageList.append(d)
+            
             
         return flask.render_template("raw.html", response=finalMessageList)
     
