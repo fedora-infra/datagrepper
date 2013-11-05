@@ -332,7 +332,9 @@ def raw():
             # create secondary icon associated with message
             secondary_icon = fedmsg.meta.msg2secondary_icon(msg, legacy=False, **config)
             d['secondary_icon'] = secondary_icon
-            
+            subtitle = fedmsg.meta.msg2subtitle(msg, legacy=False, **config)
+            d['subtitle'] = subtitle
+
             finalMessageList.append(d)
             
             
