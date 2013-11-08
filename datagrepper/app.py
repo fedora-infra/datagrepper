@@ -355,10 +355,29 @@ def msg_id():
         flask.abort(400)
     msg = dm.Message.query.filter_by(msg_id=flask.request.args['id']).first() 
     mimetype = flask.request.headers.get('Accept')
-
+    
     if msg:
         if request_wants_html():
-            return flask.render_template("msg.html", response=fedmsg.encoding.dumps(msg))
+            # convert string into python dictionary
+            obj = json.loads(fedmsg.encoding.dumps(msg))
+            #using fedmsg.meta modules
+            config = fedmsg.config.load_config([], None)
+            fedmsg.meta.make_processors(**config)
+             
+            msgDict = {}
+            icon = fedmsg.meta.msg2icon(obj,legacy=False,**config)
+            msgDict['icon'] = icon
+            link = fedmsg.meta.msg2link(obj, legacy=False, **config)
+            msgDict['link'] = link
+            title = fedmsg.meta.msg2title(obj, legacy=False, **config)
+            msgDict['title'] = title
+            secondary_icon = fedmsg.meta.msg2secondary_icon(obj, legacy=False, **config)
+            msgDict['secondary_icon'] = secondary_icon
+            subtitle = fedmsg.meta.msg2subtitle(obj, legacy=False, **config)
+            msgDict['subtitle'] = subtitle
+
+            return flask.render_template("msg.html", response=msgDict)
+        
         else:
             return flask.Response (
                 response=fedmsg.encoding.dumps(msg),
@@ -367,7 +386,6 @@ def msg_id():
             )
     else:
         flask.abort(404)
-
 
 # Add a request job to the queue
 @app.route('/submit/')
