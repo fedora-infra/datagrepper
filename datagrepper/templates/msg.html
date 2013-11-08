@@ -37,10 +37,12 @@
     <div class="container">
         <pre>
             <div>
-                <p>{{response}}</p>
+                <p><b>{{response['title']}}</b></p>
+                <p> {{response['subtitle']}} </p> 
+                <A HREF={{response['link']}}><Img SRC= {{response['icon']}} WIDTH=30 HEIGHT=40></A>&nbsp;&nbsp;&nbsp;
+                <Img SRC={{response['secondary_icon']}} WIDTH=30 HEIGHT=40></A>
             </div>
         </pre>
     </div>
-
 </body>
 </html>
