@@ -334,7 +334,6 @@ def raw():
             d['secondary_icon'] = secondary_icon
             subtitle = fedmsg.meta.msg2subtitle(msg, legacy=False, **config)
             d['subtitle'] = subtitle
-
             finalMessageList.append(d)
             
             
@@ -354,13 +353,18 @@ def raw():
 def msg_id():
     if 'id' not in flask.request.args:
         flask.abort(400)
-    msg = dm.Message.query.filter_by(msg_id=flask.request.args['id']).first()
+    msg = dm.Message.query.filter_by(msg_id=flask.request.args['id']).first() 
+    mimetype = flask.request.headers.get('Accept')
+
     if msg:
-        return flask.Response(
-            response=fedmsg.encoding.dumps(msg),
-            status=200,
-            mimetype='application/json',
-        )
+        if request_wants_html():
+            return flask.render_template("msg.html", response=fedmsg.encoding.dumps(msg))
+        else:
+            return flask.Response (
+                response=fedmsg.encoding.dumps(msg),
+                status=200,
+                mimetype=mimetype,
+            )
     else:
         flask.abort(404)
 
