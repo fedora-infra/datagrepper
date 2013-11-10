@@ -8,18 +8,19 @@ import hashlib
 import random
 import json
 import time
+import fedmsg
 
-
-# returns content according to mimetypes
-def request_wants_html():
+# http://flask.pocoo.org/snippets/45/
+# accept header returns json type content only
+def request_wants_html():     
     best = flask.request.accept_mimetypes \
         .best_match(['application/json', 'text/html', 'text/plain'])
     return best == 'text/html' and \
         flask.request.accept_mimetypes[best] > \
         (flask.request.accept_mimetypes['application/json'] or \
         flask.request.accept_mimetypes['text/plain'])
-   
-    
+
+
 def json_return(data):
     return flask.Response(json.dumps(data), mimetype='application/json')
 
@@ -92,3 +93,30 @@ def assemble_timerange(start, end, delta):
         delta = timedelta_to_seconds(delta)
 
     return start, end, delta
+
+
+def message_card(msg):
+    """ Util to generate icon, title, subtitle, link 
+     and secondary_icon using fedmsg.meta modules. 
+    """
+    # using fedmsg.meta modules
+    config = fedmsg.config.load_config([], None)
+    fedmsg.meta.make_processors(**config)
+    
+    msgDict = {}
+    # generate primary icon associated with message
+    icon = fedmsg.meta.msg2icon(msg,legacy=False,**config)
+    msgDict['icon'] = icon
+    # generate URL associated with message
+    link = fedmsg.meta.msg2link(msg, legacy=False, **config)
+    msgDict['link'] = link
+    # generate title associated with message
+    title = fedmsg.meta.msg2title(msg, legacy=False, **config)
+    msgDict['title'] = title
+    # generate secondary icon associated with message
+    secondary_icon = fedmsg.meta.msg2secondary_icon(msg, legacy=False, **config)
+    msgDict['secondary_icon'] = secondary_icon
+    # generate subtitle associated with message
+    subtitle = fedmsg.meta.msg2subtitle(msg, legacy=False, **config)
+    msgDict['subtitle'] = subtitle                                                        
+    return msgDict
