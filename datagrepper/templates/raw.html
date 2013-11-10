@@ -32,20 +32,20 @@
 
   <body>
     <div class="jumbotron">
-	<h1>Raw Messages</h1>
+	<h1>{{heading}}</h1>
     </div><br/> <br/>
     <div class="container">
-        {% for dict in response %}
+	{% for dict in response %}
         <pre>
             <div>
                 <p><b>{{dict['title']}}</b></p> </br>
                 <p> {{dict['subtitle']}} </p> </br>
                 <A HREF={{dict['link']}}><Img SRC= {{dict['icon']}} WIDTH=30 HEIGHT=40></A>&nbsp;&nbsp;&nbsp;
-                <Img SRC={{dict['secondary_icon']}} WIDTH=30 HEIGHT=40></A> 
+                <Img SRC={{dict['secondary_icon']}} WIDTH=30 HEIGHT=40></A>
             </div>
         </pre>
-        {% endfor %}
+    {% endfor %}
     </div>
 
-  </body>
+</body>
 </html>
