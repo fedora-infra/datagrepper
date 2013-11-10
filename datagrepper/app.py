@@ -33,12 +33,12 @@ import traceback
 
 from datetime import datetime
 import fedmsg
-import fedmsg.config
 import fedmsg.meta
+import fedmsg.config
 import datanommer.models as dm
 
 from datagrepper.dataquery import DataQuery
-from datagrepper.util import assemble_timerange, request_wants_html
+from datagrepper.util import assemble_timerange, request_wants_html, message_card
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -311,33 +311,15 @@ def raw():
         # convert string into python dictionary
         obj = json.loads(body)
         # extract the messages
-        messageList = obj["raw_messages"]
-        #using fedmsg.meta function
-        config = fedmsg.config.load_config([], None)
-        fedmsg.meta.make_processors(**config)
+        raw_message_list = obj["raw_messages"]
         
-        finalMessageList = []
+        final_message_list = []
          
-        for msg in messageList:
-            d = {}
-            # create primary icon associated with message
-            icon = fedmsg.meta.msg2icon(msg,legacy=False,**config)
-            d['icon'] = icon
-            # create URL associated with message
-            link = fedmsg.meta.msg2link(msg, legacy=False, **config)
-            d['link'] = link
-            # create title associated with message
-            title = fedmsg.meta.msg2title(msg, legacy=False, **config)
-            d['title'] = title
-            # create secondary icon associated with message
-            secondary_icon = fedmsg.meta.msg2secondary_icon(msg, legacy=False, **config)
-            d['secondary_icon'] = secondary_icon
-            subtitle = fedmsg.meta.msg2subtitle(msg, legacy=False, **config)
-            d['subtitle'] = subtitle
-            finalMessageList.append(d)
+        for message in raw_message_list:
+            message = message_card(message)
+            final_message_list.append(message)
             
-            
-        return flask.render_template("raw.html", response=finalMessageList)
+        return flask.render_template("raw.html", response=final_message_list, heading="Raw Messages")
     
     else:
         return flask.Response(
@@ -360,23 +342,11 @@ def msg_id():
         if request_wants_html():
             # convert string into python dictionary
             obj = json.loads(fedmsg.encoding.dumps(msg))
-            #using fedmsg.meta modules
-            config = fedmsg.config.load_config([], None)
-            fedmsg.meta.make_processors(**config)
-             
-            msgDict = {}
-            icon = fedmsg.meta.msg2icon(obj,legacy=False,**config)
-            msgDict['icon'] = icon
-            link = fedmsg.meta.msg2link(obj, legacy=False, **config)
-            msgDict['link'] = link
-            title = fedmsg.meta.msg2title(obj, legacy=False, **config)
-            msgDict['title'] = title
-            secondary_icon = fedmsg.meta.msg2secondary_icon(obj, legacy=False, **config)
-            msgDict['secondary_icon'] = secondary_icon
-            subtitle = fedmsg.meta.msg2subtitle(obj, legacy=False, **config)
-            msgDict['subtitle'] = subtitle
-
-            return flask.render_template("msg.html", response=msgDict)
+            # use message_card function 
+            message = []
+            message.append(message_card(obj))
+            
+            return flask.render_template("raw.html", response=message, heading="Message by ID")
         
         else:
             return flask.Response (
