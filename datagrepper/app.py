@@ -33,12 +33,12 @@ import traceback
 
 from datetime import datetime
 import fedmsg
-import fedmsg.config
 import fedmsg.meta
+import fedmsg.config
 import datanommer.models as dm
 
 from datagrepper.dataquery import DataQuery
-from datagrepper.util import assemble_timerange, request_wants_html
+from datagrepper.util import assemble_timerange, request_wants_html, message_card
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -311,34 +311,15 @@ def raw():
         # convert string into python dictionary
         obj = json.loads(body)
         # extract the messages
-        messageList = obj["raw_messages"]
-        #using fedmsg.meta function
-        config = fedmsg.config.load_config([], None)
-        fedmsg.meta.make_processors(**config)
+        raw_message_list = obj["raw_messages"]
         
-        finalMessageList = []
+        final_message_list = []
          
-        for msg in messageList:
-            d = {}
-            # create primary icon associated with message
-            icon = fedmsg.meta.msg2icon(msg,legacy=False,**config)
-            d['icon'] = icon
-            # create URL associated with message
-            link = fedmsg.meta.msg2link(msg, legacy=False, **config)
-            d['link'] = link
-            # create title associated with message
-            title = fedmsg.meta.msg2title(msg, legacy=False, **config)
-            d['title'] = title
-            # create secondary icon associated with message
-            secondary_icon = fedmsg.meta.msg2secondary_icon(msg, legacy=False, **config)
-            d['secondary_icon'] = secondary_icon
-            subtitle = fedmsg.meta.msg2subtitle(msg, legacy=False, **config)
-            d['subtitle'] = subtitle
-
-            finalMessageList.append(d)
+        for message in raw_message_list:
+            message = message_card(message)
+            final_message_list.append(message)
             
-            
-        return flask.render_template("raw.html", response=finalMessageList)
+        return flask.render_template("raw.html", response=final_message_list, heading="Raw Messages")
     
     else:
         return flask.Response(
@@ -354,16 +335,27 @@ def raw():
 def msg_id():
     if 'id' not in flask.request.args:
         flask.abort(400)
-    msg = dm.Message.query.filter_by(msg_id=flask.request.args['id']).first()
+    msg = dm.Message.query.filter_by(msg_id=flask.request.args['id']).first() 
+    mimetype = flask.request.headers.get('Accept')
+    
     if msg:
-        return flask.Response(
-            response=fedmsg.encoding.dumps(msg),
-            status=200,
-            mimetype='application/json',
-        )
+        if request_wants_html():
+            # convert string into python dictionary
+            obj = json.loads(fedmsg.encoding.dumps(msg))
+            # use message_card function 
+            message = []
+            message.append(message_card(obj))
+            
+            return flask.render_template("raw.html", response=message, heading="Message by ID")
+        
+        else:
+            return flask.Response (
+                response=fedmsg.encoding.dumps(msg),
+                status=200,
+                mimetype=mimetype,
+            )
     else:
         flask.abort(404)
-
 
 # Add a request job to the queue
 @app.route('/submit/')
