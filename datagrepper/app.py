@@ -335,7 +335,7 @@ def raw():
 def msg_id():
     if 'id' not in flask.request.args:
         flask.abort(400)
-    msg = dm.Message.query.filter_by(msg_id=flask.request.args['id']).first() 
+    msg = dm.Message.query.filter_by(msg_id=flask.request.args['id']).first()
     mimetype = flask.request.headers.get('Accept')
     
     if msg:
