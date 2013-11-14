@@ -1,51 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
-
-    <title>Raw Message</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="static/css/bootstrap.css" rel="stylesheet">
-    <style type="text/css">
-    .jumbotron h1 {
-        font-size: 50px;
-        line-height: 1;
-    }
-
-    .jumbotron {
-        font-size: 60px 0;
-        text-align: center;
-    }
-
-    div {
-        white-space:normal;
-    }
-
-    </style>
-  </head>
-
-  <body>
-    <div class="jumbotron">
-        <h1>{{heading}}</h1>
-    </div><br/> <br/>
-    <div class="container">
-        {% for dict in response %}
-        <pre>
-            <div>
-                <p><b>{{dict['title']}}</b></p> </br>
-                <p> {{dict['subtitle']}} </p> </br>
+{% for dict in response %}
+    <pre>
+        <div>
+            <p><b>{{dict['title']}}</b></p>
+            <p> {{dict['subtitle']}} </p>
+            {% if 'icon' in dict %}
                 <A HREF={{dict['link']}}><Img SRC= {{dict['icon']}} WIDTH=30 HEIGHT=40></A>&nbsp;&nbsp;&nbsp;
+            {% else %}
+                <A HREF={{dict['link']}}>link</A>
+            {% endif %}
                 <Img SRC={{dict['secondary_icon']}} WIDTH=30 HEIGHT=40></A>
-            </div>
-        </pre>
-        {% endfor %}
-    </div>
+        </div>
+    </pre>
+{% endfor %}
 
-  </body>
-</html>
