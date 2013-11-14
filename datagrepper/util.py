@@ -95,28 +95,32 @@ def assemble_timerange(start, end, delta):
     return start, end, delta
 
 
-def message_card(msg):
+def message_card(msg, size):
     """ Util to generate icon, title, subtitle, link 
      and secondary_icon using fedmsg.meta modules. 
     """
     # using fedmsg.meta modules
     config = fedmsg.config.load_config([], None)
     fedmsg.meta.make_processors(**config)
-    
+
     msgDict = {}
-    # generate primary icon associated with message
-    icon = fedmsg.meta.msg2icon(msg,legacy=False,**config)
-    msgDict['icon'] = icon
-    # generate URL associated with message
-    link = fedmsg.meta.msg2link(msg, legacy=False, **config)
-    msgDict['link'] = link
-    # generate title associated with message
-    title = fedmsg.meta.msg2title(msg, legacy=False, **config)
-    msgDict['title'] = title
-    # generate secondary icon associated with message
-    secondary_icon = fedmsg.meta.msg2secondary_icon(msg, legacy=False, **config)
-    msgDict['secondary_icon'] = secondary_icon
-    # generate subtitle associated with message
-    subtitle = fedmsg.meta.msg2subtitle(msg, legacy=False, **config)
-    msgDict['subtitle'] = subtitle                                                        
+
+    if (size == 'large'):
+        # generate secondary icon associated with message
+        secondary_icon = fedmsg.meta.msg2secondary_icon(msg, legacy=False, **config)
+        msgDict['secondary_icon'] = secondary_icon
+    if (size in ['large', 'medium']):
+        icon = fedmsg.meta.msg2icon(msg,legacy=False,**config)
+        msgDict['icon'] = icon
+        # generate subtitle associated with message
+        subtitle = fedmsg.meta.msg2subtitle(msg, legacy=False, **config)
+        msgDict['subtitle'] = subtitle
+    if (size in ['large', 'medium', 'small']):
+        # generate URL associated with message
+        link = fedmsg.meta.msg2link(msg, legacy=False, **config)
+        msgDict['link'] = link
+        # generate title associated with message
+        title = fedmsg.meta.msg2title(msg, legacy=False, **config)
+        msgDict['title'] = title
+
     return msgDict
