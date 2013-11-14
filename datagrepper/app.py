@@ -210,6 +210,8 @@ def raw():
     page = int(flask.request.args.get('page', 1))
     rows_per_page = int(flask.request.args.get('rows_per_page', 20))
     order = flask.request.args.get('order', 'asc')
+    # adding size as paging arguments
+    size = flask.request.args.get('size', 'large')
 
     # Response formatting arguments
     callback = flask.request.args.get('callback', None)
@@ -237,6 +239,10 @@ def raw():
 
     if order not in ['desc', 'asc']:
         raise ValueError("order must be either 'desc' or 'asc'")
+
+    # check size value
+    if size not in ['small', 'medium', 'large']:
+        raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
 
     meta_expected = set(['title', 'subtitle', 'icon', 'secondary_icon',
                          'link', 'usernames', 'packages', 'objects'])
@@ -299,7 +305,7 @@ def raw():
         status = 500
 
     body = fedmsg.encoding.dumps(output)
-	
+
     mimetype = flask.request.headers.get('Accept')
 
     if callback:
@@ -312,15 +318,16 @@ def raw():
         obj = json.loads(body)
         # extract the messages
         raw_message_list = obj["raw_messages"]
-        
+
         final_message_list = []
-         
+
         for message in raw_message_list:
-            message = message_card(message)
+            # message_card module will handle size
+            message = message_card(message, size)
             final_message_list.append(message)
-            
+
         return flask.render_template("raw.html", response=final_message_list, heading="Raw Messages")
-    
+
     else:
         return flask.Response(
             response=body,
@@ -337,17 +344,23 @@ def msg_id():
         flask.abort(400)
     msg = dm.Message.query.filter_by(msg_id=flask.request.args['id']).first()
     mimetype = flask.request.headers.get('Accept')
-    
+
+    # get paging argument for size
+    size = flask.request.args.get('size', 'large')
+    # check size value
+    if size not in ['small', 'medium', 'large']:
+        raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
+
     if msg:
         if request_wants_html():
             # convert string into python dictionary
             obj = json.loads(fedmsg.encoding.dumps(msg))
             # use message_card function 
             message = []
-            message.append(message_card(obj))
-            
+            message.append(message_card(obj, size))
+
             return flask.render_template("raw.html", response=message, heading="Message by ID")
-        
+
         else:
             return flask.Response (
                 response=fedmsg.encoding.dumps(msg),
