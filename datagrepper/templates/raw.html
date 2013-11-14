@@ -40,7 +40,11 @@
             <div>
                 <p><b>{{dict['title']}}</b></p> </br>
                 <p> {{dict['subtitle']}} </p> </br>
-                <A HREF={{dict['link']}}><Img SRC= {{dict['icon']}} WIDTH=30 HEIGHT=40></A>&nbsp;&nbsp;&nbsp;
+                {% if dict['icon'] %}
+                    <A HREF={{dict['link']}}><Img SRC= {{dict['icon']}} WIDTH=30 HEIGHT=40></A>&nbsp;&nbsp;&nbsp;
+                {% else %}
+                    <A HREF={{dict['link']}}>link</A>
+                {% endif %}
                 <Img SRC={{dict['secondary_icon']}} WIDTH=30 HEIGHT=40></A>
             </div>
         </pre>
