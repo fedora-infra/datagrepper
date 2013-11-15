@@ -212,6 +212,8 @@ def raw():
     order = flask.request.args.get('order', 'asc')
     # adding size as paging arguments
     size = flask.request.args.get('size', 'large')
+    # adding chrome as paging arguments
+    chrome = flask.request.args.get('chrome', 'true')
 
     # Response formatting arguments
     callback = flask.request.args.get('callback', None)
@@ -243,6 +245,10 @@ def raw():
     # check size value
     if size not in ['small', 'medium', 'large']:
         raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
+
+    # checks chrome value
+    if chrome not in ['true', 'false']:
+        raise ValueError("chrome should be either 'true' or 'false'")
 
     meta_expected = set(['title', 'subtitle', 'icon', 'secondary_icon',
                          'link', 'usernames', 'packages', 'objects'])
@@ -326,7 +332,11 @@ def raw():
             message = message_card(message, size)
             final_message_list.append(message)
 
-        return flask.render_template("raw.html", response=final_message_list, heading="Raw Messages")
+        # removes boilerlate codes if chrome value is false
+        if chrome == 'true':
+            return flask.render_template("base.html", response=final_message_list, heading="Raw Messages")
+        else:
+            return flask.render_template("raw.html", response=final_message_list)
 
     else:
         return flask.Response(
@@ -345,11 +355,15 @@ def msg_id():
     msg = dm.Message.query.filter_by(msg_id=flask.request.args['id']).first()
     mimetype = flask.request.headers.get('Accept')
 
-    # get paging argument for size
+    # get paging argument for size and chrome
     size = flask.request.args.get('size', 'large')
+    chrome = flask.request.args.get('chrome', 'true')
     # check size value
     if size not in ['small', 'medium', 'large']:
         raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
+    # checks chrome value
+    if chrome not in ['true', 'false']:
+        raise ValueError("chrome should be either 'true' or 'false'")
 
     if msg:
         if request_wants_html():
@@ -359,7 +373,10 @@ def msg_id():
             message = []
             message.append(message_card(obj, size))
 
-            return flask.render_template("raw.html", response=message, heading="Message by ID")
+            if chrome=='true':
+                return flask.render_template("base.html", response=message, heading="Message by ID")
+            else:
+                return flask.render_template("raw.html", response=message)
 
         else:
             return flask.Response (
