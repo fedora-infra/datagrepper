@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+
+    <title>Raw Message</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+    .jumbotron h1 {
+        font-size: 50px;
+        line-height: 1;
+    }
+
+    .jumbotron {
+        font-size: 60px 0;
+        text-align: center;
+    }
+
+    div {
+        white-space:normal;
+    }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="jumbotron">
+    {% if heading %}
+        <h1>{{heading}}</h1>
+    {% else %}
+        <h1>{{'Datagrepper Messages'}}</h1>
+    {% endif %}
+    </div> 
+    <br/> <br/>
+
+    <div class="container">
+        {% include 'raw.html' %}
+    </div>
+
+  </body>
+</html>
