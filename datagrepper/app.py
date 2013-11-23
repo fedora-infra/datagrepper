@@ -327,9 +327,11 @@ def raw():
 
         final_message_list = []
 
-        for message in raw_message_list:
+        for msg in raw_message_list:
             # message_card module will handle size
-            message = message_card(message, size)
+            message = message_card(msg, size)
+            if (msg["msg_id"] != None):
+                message['msg_id'] = msg["msg_id"]
             final_message_list.append(message)
 
         # removes boilerlate codes if chrome value is false
@@ -372,7 +374,6 @@ def msg_id():
             # use message_card function 
             message = []
             message.append(message_card(obj, size))
-
             if chrome=='true':
                 return flask.render_template("base.html", response=message, heading="Message by ID")
             else:
