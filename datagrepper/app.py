@@ -330,6 +330,7 @@ def raw():
         for msg in raw_message_list:
             # message_card module will handle size
             message = message_card(msg, size)
+            # add msg_id to the message dictionary
             if (msg["msg_id"] != None):
                 message['msg_id'] = msg["msg_id"]
             final_message_list.append(message)
@@ -360,20 +361,31 @@ def msg_id():
     # get paging argument for size and chrome
     size = flask.request.args.get('size', 'large')
     chrome = flask.request.args.get('chrome', 'true')
+    # get paging argument for is_raw
+    # is_raw checks if card comes from /raw url
+    is_raw = flask.request.args.get('is_raw', 'false')
+
     # check size value
     if size not in ['small', 'medium', 'large']:
         raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
     # checks chrome value
     if chrome not in ['true', 'false']:
         raise ValueError("chrome should be either 'true' or 'false'")
-
+    # checks is_raw value
+    if is_raw not in ['true', 'false']:
+        raise ValueError("is_raw should be either 'true' or 'false'")
     if msg:
         if request_wants_html():
             # convert string into python dictionary
             obj = json.loads(fedmsg.encoding.dumps(msg))
-            # use message_card function 
             message = []
-            message.append(message_card(obj, size))
+            if is_raw == 'true':
+                message_dict = message_card(obj, size)
+                message_dict['is_raw'] = 'true'
+                message.append(message_dict)
+            else:
+                message.append(message_card(obj, size))
+
             if chrome=='true':
                 return flask.render_template("base.html", response=message, heading="Message by ID")
             else:
