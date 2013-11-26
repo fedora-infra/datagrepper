@@ -10,7 +10,10 @@
             {% endif %}
                 <Img SRC={{dict['secondary_icon']}} WIDTH=30 HEIGHT=40></A></br>
             {% if 'msg_id' in dict %}
-                <A HREF="/id?id={{dict['msg_id']}}">Link to /id endpoint</A>
+                <A HREF="/id?id={{dict['msg_id']}}&is_raw=true">Details</A>
+            {% endif %}
+            {% if 'is_raw' in dict %}
+                <A HREF="#" onclick="history.go(-1)">Go Back</A>
             {% endif %}
         </div>
     </pre>
