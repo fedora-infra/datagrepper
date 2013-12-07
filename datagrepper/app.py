@@ -318,7 +318,7 @@ def raw():
         mimetype = 'application/javascript'
         body = "%s(%s);" % (callback, body)
 
-    # return HTML content else json 
+    # return HTML content else json
     if request_wants_html():
         # convert string into python dictionary
         obj = json.loads(body)
@@ -365,6 +365,8 @@ def msg_id():
     # is_raw checks if card comes from /raw url
     is_raw = flask.request.args.get('is_raw', 'false')
 
+    meta = flask.request.args.getlist('meta')
+
     # check size value
     if size not in ['small', 'medium', 'large']:
         raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
@@ -374,7 +376,26 @@ def msg_id():
     # checks is_raw value
     if is_raw not in ['true', 'false']:
         raise ValueError("is_raw should be either 'true' or 'false'")
+
+    meta_expected = set(['title', 'subtitle', 'icon', 'secondary_icon',
+                         'link', 'usernames', 'packages', 'objects'])
+    if len(set(meta).intersection(meta_expected)) != len(set(meta)):
+        raise ValueError("meta must be in %s"
+                         % ','.join(list(meta_expected)))
+
     if msg:
+        # converts message from sqlalchemy objects to json-like dicts
+        msg = msg.__json__()
+        if meta:
+            metas = {}
+            for metadata in meta:
+                cmd = 'msg2%s' % metadata
+                metas[metadata] = getattr(
+                    fedmsg.meta, cmd)(msg, **fedmsg_config)
+                if isinstance(metas[metadata], set):
+                    metas[metadata] = list(metas[metadata])
+            msg['meta'] = metas
+
         if request_wants_html():
             # convert string into python dictionary
             obj = json.loads(fedmsg.encoding.dumps(msg))
