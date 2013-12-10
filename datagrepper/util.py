@@ -97,7 +97,7 @@ def assemble_timerange(start, end, delta):
 
 def message_card(msg, size):
     """ Util to generate icon, title, subtitle, link 
-     and secondary_icon using fedmsg.meta modules. 
+     and secondary_icon using fedmsg.meta modules.
     """
     # using fedmsg.meta modules
     config = fedmsg.config.load_config([], None)
@@ -124,3 +124,33 @@ def message_card(msg, size):
         msgDict['title'] = title
 
     return msgDict
+
+
+def meta_argument(msg,meta):
+    """ Util to accept meta arguments for /raw and /id endpoint
+        so that JSON include human-readable strings"""
+
+    meta_expected = set(['title', 'subtitle', 'icon', 'secondary_icon',
+                         'link', 'usernames', 'packages', 'objects'])
+    if len(set(meta).intersection(meta_expected)) != len(set(meta)):
+        raise ValueError("meta must be in %s"
+                         % ','.join(list(meta_expected)))
+
+    metas = {}
+    config = fedmsg.config.load_config([], None)
+    for metadata in meta:
+         cmd = 'msg2%s' % metadata
+         metas[metadata] = getattr(
+             fedmsg.meta, cmd)(msg, **config)
+
+         # We have to do this because 'set' is not
+         # JSON-serializable.  In the next version of fedmsg, this
+         # will be handled automatically and we can just remove this
+         # statement https://github.com/fedora-infra/fedmsg/pull/139
+         if isinstance(metas[metadata], set):
+            metas[metadata] = list(metas[metadata])
+    msg['meta'] = metas
+    return msg
+
+
+
