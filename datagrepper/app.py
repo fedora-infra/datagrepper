@@ -38,7 +38,7 @@ import fedmsg.config
 import datanommer.models as dm
 
 from datagrepper.dataquery import DataQuery
-from datagrepper.util import assemble_timerange, request_wants_html, message_card
+from datagrepper.util import assemble_timerange, request_wants_html, message_card, meta_argument
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -250,12 +250,6 @@ def raw():
     if chrome not in ['true', 'false']:
         raise ValueError("chrome should be either 'true' or 'false'")
 
-    meta_expected = set(['title', 'subtitle', 'icon', 'secondary_icon',
-                         'link', 'usernames', 'packages', 'objects'])
-    if len(set(meta).intersection(meta_expected)) != len(set(meta)):
-        raise ValueError("meta must be in %s"
-                         % ','.join(list(meta_expected)))
-
     try:
         # This fancy classmethod does all of our search for us.
         total, pages, messages = dm.Message.grep(
@@ -272,23 +266,9 @@ def raw():
 
         # Convert our messages from sqlalchemy objects to json-like dicts
         messages = [msg.__json__() for msg in messages]
-
         if meta:
             for message in messages:
-                metas = {}
-                for metadata in meta:
-                    cmd = 'msg2%s' % metadata
-                    metas[metadata] = getattr(
-                        fedmsg.meta, cmd)(message, **fedmsg_config)
-
-                    # We have to do this because 'set' is not
-                    # JSON-serializable.  In the next version of fedmsg, this
-                    # will be handled automatically and we can just remove this
-                    # statement https://github.com/fedora-infra/fedmsg/pull/139
-                    if isinstance(metas[metadata], set):
-                        metas[metadata] = list(metas[metadata])
-
-                message['meta'] = metas
+                message = meta_argument(message, meta)
 
         output = dict(
             raw_messages=messages,
@@ -318,7 +298,7 @@ def raw():
         mimetype = 'application/javascript'
         body = "%s(%s);" % (callback, body)
 
-    # return HTML content else json 
+    # return HTML content else json
     if request_wants_html():
         # convert string into python dictionary
         obj = json.loads(body)
@@ -365,6 +345,8 @@ def msg_id():
     # is_raw checks if card comes from /raw url
     is_raw = flask.request.args.get('is_raw', 'false')
 
+    meta = flask.request.args.getlist('meta')
+
     # check size value
     if size not in ['small', 'medium', 'large']:
         raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
@@ -374,7 +356,13 @@ def msg_id():
     # checks is_raw value
     if is_raw not in ['true', 'false']:
         raise ValueError("is_raw should be either 'true' or 'false'")
+
     if msg:
+        # converts message from sqlalchemy objects to json-like dicts
+        msg = msg.__json__()
+        if meta:
+            msg = meta_argument(msg, meta)
+
         if request_wants_html():
             # convert string into python dictionary
             obj = json.loads(fedmsg.encoding.dumps(msg))
