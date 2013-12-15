@@ -1,4 +1,4 @@
-# datagreppe - HTTP API for datanommer and the fedmsg bus
+# datagrepper - HTTP API for datanommer and the fedmsg bus
 # Copyright (C) 2013  Red Hat, Inc. and others
 #
 # This program is free software; you can redistribute it and/or modify
@@ -179,7 +179,7 @@ def load_docs(request):
 
 @app.route('/')
 def index():
-    total, pages, messages = dm.Message.grep()
+    total = dm.Message.grep()[0]
     return flask.render_template('index.html', docs=load_docs(flask.request), total=total)
 
 
@@ -388,12 +388,10 @@ def msg_id():
             )
     else:
         flask.abort(404)
-
-
 @app.route('/messagecount/')
 @app.route('/messagecount')
 def messagecount():
-    total, pages, messages = dm.Message.grep()
+    total = dm.Message.grep()[0]
 
     return str(total)
 
