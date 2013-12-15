@@ -179,7 +179,8 @@ def load_docs(request):
 
 @app.route('/')
 def index():
-    return flask.render_template('index.html', docs=load_docs(flask.request))
+    total = dm.Message.grep()[0]
+    return flask.render_template('index.html', docs=load_docs(flask.request), total=total)
 
 
 @app.route('/reference/')
@@ -387,6 +388,13 @@ def msg_id():
             )
     else:
         flask.abort(404)
+@app.route('/messagecount/')
+@app.route('/messagecount')
+def messagecount():
+    total = dm.Message.grep()[0]
+
+    return str(total)
+
 
 # Add a request job to the queue
 @app.route('/submit/')

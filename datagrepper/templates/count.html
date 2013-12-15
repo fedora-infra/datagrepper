@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+    <link rel="stylesheet" href="http://github.hubspot.com/odometer/themes/odometer-theme-car.css" />
+    <script src="http://github.hubspot.com/odometer/odometer.js"></script>
+
+    <!-- Extra styles -->
+    <style>
+        .odometer {
+            font-size: 100px;
+            top : 100px;
+        }
+    </style>
+    <body>
+        <center>
+        <div id="odometer" class="odometer">123456</div>
+
+        <script>
+            setTimeout(function(){
+            odometer.innerHTML = {{total}};
+            }, 1000);
+        </script>
+        </center>
+    </body>
+</html>
