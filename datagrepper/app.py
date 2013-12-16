@@ -393,7 +393,7 @@ def msg_id():
 def messagecount():
     total = {}
     total['messagecount'] = dm.Message.grep()[0]
-    total = flask.jsonify(**total)
+    total = flask.jsonify(total)
     return total
 
 
