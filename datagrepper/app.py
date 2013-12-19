@@ -391,9 +391,10 @@ def msg_id():
 @app.route('/messagecount/')
 @app.route('/messagecount')
 def messagecount():
-    total = dm.Message.grep()[0]
-
-    return str(total)
+    total = {}
+    total['messagecount'] = dm.Message.grep()[0]
+    total = flask.jsonify(total)
+    return total
 
 
 # Add a request job to the queue
