@@ -80,9 +80,6 @@
     <!-- Odometr includes -->
     <link rel="stylesheet" href="static/css/odometer-theme-car.css" />
     <script src="static/odometer.js"></script>
-    <!--<script src="https://rawgithub.com/fedora-infra/fedora-news/develop/js/fedora_apps.js" type="text/javascript"></script>-->
-    <script src="http://code.jquery.com/jquery-1.9.1.js" text="text/javascript"></script>:
-    <script src="http://code.jquery.com/mobile/git/jquery.mobile-git.js" type="text/javascript"></script>
   </head>
 
   <body>
@@ -104,10 +101,10 @@
       {% if request.endpoint == 'index' %}
       <div class="jumbotron">
           <h1> <div id="odometer" class="odometer">123456</div>
-               <script type="text/javascript">
-                  var count = {{total}}
+              <script>
+                  var count = {{total}};
                   setTimeout(function(){
-                     WebSocketTest()
+                     WebSocketTest();
                      odometer.innerHTML = count;
                   }, 1000);
 
@@ -122,24 +119,16 @@
                             // Web Socket is connected, send data using send()
                             ws.send(JSON.stringify({topic: '__topic_subscribe__', body: '*'}));
                         };
-                        ws.onmessage = function (evt) 
+                        ws.onmessage = function (evt)
                         {
                             count = count + 1;
-                            $('.odometer').html(count)
+                            odometer.innerHTML = count;
                         };
-                        ws.onclose = function()
-                        {
-                            // websocket is closed.
-                            alert("Connection is closed..."); 
-                        };
-                    }
-                    else
-                    {
-                        // The browser doesn't support WebSocket
-                        alert("WebSocket NOT supported by your Browser!");
+                        ws.onclose = function(e){ws=null;};
+                        ws.onerror = function(e){ws=null;};
                     }
                   }
-            </script>
+              </script>
           </h1>
           <h1>JSON fedmsg API</h1>
           <p class="lead">Using HTTP GET requests, you can query for all
