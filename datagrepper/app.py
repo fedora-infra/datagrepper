@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
+import json
 import flask
 from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -32,14 +32,13 @@ import time
 import traceback
 
 from datetime import datetime
-
 import fedmsg
-import fedmsg.config
 import fedmsg.meta
+import fedmsg.config
 import datanommer.models as dm
 
 from datagrepper.dataquery import DataQuery
-from datagrepper.util import assemble_timerange
+from datagrepper.util import assemble_timerange, request_wants_html, message_card, meta_argument
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -180,7 +179,8 @@ def load_docs(request):
 
 @app.route('/')
 def index():
-    return flask.render_template('index.html', docs=load_docs(flask.request))
+    total = dm.Message.grep()[0]
+    return flask.render_template('index.html', docs=load_docs(flask.request), total=total)
 
 
 @app.route('/reference/')
@@ -211,6 +211,10 @@ def raw():
     page = int(flask.request.args.get('page', 1))
     rows_per_page = int(flask.request.args.get('rows_per_page', 20))
     order = flask.request.args.get('order', 'asc')
+    # adding size as paging arguments
+    size = flask.request.args.get('size', 'large')
+    # adding chrome as paging arguments
+    chrome = flask.request.args.get('chrome', 'true')
 
     # Response formatting arguments
     callback = flask.request.args.get('callback', None)
@@ -239,11 +243,13 @@ def raw():
     if order not in ['desc', 'asc']:
         raise ValueError("order must be either 'desc' or 'asc'")
 
-    meta_expected = set(['title', 'subtitle', 'icon', 'secondary_icon',
-                         'link', 'usernames', 'packages', 'objects'])
-    if len(set(meta).intersection(meta_expected)) != len(set(meta)):
-        raise ValueError("meta must be in %s"
-                         % ','.join(list(meta_expected)))
+    # check size value
+    if size not in ['small', 'medium', 'large']:
+        raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
+
+    # checks chrome value
+    if chrome not in ['true', 'false']:
+        raise ValueError("chrome should be either 'true' or 'false'")
 
     try:
         # This fancy classmethod does all of our search for us.
@@ -261,23 +267,9 @@ def raw():
 
         # Convert our messages from sqlalchemy objects to json-like dicts
         messages = [msg.__json__() for msg in messages]
-
         if meta:
             for message in messages:
-                metas = {}
-                for metadata in meta:
-                    cmd = 'msg2%s' % metadata
-                    metas[metadata] = getattr(
-                        fedmsg.meta, cmd)(message, **fedmsg_config)
-
-                    # We have to do this because 'set' is not
-                    # JSON-serializable.  In the next version of fedmsg, this
-                    # will be handled automatically and we can just remove this
-                    # statement https://github.com/fedora-infra/fedmsg/pull/139
-                    if isinstance(metas[metadata], set):
-                        metas[metadata] = list(metas[metadata])
-
-                message['meta'] = metas
+                message = meta_argument(message, meta)
 
         output = dict(
             raw_messages=messages,
@@ -301,17 +293,41 @@ def raw():
 
     body = fedmsg.encoding.dumps(output)
 
-    mimetype = 'application/json'
+    mimetype = flask.request.headers.get('Accept')
 
     if callback:
         mimetype = 'application/javascript'
         body = "%s(%s);" % (callback, body)
 
-    return flask.Response(
-        response=body,
-        status=status,
-        mimetype=mimetype,
-    )
+    # return HTML content else json
+    if request_wants_html():
+        # convert string into python dictionary
+        obj = json.loads(body)
+        # extract the messages
+        raw_message_list = obj["raw_messages"]
+
+        final_message_list = []
+
+        for msg in raw_message_list:
+            # message_card module will handle size
+            message = message_card(msg, size)
+            # add msg_id to the message dictionary
+            if (msg["msg_id"] != None):
+                message['msg_id'] = msg["msg_id"]
+            final_message_list.append(message)
+
+        # removes boilerlate codes if chrome value is false
+        if chrome == 'true':
+            return flask.render_template("base.html", response=final_message_list, heading="Raw Messages")
+        else:
+            return flask.render_template("raw.html", response=final_message_list)
+
+    else:
+        return flask.Response(
+            response=body,
+            status = status,
+            mimetype = mimetype,
+        )
 
 
 # Get a message by msg_id
@@ -321,14 +337,64 @@ def msg_id():
     if 'id' not in flask.request.args:
         flask.abort(400)
     msg = dm.Message.query.filter_by(msg_id=flask.request.args['id']).first()
+    mimetype = flask.request.headers.get('Accept')
+
+    # get paging argument for size and chrome
+    size = flask.request.args.get('size', 'large')
+    chrome = flask.request.args.get('chrome', 'true')
+    # get paging argument for is_raw
+    # is_raw checks if card comes from /raw url
+    is_raw = flask.request.args.get('is_raw', 'false')
+
+    meta = flask.request.args.getlist('meta')
+
+    # check size value
+    if size not in ['small', 'medium', 'large']:
+        raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
+    # checks chrome value
+    if chrome not in ['true', 'false']:
+        raise ValueError("chrome should be either 'true' or 'false'")
+    # checks is_raw value
+    if is_raw not in ['true', 'false']:
+        raise ValueError("is_raw should be either 'true' or 'false'")
+
     if msg:
-        return flask.Response(
-            response=fedmsg.encoding.dumps(msg),
-            status=200,
-            mimetype='application/json',
-        )
+        # converts message from sqlalchemy objects to json-like dicts
+        msg = msg.__json__()
+        if meta:
+            msg = meta_argument(msg, meta)
+
+        if request_wants_html():
+            # convert string into python dictionary
+            obj = json.loads(fedmsg.encoding.dumps(msg))
+            message = []
+            if is_raw == 'true':
+                message_dict = message_card(obj, size)
+                message_dict['is_raw'] = 'true'
+                message.append(message_dict)
+            else:
+                message.append(message_card(obj, size))
+
+            if chrome=='true':
+                return flask.render_template("base.html", response=message, heading="Message by ID")
+            else:
+                return flask.render_template("raw.html", response=message)
+
+        else:
+            return flask.Response (
+                response=fedmsg.encoding.dumps(msg),
+                status=200,
+                mimetype=mimetype,
+            )
     else:
         flask.abort(404)
+@app.route('/messagecount/')
+@app.route('/messagecount')
+def messagecount():
+    total = {}
+    total['messagecount'] = dm.Message.grep()[0]
+    total = flask.jsonify(total)
+    return total
 
 
 # Add a request job to the queue

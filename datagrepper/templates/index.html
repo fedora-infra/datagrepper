@@ -58,6 +58,9 @@
       .marketing p + h4 {
         margin-top: 28px;
       }
+      .odometer {
+            font-size: 90px;
+      }
     </style>
     <link href="static/css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -74,6 +77,9 @@
     <link rel="apple-touch-icon-precomposed" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-57-precomposed.png">
     -->
     <link rel="shortcut icon" href="static/favicon.png">
+    <!-- Odometr includes -->
+    <link rel="stylesheet" href="static/css/odometer-theme-car.css" />
+    <script src="static/odometer.js"></script>
   </head>
 
   <body>
@@ -94,11 +100,41 @@
 
       {% if request.endpoint == 'index' %}
       <div class="jumbotron">
+          <h1> <div id="odometer" class="odometer">123456</div>
+              <script>
+                  var count = {{total}};
+                  setTimeout(function(){
+                     WebSocketTest();
+                     odometer.innerHTML = count;
+                  }, 1000);
+
+                  function WebSocketTest()
+                  {
+                    if ("WebSocket" in window)
+                    {
+                        // Let us open a web socket
+                        var ws = new WebSocket("wss://hub.fedoraproject.org:9939");
+                        ws.onopen = function(e)
+                        {
+                            // Web Socket is connected, send data using send()
+                            ws.send(JSON.stringify({topic: '__topic_subscribe__', body: '*'}));
+                        };
+                        ws.onmessage = function (evt)
+                        {
+                            count = count + 1;
+                            odometer.innerHTML = count;
+                        };
+                        ws.onclose = function(e){ws=null;};
+                        ws.onerror = function(e){ws=null;};
+                    }
+                  }
+              </script>
+          </h1>
           <h1>JSON fedmsg API</h1>
-        <p class="lead">Using HTTP GET requests, you can query for all
-        kinds of historical data from the <a href="http://fedmsg.com">
-        fedmsg bus</a>:  events by username, by package, by message
-        source, by topic&hellip; you name it.</p>
+          <p class="lead">Using HTTP GET requests, you can query for all
+          kinds of historical data from the <a href="http://fedmsg.com">
+          fedmsg bus</a>:  events by username, by package, by message
+          source, by topic&hellip; you name it.</p>
       </div>
 
       <hr>
