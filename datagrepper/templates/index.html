@@ -124,8 +124,8 @@
                             count = count + 1;
                             odometer.innerHTML = count;
                         };
-                        ws.onclose = function(e){socket=null;};
-                        ws.onerror = function(e){socket=null;};
+                        ws.onclose = function(e){ws=null;};
+                        ws.onerror = function(e){ws=null;};
                     }
                   }
               </script>
