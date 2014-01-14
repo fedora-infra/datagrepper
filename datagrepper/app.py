@@ -215,6 +215,8 @@ def raw():
     size = flask.request.args.get('size', 'large')
     # adding chrome as paging arguments
     chrome = flask.request.args.get('chrome', 'true')
+    # adding fedpkg as paging argument
+    fedpkg = flask.request.args.get('fedpkg','false')
 
     # Response formatting arguments
     callback = flask.request.args.get('callback', None)
@@ -249,6 +251,10 @@ def raw():
 
     # checks chrome value
     if chrome not in ['true', 'false']:
+        raise ValueError("chrome should be either 'true' or 'false'")
+
+    # checks fedpkg value
+    if fedpkg not in ['true', 'false']:
         raise ValueError("chrome should be either 'true' or 'false'")
 
     try:
@@ -316,6 +322,10 @@ def raw():
                 message['msg_id'] = msg["msg_id"]
             final_message_list.append(message)
 
+        if fedpkg == 'true':
+            final = final_message_list[:5]
+            final_message_list = final
+
         # removes boilerlate codes if chrome value is false
         if chrome == 'true':
             return flask.render_template("base.html", response=final_message_list, heading="Raw Messages")
@@ -330,7 +340,6 @@ def raw():
         )
 
 
-# Get a message by msg_id
 @app.route('/id/')
 @app.route('/id')
 def msg_id():
@@ -388,6 +397,8 @@ def msg_id():
             )
     else:
         flask.abort(404)
+
+
 @app.route('/messagecount/')
 @app.route('/messagecount')
 def messagecount():
