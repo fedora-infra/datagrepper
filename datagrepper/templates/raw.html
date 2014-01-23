@@ -1,24 +1,19 @@
 {% for dict in response %}
-    <pre>
-        <div>
-            <p><b>{{dict['title']}}</b></p>
-            <p> {{dict['subtitle']}} </p>
-            <div class="icon-history">
-            {% if 'icon' in dict %}
-                <A HREF={{dict['link']}}><Img SRC= {{dict['icon']}} WIDTH=30 HEIGHT=40></A>&nbsp;&nbsp;&nbsp;
-            {% else %}
-                <A HREF={{dict['link']}}>link</A>
-            {% endif %}
-                <Img SRC={{dict['secondary_icon']}} WIDTH=30 HEIGHT=40></A></br>
-            </div> 
-            {% if 'msg_id' in dict %}
-                <A HREF="/id?id={{dict['msg_id']}}&is_raw=true"><span class="details-history">Details</span></A>
-            {% endif %}
-            {% if 'is_raw' in dict %}
-                <A HREF="#" onclick="history.go(-1)">Go Back</A>
-            {% endif %}
-        </div>
-    </pre>
+    <div class="message-card">
+        {% if 'icon' in dict %}
+            <a href={{dict['link']}}><img src= {{dict['icon']}}></a>
+        {% else %}
+            <a href={{dict['link']}}>Link</a>
+        {% endif %}
+        <img src={{dict['secondary_icon']}}></a>
+        <p><b>{{dict['title']}}</b></p>
+        <p> {{dict['subtitle']}} </p>
+        {% if 'msg_id' in dict %}
+            <a href="{{url_for('msg_id')}}?id={{dict['msg_id']}}&is_raw=true"><span class="details-history">Details</span></a>
+        {% endif %}
+        {% if 'is_raw' in dict %}
+            <a href="#" onclick="history.go(-1)">Go Back</a>
+        {% endif %}
+    </div>
 {% endfor %}
-
 
