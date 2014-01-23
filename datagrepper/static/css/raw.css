@@ -1,0 +1,13 @@
+.message-card {
+    min-height: 52px;
+}
+
+img {
+    height: 25px;
+    width: 20px;
+    margin: 2px auto;
+}
+
+p {
+    display: inline;
+}
