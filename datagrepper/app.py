@@ -318,9 +318,9 @@ def raw():
 
         # removes boilerlate codes if chrome value is false
         if chrome == 'true':
-            return flask.render_template("base.html", response=final_message_list, heading="Raw Messages")
+            return flask.render_template("base.html", size=size, response=final_message_list, heading="Raw Messages")
         else:
-            return flask.render_template("raw.html", response=final_message_list)
+            return flask.render_template("raw.html", size=size, response=final_message_list)
 
     else:
         return flask.Response(
