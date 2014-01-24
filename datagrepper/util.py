@@ -1,5 +1,6 @@
 import flask
 
+import arrow
 from datetime import (
     datetime,
     timedelta,
@@ -123,7 +124,7 @@ def message_card(msg, size):
         title = fedmsg.meta.msg2title(msg, legacy=False, **config)
         msgDict['title'] = title
     # convert the timestamp in datetime object
-    msgDict['date'] = datetime.utcfromtimestamp(int(msg['timestamp']))
+    msgDict['date'] = arrow.get(msg['timestamp'])
 
     return msgDict
 
