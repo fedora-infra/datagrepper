@@ -101,12 +101,11 @@
 
       {% if request.endpoint == 'index' %}
       <div class="jumbotron">
-          <h1> <div id="odometer" class="odometer">0</div>
+          <h1> <div id="odometer" class="odometer">{{total}}</div>
               <script>
                   var count = {{total}};
                   $(document).ready(function() {
                      WebSocketSetup();
-                     odometer.innerHTML = count;
                   });
 
                   function WebSocketSetup()
