@@ -79,6 +79,7 @@
     <link rel="shortcut icon" href="static/favicon.png">
     <!-- Odometr includes -->
     <link rel="stylesheet" href="static/css/odometer-theme-car.css" />
+    <script src="static/jquery-2.1.0.min.js"></script>
     <script src="static/odometer.js"></script>
   </head>
 
@@ -100,15 +101,15 @@
 
       {% if request.endpoint == 'index' %}
       <div class="jumbotron">
-          <h1> <div id="odometer" class="odometer">123456</div>
+          <h1> <div id="odometer" class="odometer">0</div>
               <script>
                   var count = {{total}};
-                  setTimeout(function(){
-                     WebSocketTest();
+                  $(document).ready(function() {
+                     WebSocketSetup();
                      odometer.innerHTML = count;
-                  }, 1000);
+                  });
 
-                  function WebSocketTest()
+                  function WebSocketSetup()
                   {
                     if ("WebSocket" in window)
                     {
