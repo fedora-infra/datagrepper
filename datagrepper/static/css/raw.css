@@ -1,5 +1,5 @@
 .message-card {
-    min-height: 52px;
+    min-height: 25px;
 }
 
 img {
@@ -10,4 +10,11 @@ img {
 
 p {
     display: inline;
+}
+
+.datetime {
+    margin-bottom: 10px;
+    margin-left: 729px;
+    color: #999;
+    font-size: 13px;
 }
