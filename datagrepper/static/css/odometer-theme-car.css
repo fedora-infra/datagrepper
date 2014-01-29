@@ -1,4 +1,3 @@
-@import url("//fonts.googleapis.com/css?family=Arimo");
 .odometer.odometer-auto-theme, .odometer.odometer-theme-car {
   display: -moz-inline-box;
   -moz-box-orient: vertical;
@@ -97,7 +96,7 @@
   -ms-border-radius: 0.34em;
   -khtml-border-radius: 0.34em;
   border-radius: 0.34em;
-  font-family: "Arimo", monospace;
+  font-family: Comfortaa, "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding: 0.15em;
   background: black;
   color: #eee0d3;
