@@ -179,8 +179,20 @@ def load_docs(request):
 
 @app.route('/')
 def index():
-    total = dm.Message.grep()[0]
-    return flask.render_template('index.html', docs=load_docs(flask.request), total=total)
+
+    # Here we return a count of all messages in the db for a 'counter' on the
+    # front page.  In some cases, doing a full count of all the message on a
+    # postgres database takes too long (many tens of seconds).  We can produce
+    # a much faster query like this, but it only returns the approximate number
+    # of messages in the db.
+    if app.config.get('DATAGREPPER_APPROXIMATE_COUNT', True):
+        query = "SELECT reltuples FROM pg_class WHERE relname = 'messages';"
+        total = dm.session.execute(query).first()[0]
+    else:
+        total = dm.Message.grep()[0]
+
+    docs = load_docs(flask.request)
+    return flask.render_template('index.html', docs=docs, total=total)
 
 
 @app.route('/reference/')
@@ -392,7 +404,13 @@ def msg_id():
 @app.route('/messagecount')
 def messagecount():
     total = {}
-    total['messagecount'] = dm.Message.grep()[0]
+
+    if app.config.get('DATAGREPPER_APPROXIMATE_COUNT', True):
+        query = "SELECT reltuples FROM pg_class WHERE relname = 'messages';"
+        total['messagecount'] = dm.session.execute(query).first()[0]
+    else:
+        total['messagecount'] = dm.Message.grep()[0]
+
     total = flask.jsonify(total)
     return total
 
