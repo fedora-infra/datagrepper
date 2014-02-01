@@ -78,8 +78,8 @@ shell to setup the DB, the user, and privileges::
 Back in the bash shell (but still as the `postgres` user), grab a DB dump and
 restore it::
 
-    $ wget http://ralph.fedorapeople.org/datanommer-2013-11-11.dump.xz
-    $ xzcat datanommer-2013-11-11.dump.xz | psql datanommer
+    $ wget http://ralph.fedorapeople.org/datanommer-2014-01-31.dump.xz
+    $ xzcat datanommer-2014-01-31.dump.xz | psql datanommer
 
 Last step, run datagrepper
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
