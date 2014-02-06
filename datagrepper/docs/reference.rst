@@ -172,7 +172,7 @@ Formatting arguments
 
 ``chrome``
   "chrome" decides whether the messages should be displayed with html boiler-plate 
-  or not.Must be one of either "true" or "false". "true" means with boiler-plate and 
+  or not. Must be one of either "true" or "false". "true" means with boiler-plate and 
   "false" implies without it.
   
   Default: true
@@ -182,8 +182,7 @@ Formatting arguments
   Options are: small, medium, large. 
   small contains link, title
   medium contains link, title, icon, subtitle
-  large contains link, title, icon, subtitle, secondary_icon
-  
+  large contains link, title, icon, subtitle, secondary_icon, datetime
   Default: large
   
 /id
