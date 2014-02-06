@@ -25,7 +25,6 @@ Install dependencies::
 
     $ pip install -r requirements.txt
     $ pip install psycopg2
-    $ pip install fedmsg_meta_fedora_infrastructure
 
 Set up the fedmsg consumer for the job runner::
 
