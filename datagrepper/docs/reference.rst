@@ -180,9 +180,9 @@ Formatting arguments
 ``size``
   Argument need to be specified if you want to receive different kinds of message cards. 
   Options are: small, medium, large. 
-  small contains link, title
-  medium contains link, title, icon, subtitle
-  large contains link, title, icon, subtitle, secondary_icon, datetime
+  "small" contains link, title. "medium" contains link, title, icon, subtitle.
+  "large" contains link, title, icon, subtitle, secondary_icon, datetime.
+  
   Default: large
   
 /id
