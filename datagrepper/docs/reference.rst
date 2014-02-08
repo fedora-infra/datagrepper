@@ -6,9 +6,9 @@ All API calls (currently) permit GET and POST requests with the same arguments.
 A trailing slash is optional on all API endpoints. There is no difference
 between using one and not using one.
 
-Responses are always served as ``application/json`` (unless ``JSONP`` is
-explicitly requested, in which case datagrepper returns the appropriate
-``application/javascript``).
+Responses can be served as ``application/json`` or ``text/html`` as per the accept header. If the request  
+is made in "text/html" then it will return the html content otherwise it will return the json content (unless ``JSONP`` is
+explicitly requested, in which case datagrepper returns the appropriate ``application/javascript``).
 
 
 /raw
@@ -169,6 +169,38 @@ Formatting arguments
 
   Default: None
 
+``chrome``
+  "chrome" decides whether the messages should be displayed with html boiler-plate 
+  or not. Must be one of either "true" or "false". "true" means with boiler-plate and 
+  "false" implies without it.
+  
+  Default: true
+  
+``size``
+  Argument need to be specified if you want to receive different kinds of message cards. 
+  Options are: small, medium, large. 
+  "small" contains link and title. "medium" contains link, title, icon and subtitle.
+  "large" contains link, title, icon, subtitle, secondary_icon and datetime.
+  
+  Default: large
+  
+/id
+---
+
+Returns the message by the particular message-id given by the user.
+
+Formatting arguments
+====================
+
+``chrome``
+  Same as that of /raw
+
+``size``
+  Same as that of /raw
+
+``is_raw``
+  Checks whether the card is coming from /raw url or not. Must be one of either "true" or "false". 
+  If card is from /raw url then it will be "true" otherwise "false". 
 
 /submit
 -------
