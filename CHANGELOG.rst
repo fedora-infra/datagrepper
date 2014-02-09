@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.3.1
+0.3.2
 -----
 
 - Merge pull request #106 from charulagrl/fedpkg `b16756c2c <https://github.com/fedora-infra/datagrepper/commit/b16756c2cf2f65ff1f388aaa5a98b38eab081bbd>`_
@@ -44,6 +44,8 @@ Changelog
 - Update reference.rst `b0f4706ec <https://github.com/fedora-infra/datagrepper/commit/b0f4706ec17e9290461225d07abfbc3365a24c8b>`_
 - Merge pull request #116 from charulagrl/patch-2 `520bf0e93 <https://github.com/fedora-infra/datagrepper/commit/520bf0e9345b96a057b51bd9ba479615cc789d6b>`_
 - Check for existance of secondary_icon. `62ec18b67 <https://github.com/fedora-infra/datagrepper/commit/62ec18b67a8d1ee0a116490a3003a91a319ded52>`_
+- 0.3.1 `230b4d50a <https://github.com/fedora-infra/datagrepper/commit/230b4d50af2b83625b9cbd828b8255b00c11d4a2>`_
+- Also check to make sure the icon is not None. `d991f2a0b <https://github.com/fedora-infra/datagrepper/commit/d991f2a0be5e54a7c3c6a6ae7440b4280d47fae2>`_
 
 0.3.0
 -----
