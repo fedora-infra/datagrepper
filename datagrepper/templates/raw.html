@@ -1,6 +1,6 @@
 {% for dict in response %}
     <div class="message-card">
-        {% if 'icon' in dict %}
+        {% if dict.get('icon') %}
             <a href={{dict['link']}}><img src= {{dict['icon']}}></a>
         {% else %}
             <a href={{dict['link']}}>Link</a>
