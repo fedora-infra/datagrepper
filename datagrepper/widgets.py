@@ -55,22 +55,17 @@ var datagrepper_success = function(json) {
         card = card +
             '<img src="' + meta.secondary_icon + '"/>';
         card = card +
-            '<p>' + meta['subtitle'] + '</p>' +
+            '<p>' + meta.subtitle + '</p>' +
             '</div>';
         card = card + '<div class="datetime">' + meta['date'] + '</div>';
         $("#datagrepper-widget").append(card);
     });
 }
 $.ajax(
-    '%(base)s/raw/', {
+    '%(base)s/raw/?meta=link&meta=icon&meta=secondary_icon&meta=subtitle&meta=date', {
         data: {
             order: 'desc',
             chrome: 'false',
-            meta: 'link',
-            meta: 'icon',
-            meta: 'secondary_icon',
-            meta: 'subtitle',
-            meta: 'date'
         },
         dataType: 'jsonp',
         success: datagrepper_success,
