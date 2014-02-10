@@ -4,13 +4,6 @@ import flask
 from datagrepper.app import app
 
 
-def intify(value):
-    try:
-        return int(value)
-    except ValueError:
-        return value
-
-
 js_helpers = """
 function include_js(url, success) {
     var script     = document.createElement('script');
@@ -43,17 +36,21 @@ function run_with_jquery(callback) {
     }
 }"""
 
-socket = """
+work = """
 var datagrepper_success = function(json) {
     $.each(json.raw_messages, function(i, msg) {
         var meta = msg.meta;
         var card = '<div class="message-card">';
-        card = card +
-            '<a href="' + meta.link + '">' +
-            '<img src="' + meta.icon + '"/>' +
-            '</a>';
-        card = card +
-            '<img src="' + meta.secondary_icon + '"/>';
+        if (meta.icon) {
+            card = card +
+                '<a href="' + meta.link + '">' +
+                '<img src="' + meta.icon + '"/>' +
+                '</a>';
+        }
+        if (meta.secondary_icon) {
+            card = card +
+                '<img src="' + meta.secondary_icon + '"/>';
+        }
         card = card +
             '<p>' + meta.subtitle + '</p>' +
             '</div>';
@@ -102,35 +99,12 @@ def widget_js():
     """ This code is super ugly.
     But it produces a widget as a self-extracting script.
 
-    It can take some parameters to change the shape and character of the
-    chart.
-
-    It renders the chart widget and the moksha socket, strips any boilerplate
-    html, grabs all the resources and then builds a single javascript blob that
-    dynamically loads the resources before finally calling the
-    moksha_socket and widget javascript.
-
-    It takes the boilerplate html that it stripped and
-    dynamically injects it back into the host page.
-
     """
-
-    defaults = {
-        'width': 960,
-        'height': 75,
-        'n': 100,
-        'duration': 750,
-    }
-
-    params = defaults
-    params.update(dict([
-        (k, intify(v)) for k, v in flask.request.args.items()
-    ]))
 
     prefix = flask.request.url_root[:-1]
 
     raw_widget = '<div id="datagrepper-widget"></div>'
-    scripts, calls, css = [], [socket % dict(base=prefix)], []
+    scripts, calls, css = [], [work % dict(base=prefix)], []
 
     # This, ridiculously, will find the place in the DOM of the script tag
     # responsible for running this javascript at the time of its execution.
