@@ -61,12 +61,27 @@ var datagrepper_success = function(json) {
         $("#datagrepper-widget").append(card);
     });
 }
+
+// These are the default arguments that we use for our datagrepper query
+var data = {
+    order: 'desc',
+    chrome: 'false'
+};
+
+// Check to see if the user has asked us to filter the firehose.
+var datagrepper_attrs = [
+    'user', 'package', 'category', 'topic',
+    'order', 'rows_per_page', 'page', 'size'];
+$.each(datagrepper_attrs, function(i, attr) {
+    var value = $('script:last').attr("data-" + attr);
+    if (value != undefined) {
+        data[attr] = value;
+    }
+});
+
 $.ajax(
     '%(base)s/raw/?meta=link&meta=icon&meta=secondary_icon&meta=subtitle&meta=date', {
-        data: {
-            order: 'desc',
-            chrome: 'false',
-        },
+        data: data,
         dataType: 'jsonp',
         success: datagrepper_success,
         error: function() {
