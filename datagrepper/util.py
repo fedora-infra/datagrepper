@@ -13,7 +13,7 @@ import fedmsg
 
 # http://flask.pocoo.org/snippets/45/
 # accept header returns json type content only
-def request_wants_html():     
+def request_wants_html():
     best = flask.request.accept_mimetypes \
         .best_match(['application/json', 'text/html', 'text/plain'])
     return best == 'text/html' and \
@@ -97,7 +97,7 @@ def assemble_timerange(start, end, delta):
 
 
 def message_card(msg, size):
-    """ Util to generate icon, title, subtitle, link 
+    """ Util to generate icon, title, subtitle, link
      and secondary_icon using fedmsg.meta modules.
     """
     # using fedmsg.meta modules
@@ -134,7 +134,7 @@ def meta_argument(msg,meta):
         so that JSON include human-readable strings"""
 
     meta_expected = set(['title', 'subtitle', 'icon', 'secondary_icon',
-                         'link', 'usernames', 'packages', 'objects'])
+                         'link', 'usernames', 'packages', 'objects', 'date'])
     if len(set(meta).intersection(meta_expected)) != len(set(meta)):
         raise ValueError("meta must be in %s"
                          % ','.join(list(meta_expected)))
@@ -142,6 +142,12 @@ def meta_argument(msg,meta):
     metas = {}
     config = fedmsg.config.load_config([], None)
     for metadata in meta:
+         # This one is exceptional
+         if metadata == 'date':
+             metas[metadata] = arrow.get(msg['timestamp']).humanize()
+             continue
+
+         # All the other metas use fedmsg.meta.msg2*
          cmd = 'msg2%s' % metadata
          metas[metadata] = getattr(
              fedmsg.meta, cmd)(msg, **config)

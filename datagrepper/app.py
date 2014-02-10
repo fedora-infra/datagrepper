@@ -67,6 +67,8 @@ cache = dogpile.cache.make_region().configure(
     **app.config.get('DATAGREPPER_CACHE_KWARGS', {})
 )
 
+import datagrepper.widgets
+
 
 @app.before_request
 def check_auth():
