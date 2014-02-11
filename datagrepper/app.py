@@ -167,7 +167,7 @@ def preload_docs(endpoint):
     api_docs = markupsafe.Markup(api_docs)
     return api_docs
 
-htmldocs = dict.fromkeys(['index', 'reference'])
+htmldocs = dict.fromkeys(['index', 'reference', 'widget'])
 for key in htmldocs:
     htmldocs[key] = preload_docs(key)
 
@@ -207,6 +207,12 @@ def index():
 @app.route('/reference/')
 @app.route('/reference')
 def reference():
+    return flask.render_template('index.html', docs=load_docs(flask.request))
+
+
+@app.route('/widget/')
+@app.route('/widget')
+def widget():
     return flask.render_template('index.html', docs=load_docs(flask.request))
 
 
