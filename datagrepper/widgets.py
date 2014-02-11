@@ -86,7 +86,6 @@ $.ajax(
         }
     }
 )
-console.log('socket goes here')
 """
 
 css_helper = """
@@ -106,6 +105,13 @@ def widget_js():
     raw_widget = '<div id="datagrepper-widget"></div>'
     scripts, calls, css = [], [work % dict(base=prefix)], []
 
+    if flask.request.args.get('css', '').lower() == 'true':
+        def static_url(filename):
+            return flask.url_for('static', filename=filename, _external=True)
+
+        css.append(css_helper % static_url('css/bootstrap.css'))
+        css.append(css_helper % static_url('css/raw.css'))
+
     # This, ridiculously, will find the place in the DOM of the script tag
     # responsible for running this javascript at the time of its execution.
     # The "last" script tag on the page during page load is the tag responsible
@@ -113,6 +119,7 @@ def widget_js():
     # in-place; i.e., wherever the user includes our tag, that's where the
     # graph will unpack itself.
     calls.insert(0, "$('script:last').before('%s');" % raw_widget.strip())
+    calls.extend(css)
 
     # Just for debugging...
     #calls.append("console.log('waaaaaat!');")
