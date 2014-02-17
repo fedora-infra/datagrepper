@@ -38,16 +38,20 @@ digestable::
 
     {
         "arguments": {
-            "categories": [],
             "delta": 1728000.0,
             "end": 1366221938.0,
-            "packages": [],
             "page": 1,
             "rows_per_page": 1,
             "order": "asc",
             "start": 1364493938.0,
             "topics": [],
+            "categories": [],
             "users": []
+            "packages": [],
+            "not_topics": [],
+            "not_categories": [],
+            "not_users": []
+            "not_packages": [],
         },
         "count": 1,
         "pages": 2052,
@@ -76,16 +80,20 @@ following query to get the next one::
 
     {
         "arguments": {
-            "categories": [],
             "delta": 1728000.0,
             "end": 1366221938.0,
-            "packages": [],
             "page": 2,
             "rows_per_page": 1,
             "order": "asc",
             "start": 1364493938.0,
             "topics": [],
+            "categories": [],
             "users": []
+            "packages": [],
+            "not_topics": [],
+            "not_categories": [],
+            "not_users": []
+            "not_packages": [],
         },
         "count": 1,
         "pages": 2052,
@@ -139,6 +147,26 @@ Same goes for packages::
     $ http get {{URL}}raw/ \
         delta==172800 \
         package==nethack
+
+Everything but the...
+---------------------
+
+There are corresponding *negative filters* for each of the above mentioned
+positive filters.  For instance, if you wanted to get all messages **except for
+Koji messages**, you could use this query:
+
+    $ http get {{URL}}raw/ \
+        delta==172800 \
+        not_category==buildsys
+
+You can combine positive and negative filters as you might expect to, for
+instance, get all messages relating to the user toshio **except** for Ask
+Fedora activity:
+
+    $ http get {{URL}}raw/ \
+        delta==172800 \
+        user==toshio \
+        not_category==askbot
 
 Putting it all together (CNF)
 -----------------------------

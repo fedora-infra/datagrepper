@@ -234,6 +234,12 @@ def raw():
     categories = flask.request.args.getlist('category')
     topics = flask.request.args.getlist('topic')
 
+    # Still more filters.. negations of the previous ones.
+    not_users = flask.request.args.getlist('not_user')
+    not_packages = flask.request.args.getlist('not_package')
+    not_categories = flask.request.args.getlist('not_category')
+    not_topics = flask.request.args.getlist('not_topic')
+
     # Paging arguments
     page = int(flask.request.args.get('page', 1))
     rows_per_page = int(flask.request.args.get('rows_per_page', 20))
@@ -255,6 +261,10 @@ def raw():
         packages=packages,
         categories=categories,
         topics=topics,
+        not_users=not_users,
+        not_packages=not_packages,
+        not_categories=not_categories,
+        not_topics=not_topics,
         page=page,
         rows_per_page=rows_per_page,
         order=order,
@@ -290,6 +300,10 @@ def raw():
             packages=packages,
             categories=categories,
             topics=topics,
+            not_users=not_users,
+            not_packages=not_packages,
+            not_categories=not_categories,
+            not_topics=not_topics,
         )
 
         # Convert our messages from sqlalchemy objects to json-like dicts

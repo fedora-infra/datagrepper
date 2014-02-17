@@ -115,7 +115,7 @@ Filter arguments
   the topic.
 
   This argument can be provided multiple times; returns messages referring to
-  any listed package.
+  any listed category.
 
   Default: all categories
 
@@ -126,9 +126,48 @@ Filter arguments
   message, such as ``org.fedoraproject.prod.git.receive``.
 
   This argument can be provided multiple times; returns messages referring to
-  any listed package.
+  any listed topic.
 
   Default: all topics
+
+``not_user``
+  FAS users to exempt from query.
+
+  This argument can be provided multiple times; returns only messages that do
+  not refer to any listed user.
+
+  Default: no users
+
+``not_package``
+  Fedora package to exempt from query.
+
+  This argument can be provided multiple times; returns only messages that do
+  not refer to any listed package.
+
+  Default: no packages
+
+``not_category``
+  Category to exempt from query.
+
+  In fedmsg, a *category* is what service emitted the message, e.g. ``git``,
+  ``bodhi``, or ``wiki``. The category is usually the third or fourth part of
+  the topic.
+
+  This argument can be provided multiple times; returns only messages that
+  do not fall under the listed categories.
+
+  Default: no categories
+
+``not_topic``
+  Topic to exempt from query.
+
+  In fedmsg, a *topic* is a full reverse-domain description of the type of
+  message, such as ``org.fedoraproject.prod.git.receive``.
+
+  This argument can be provided multiple times; returns only messages that
+  do are not marked with the listed topics.
+
+  Default: no topics
 
 Pagination arguments
 ====================
