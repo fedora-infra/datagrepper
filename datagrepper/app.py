@@ -233,6 +233,7 @@ def raw():
     packages = flask.request.args.getlist('package')
     categories = flask.request.args.getlist('category')
     topics = flask.request.args.getlist('topic')
+    contains = flask.request.args.getlist('contains')
 
     # Still more filters.. negations of the previous ones.
     not_users = flask.request.args.getlist('not_user')
@@ -261,6 +262,7 @@ def raw():
         packages=packages,
         categories=categories,
         topics=topics,
+        contains=contains,
         not_users=not_users,
         not_packages=not_packages,
         not_categories=not_categories,
@@ -300,6 +302,7 @@ def raw():
             packages=packages,
             categories=categories,
             topics=topics,
+            contains=contains,
             not_users=not_users,
             not_packages=not_packages,
             not_categories=not_categories,
