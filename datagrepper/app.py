@@ -67,6 +67,8 @@ cache = dogpile.cache.make_region().configure(
     **app.config.get('DATAGREPPER_CACHE_KWARGS', {})
 )
 
+import datagrepper.widgets
+
 
 @app.before_request
 def check_auth():
@@ -165,7 +167,7 @@ def preload_docs(endpoint):
     api_docs = markupsafe.Markup(api_docs)
     return api_docs
 
-htmldocs = dict.fromkeys(['index', 'reference'])
+htmldocs = dict.fromkeys(['index', 'reference', 'widget'])
 for key in htmldocs:
     htmldocs[key] = preload_docs(key)
 
@@ -177,15 +179,40 @@ def load_docs(request):
     return markupsafe.Markup(docs)
 
 
+def count_all_messages():
+    """ Return a count of all messages in the db.
+
+    In some cases, doing a full count of all the message on a postgres database
+    takes too long (many tens of seconds).  We can produce a much faster query
+    like this, but it only returns the approximate number of messages in the
+    db.
+    """
+
+    if app.config.get('DATAGREPPER_APPROXIMATE_COUNT', True):
+        query = "SELECT reltuples FROM pg_class WHERE relname = 'messages';"
+        total = dm.session.execute(query).first()[0]
+    else:
+        total = dm.Message.grep()[0]
+
+    return total
+
+
 @app.route('/')
 def index():
-    total = dm.Message.grep()[0]
-    return flask.render_template('index.html', docs=load_docs(flask.request), total=total)
+    total = count_all_messages()
+    docs = load_docs(flask.request)
+    return flask.render_template('index.html', docs=docs, total=total)
 
 
 @app.route('/reference/')
 @app.route('/reference')
 def reference():
+    return flask.render_template('index.html', docs=load_docs(flask.request))
+
+
+@app.route('/widget/')
+@app.route('/widget')
+def widget():
     return flask.render_template('index.html', docs=load_docs(flask.request))
 
 
@@ -206,6 +233,13 @@ def raw():
     packages = flask.request.args.getlist('package')
     categories = flask.request.args.getlist('category')
     topics = flask.request.args.getlist('topic')
+    contains = flask.request.args.getlist('contains')
+
+    # Still more filters.. negations of the previous ones.
+    not_users = flask.request.args.getlist('not_user')
+    not_packages = flask.request.args.getlist('not_package')
+    not_categories = flask.request.args.getlist('not_category')
+    not_topics = flask.request.args.getlist('not_topic')
 
     # Paging arguments
     page = int(flask.request.args.get('page', 1))
@@ -228,6 +262,11 @@ def raw():
         packages=packages,
         categories=categories,
         topics=topics,
+        contains=contains,
+        not_users=not_users,
+        not_packages=not_packages,
+        not_categories=not_categories,
+        not_topics=not_topics,
         page=page,
         rows_per_page=rows_per_page,
         order=order,
@@ -263,6 +302,11 @@ def raw():
             packages=packages,
             categories=categories,
             topics=topics,
+            contains=contains,
+            not_users=not_users,
+            not_packages=not_packages,
+            not_categories=not_categories,
+            not_topics=not_topics,
         )
 
         # Convert our messages from sqlalchemy objects to json-like dicts
@@ -318,9 +362,9 @@ def raw():
 
         # removes boilerlate codes if chrome value is false
         if chrome == 'true':
-            return flask.render_template("base.html", response=final_message_list, heading="Raw Messages")
+            return flask.render_template("base.html", size=size, response=final_message_list, heading="Raw Messages")
         else:
-            return flask.render_template("raw.html", response=final_message_list)
+            return flask.render_template("raw.html", size=size, response=final_message_list)
 
     else:
         return flask.Response(
@@ -388,11 +432,13 @@ def msg_id():
             )
     else:
         flask.abort(404)
+
+
 @app.route('/messagecount/')
 @app.route('/messagecount')
 def messagecount():
     total = {}
-    total['messagecount'] = dm.Message.grep()[0]
+    total['messagecount'] = count_all_messages()
     total = flask.jsonify(total)
     return total
 

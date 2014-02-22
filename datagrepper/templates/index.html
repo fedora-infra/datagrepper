@@ -79,6 +79,7 @@
     <link rel="shortcut icon" href="static/favicon.png">
     <!-- Odometr includes -->
     <link rel="stylesheet" href="static/css/odometer-theme-car.css" />
+    <script src="static/jquery-2.1.0.min.js"></script>
     <script src="static/odometer.js"></script>
   </head>
 
@@ -90,6 +91,7 @@
         <ul class="nav nav-pills pull-right">
           <li{% if request.endpoint == 'index' %} class="active"{% endif %}><a href="{{ url_for('index') }}">Getting started</a></li>
           <li{% if request.endpoint == 'reference' %} class="active"{% endif %}><a href="{{ url_for('reference') }}">Reference</a></li>
+          <li{% if request.endpoint == 'widget' %} class="active"{% endif %}><a href="{{ url_for('widget') }}">Embedding</a></li>
           <li><a href="https://github.com/fedora-infra/datagrepper">Source</a></li>
           <li><a href="https://github.com/fedora-infra/datagrepper/issues">Issues</a></li>
         </ul>
@@ -100,15 +102,14 @@
 
       {% if request.endpoint == 'index' %}
       <div class="jumbotron">
-          <h1> <div id="odometer" class="odometer">123456</div>
+          <h1> <div id="odometer" class="odometer">{{total}}</div>
               <script>
                   var count = {{total}};
-                  setTimeout(function(){
-                     WebSocketTest();
-                     odometer.innerHTML = count;
-                  }, 1000);
+                  $(document).ready(function() {
+                     WebSocketSetup();
+                  });
 
-                  function WebSocketTest()
+                  function WebSocketSetup()
                   {
                     if ("WebSocket" in window)
                     {

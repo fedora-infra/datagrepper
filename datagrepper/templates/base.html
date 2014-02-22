@@ -12,7 +12,9 @@
 
     <!-- Bootstrap core CSS -->
     <link href="static/css/bootstrap.css" rel="stylesheet">
+    <link href="static/css/raw.css" rel="stylesheet">
     <style type="text/css">
+
     .jumbotron h1 {
         font-size: 50px;
         line-height: 1;
@@ -33,12 +35,12 @@
   <body>
     <div class="jumbotron">
     {% if heading %}
-        <h1>{{heading}}</h1>
+        <h2>{{heading}}</h2>
     {% else %}
-        <h1>{{'Datagrepper Messages'}}</h1>
+        <h2>Datagrepper Messages</h2>
     {% endif %}
-    </div> 
-    <br/> <br/>
+    </div>
+    <br/><br/>
 
     <div class="container">
         {% include 'raw.html' %}

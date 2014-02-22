@@ -1,6 +1,66 @@
 Changelog
 =========
 
+0.3.3
+-----
+
+- Merge pull request #106 from charulagrl/fedpkg `b16756c2c <https://github.com/fedora-infra/datagrepper/commit/b16756c2cf2f65ff1f388aaa5a98b38eab081bbd>`_
+- added div and span tag for images and details link respectively `c84c05d98 <https://github.com/fedora-infra/datagrepper/commit/c84c05d98a1c608c3c380dde28fdb6de54e31a41>`_
+- added definitions for various classes `f8d87b0f9 <https://github.com/fedora-infra/datagrepper/commit/f8d87b0f9bd6882652d69baf85f00f43bcc80dd8>`_
+- changed the layout of message-card `71a83df95 <https://github.com/fedora-infra/datagrepper/commit/71a83df95c96be9fe4143fea271acce6fc2ce978>`_
+- includes raw.css file `5c9ef2eb9 <https://github.com/fedora-infra/datagrepper/commit/5c9ef2eb993e86ef528f5330d4a675045401e0d5>`_
+- removed unnecessary curly brackets from heading Datagrepper Messages `ca460a723 <https://github.com/fedora-infra/datagrepper/commit/ca460a7232cb1898654f1ceaedfa4d2116e5328b>`_
+- Merge pull request #107 from charulagrl/fedpkg `32c0a8416 <https://github.com/fedora-infra/datagrepper/commit/32c0a84168328c1f4974bf15bf55588aecdfab67>`_
+- Convert the msg timestamp into a datetime object to make the date available in the card `304c91f45 <https://github.com/fedora-infra/datagrepper/commit/304c91f45c580b7378301c43f17c26389ccc6008>`_
+- Small HTML fixes, add the date to the card and fix link to the individual message by its id `09c87af56 <https://github.com/fedora-infra/datagrepper/commit/09c87af56c6b266ad3ab88e3d7e3acde4d56d279>`_
+- Make sure the dates are converted in UTC `dd472ff33 <https://github.com/fedora-infra/datagrepper/commit/dd472ff3313972229404c7172a63b64396479fa0>`_
+- Use arrow to parse the date from the raw_message `007981f89 <https://github.com/fedora-infra/datagrepper/commit/007981f897a139ca57ff4c3f82320a0af5a466d2>`_
+- Display the date in full if size == 'large' otherwise just the relative date provided by arrow `ff049fcbc <https://github.com/fedora-infra/datagrepper/commit/ff049fcbca149fd5f2dda265f4367b277fd9dba7>`_
+- Merge pull request #105 from fedora-infra/add_dates `384ff89ac <https://github.com/fedora-infra/datagrepper/commit/384ff89ac0bf15ae1dfe5e041012e0eaaf642271>`_
+- changed the css for datetime `1c5b5ed76 <https://github.com/fedora-infra/datagrepper/commit/1c5b5ed76e2806a15e310c34b33fd74ee8af2a0b>`_
+- changed the position of datetime element `3fb180616 <https://github.com/fedora-infra/datagrepper/commit/3fb1806166e37db28f9621bbd184e0d250118a71>`_
+- Merge pull request #108 from charulagrl/develop `68142cf5f <https://github.com/fedora-infra/datagrepper/commit/68142cf5f7af431d23024ecbc6cc4a1be2f2c925>`_
+- Optimize frontpage for #101. `54b077e1f <https://github.com/fedora-infra/datagrepper/commit/54b077e1fe2788d1ec76df46fc032004c5cf8546>`_
+- Add jquery to avoid 1s delay before initializing odometer. `2b71d071d <https://github.com/fedora-infra/datagrepper/commit/2b71d071d097af368eb01f03c25911889d0145b7>`_
+- Actually, we can just set the value on the server. `ecde1ff21 <https://github.com/fedora-infra/datagrepper/commit/ecde1ff214adf2ef1163415e7b60fd5673e23b4c>`_
+- No more "Arimo" google font.  Fixes #103 `7dc66bea7 <https://github.com/fedora-infra/datagrepper/commit/7dc66bea7967da4d74ceed9f792e0a01e19951e9>`_
+- Merge pull request #110 from fedora-infra/feature/count-from-zero `fe0a0a7a0 <https://github.com/fedora-infra/datagrepper/commit/fe0a0a7a0044de6ab56588bee124de7bb08135d7>`_
+- Break that optimization conditional out into a utility function. `4b9a4ab5a <https://github.com/fedora-infra/datagrepper/commit/4b9a4ab5a378e1c768db5a039e121d4efa83bf29>`_
+- Merge pull request #109 from fedora-infra/feature/optimize-frontpage `056dae5eb <https://github.com/fedora-infra/datagrepper/commit/056dae5eb85f188a43e4e2981e876d453ac8e0e5>`_
+- Merge pull request #111 from fedora-infra/feature/font-fixing `e78a71ebb <https://github.com/fedora-infra/datagrepper/commit/e78a71ebb776b878bf6fc887deab1a20949cd9cc>`_
+- Update docs to point at the latest snapshot. `67d3ac220 <https://github.com/fedora-infra/datagrepper/commit/67d3ac220151d247556f50927dffb6458f6273d1>`_
+- Merge pull request #112 from fedora-infra/feature/latest-snapshot `25afc011b <https://github.com/fedora-infra/datagrepper/commit/25afc011b18b316a57848ce17b90747843e619c3>`_
+- Update README.rst `a6ff96a36 <https://github.com/fedora-infra/datagrepper/commit/a6ff96a36019c8faf030b6c608955ac80a8a2347>`_
+- removed the instruction added before `2b2d5eb42 <https://github.com/fedora-infra/datagrepper/commit/2b2d5eb42c301c0617acdbe914e1255bda0fb42b>`_
+- added fedmsg_meta_fedora_infrastructure `19a07ff17 <https://github.com/fedora-infra/datagrepper/commit/19a07ff17e10aea518e367dd337ba7b39137ec73>`_
+- Update the documentation `d8c9715e2 <https://github.com/fedora-infra/datagrepper/commit/d8c9715e20c345927ae5e80ae0f475f132101bfa>`_
+- Merge pull request #113 from charulagrl/patch-1 `98ce4bb1e <https://github.com/fedora-infra/datagrepper/commit/98ce4bb1ec8cfd47201eb0d1bc8c954c564b58f4>`_
+- Merge remote-tracking branch 'upstream/master' into fedpkg `5731277e4 <https://github.com/fedora-infra/datagrepper/commit/5731277e4619660f07c44aca89099c7c5c50d2dd>`_
+- changed the width of image `a7be2e399 <https://github.com/fedora-infra/datagrepper/commit/a7be2e3991819059dfd3bf0116471325d6c94ea4>`_
+- Update reference.rst `2c6b11544 <https://github.com/fedora-infra/datagrepper/commit/2c6b115449f49d6b90624ed075cffd721f6d82e0>`_
+- Update reference.rst `3fcdf22de <https://github.com/fedora-infra/datagrepper/commit/3fcdf22dedac4e85f26ea50c7972f61f0575010e>`_
+- Merge pull request #115 from charulagrl/fedpkg `a6ba30815 <https://github.com/fedora-infra/datagrepper/commit/a6ba30815a219ce46e04643622b3c61cfaa8512f>`_
+- Update reference.rst `0769068ec <https://github.com/fedora-infra/datagrepper/commit/0769068ecceff16185a2d096dd9cf179114e6112>`_
+- Update reference.rst `b0f4706ec <https://github.com/fedora-infra/datagrepper/commit/b0f4706ec17e9290461225d07abfbc3365a24c8b>`_
+- Merge pull request #116 from charulagrl/patch-2 `520bf0e93 <https://github.com/fedora-infra/datagrepper/commit/520bf0e9345b96a057b51bd9ba479615cc789d6b>`_
+- Check for existance of secondary_icon. `62ec18b67 <https://github.com/fedora-infra/datagrepper/commit/62ec18b67a8d1ee0a116490a3003a91a319ded52>`_
+- 0.3.1 `230b4d50a <https://github.com/fedora-infra/datagrepper/commit/230b4d50af2b83625b9cbd828b8255b00c11d4a2>`_
+- Also check to make sure the icon is not None. `d991f2a0b <https://github.com/fedora-infra/datagrepper/commit/d991f2a0be5e54a7c3c6a6ae7440b4280d47fae2>`_
+- 0.3.2 `a1ad7e228 <https://github.com/fedora-infra/datagrepper/commit/a1ad7e228ec022bb6145890328349f2eb710f38b>`_
+- First start of a functional widget. `1fb98a97e <https://github.com/fedora-infra/datagrepper/commit/1fb98a97efe9cfb384e1abe72275cbb131b206fe>`_
+- Fixes to query. `519a9cd8e <https://github.com/fedora-infra/datagrepper/commit/519a9cd8e6882dc6ea48e040eb00768c7665eaa6>`_
+- Allow users to pass arguments to the js widget query. `58acb1b54 <https://github.com/fedora-infra/datagrepper/commit/58acb1b5462246911f192c317a20b66059ee96c7>`_
+- Removed old unused stuff. `5de9b4b7e <https://github.com/fedora-infra/datagrepper/commit/5de9b4b7e3e1249e68a51d9486ca0f699a9f0e53>`_
+- Optionally add in css for the embedded widget. `2d4aee9e5 <https://github.com/fedora-infra/datagrepper/commit/2d4aee9e51ea204a6c3bd8548de83fd0a00228ba>`_
+- Add a docs page for the embeddable widget. `2e3e08f4a <https://github.com/fedora-infra/datagrepper/commit/2e3e08f4a872ac8ab0610a80455bd3ce86c49df7>`_
+- Reformat meta example list and add the new 'date' field. `8aac1e695 <https://github.com/fedora-infra/datagrepper/commit/8aac1e695c914d71e21c23024e1fce546f4feefa>`_
+- Merge pull request #117 from fedora-infra/feature/embeddable-js-widget `a7c99c36c <https://github.com/fedora-infra/datagrepper/commit/a7c99c36c3f04fa1f42241204e058e60734a311d>`_
+- Add negative filters. `8a153c169 <https://github.com/fedora-infra/datagrepper/commit/8a153c1698e598161a41d02951ce0eb3717d00fc>`_
+- Update docs with new negative filters. `2814c1990 <https://github.com/fedora-infra/datagrepper/commit/2814c19907105c52617a84be3d0bea4d2061339e>`_
+- Merge pull request #120 from fedora-infra/feature/negative-filters `6826f440e <https://github.com/fedora-infra/datagrepper/commit/6826f440e713c813f6cc206e29fb2aeadeef2d0b>`_
+- Add possibility to query the database with a keyword and retrieve all messages having it `601642197 <https://github.com/fedora-infra/datagrepper/commit/6016421972817377221f30b8dd5e3b6641a449ba>`_
+- Merge pull request #121 from fedora-infra/feature/contains `9e2d2ea40 <https://github.com/fedora-infra/datagrepper/commit/9e2d2ea4080c62e98476aa6bfc2bc7076d3948ef>`_
+
 0.3.0
 -----
 

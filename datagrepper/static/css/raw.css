@@ -1,0 +1,20 @@
+.message-card {
+    min-height: 25px;
+}
+
+img {
+    height: 25px;
+    width: 25px;
+    margin: 2px auto;
+}
+
+p {
+    display: inline;
+}
+
+.datetime {
+    margin-bottom: 10px;
+    margin-left: 729px;
+    color: #999;
+    font-size: 13px;
+}

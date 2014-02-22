@@ -1,3 +1,4 @@
+arrow
 Flask
 Flask-OpenID
 Flask-SQLAlchemy
@@ -9,3 +10,4 @@ backports.lzma
 lockfile
 dogpile.cache
 bunch
+fedmsg_meta_fedora_infrastructure

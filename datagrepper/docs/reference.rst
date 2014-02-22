@@ -6,9 +6,9 @@ All API calls (currently) permit GET and POST requests with the same arguments.
 A trailing slash is optional on all API endpoints. There is no difference
 between using one and not using one.
 
-Responses are always served as ``application/json`` (unless ``JSONP`` is
-explicitly requested, in which case datagrepper returns the appropriate
-``application/javascript``).
+Responses can be served as ``application/json`` or ``text/html`` as per the accept header. If the request
+is made in "text/html" then it will return the html content otherwise it will return the json content (unless ``JSONP`` is
+explicitly requested, in which case datagrepper returns the appropriate ``application/javascript``).
 
 
 /raw
@@ -115,7 +115,7 @@ Filter arguments
   the topic.
 
   This argument can be provided multiple times; returns messages referring to
-  any listed package.
+  any listed category.
 
   Default: all categories
 
@@ -126,9 +126,59 @@ Filter arguments
   message, such as ``org.fedoraproject.prod.git.receive``.
 
   This argument can be provided multiple times; returns messages referring to
-  any listed package.
+  any listed topic.
 
   Default: all topics
+
+``contains``
+  Keyword to search in the messages.
+
+  Sometime one knows only a part of a message, this would allow retrieving
+  all the messages containing that part.
+
+  This argument can be provided multiple times; returns messages referring to
+  any listed topic.
+
+  Default: all messages
+
+``not_user``
+  FAS users to exempt from query.
+
+  This argument can be provided multiple times; returns only messages that do
+  not refer to any listed user.
+
+  Default: no users
+
+``not_package``
+  Fedora package to exempt from query.
+
+  This argument can be provided multiple times; returns only messages that do
+  not refer to any listed package.
+
+  Default: no packages
+
+``not_category``
+  Category to exempt from query.
+
+  In fedmsg, a *category* is what service emitted the message, e.g. ``git``,
+  ``bodhi``, or ``wiki``. The category is usually the third or fourth part of
+  the topic.
+
+  This argument can be provided multiple times; returns only messages that
+  do not fall under the listed categories.
+
+  Default: no categories
+
+``not_topic``
+  Topic to exempt from query.
+
+  In fedmsg, a *topic* is a full reverse-domain description of the type of
+  message, such as ``org.fedoraproject.prod.git.receive``.
+
+  This argument can be provided multiple times; returns only messages that
+  do are not marked with the listed topics.
+
+  Default: no topics
 
 Pagination arguments
 ====================
@@ -164,11 +214,43 @@ Formatting arguments
 ``meta``
   Argument to specify what meta information to return with the raw
   message from fedmsg.
-  Options are: `title, subtitle, icon, secondary_icon, link, usernames,
-  packages, objects`
+  Options are: ``title``, ``subtitle``, ``icon``, ``secondary_icon``, ``link``,
+  ``usernames``, ``packages``, ``objects``, and ``date``.
 
   Default: None
 
+``chrome``
+  "chrome" decides whether the messages should be displayed with html boiler-plate
+  or not. Must be one of either "true" or "false". "true" means with boiler-plate and
+  "false" implies without it.
+
+  Default: true
+
+``size``
+  Argument need to be specified if you want to receive different kinds of message cards.
+  Options are: small, medium, large.
+  "small" contains link and title. "medium" contains link, title, icon and subtitle.
+  "large" contains link, title, icon, subtitle, secondary_icon and datetime.
+
+  Default: large
+
+/id
+---
+
+Returns the message by the particular message-id given by the user.
+
+Formatting arguments
+====================
+
+``chrome``
+  Same as that of /raw
+
+``size``
+  Same as that of /raw
+
+``is_raw``
+  Checks whether the card is coming from /raw url or not. Must be one of either "true" or "false".
+  If card is from /raw url then it will be "true" otherwise "false".
 
 /submit
 -------
