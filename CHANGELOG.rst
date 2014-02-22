@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.3.2
+0.3.3
 -----
 
 - Merge pull request #106 from charulagrl/fedpkg `b16756c2c <https://github.com/fedora-infra/datagrepper/commit/b16756c2cf2f65ff1f388aaa5a98b38eab081bbd>`_
@@ -46,6 +46,20 @@ Changelog
 - Check for existance of secondary_icon. `62ec18b67 <https://github.com/fedora-infra/datagrepper/commit/62ec18b67a8d1ee0a116490a3003a91a319ded52>`_
 - 0.3.1 `230b4d50a <https://github.com/fedora-infra/datagrepper/commit/230b4d50af2b83625b9cbd828b8255b00c11d4a2>`_
 - Also check to make sure the icon is not None. `d991f2a0b <https://github.com/fedora-infra/datagrepper/commit/d991f2a0be5e54a7c3c6a6ae7440b4280d47fae2>`_
+- 0.3.2 `a1ad7e228 <https://github.com/fedora-infra/datagrepper/commit/a1ad7e228ec022bb6145890328349f2eb710f38b>`_
+- First start of a functional widget. `1fb98a97e <https://github.com/fedora-infra/datagrepper/commit/1fb98a97efe9cfb384e1abe72275cbb131b206fe>`_
+- Fixes to query. `519a9cd8e <https://github.com/fedora-infra/datagrepper/commit/519a9cd8e6882dc6ea48e040eb00768c7665eaa6>`_
+- Allow users to pass arguments to the js widget query. `58acb1b54 <https://github.com/fedora-infra/datagrepper/commit/58acb1b5462246911f192c317a20b66059ee96c7>`_
+- Removed old unused stuff. `5de9b4b7e <https://github.com/fedora-infra/datagrepper/commit/5de9b4b7e3e1249e68a51d9486ca0f699a9f0e53>`_
+- Optionally add in css for the embedded widget. `2d4aee9e5 <https://github.com/fedora-infra/datagrepper/commit/2d4aee9e51ea204a6c3bd8548de83fd0a00228ba>`_
+- Add a docs page for the embeddable widget. `2e3e08f4a <https://github.com/fedora-infra/datagrepper/commit/2e3e08f4a872ac8ab0610a80455bd3ce86c49df7>`_
+- Reformat meta example list and add the new 'date' field. `8aac1e695 <https://github.com/fedora-infra/datagrepper/commit/8aac1e695c914d71e21c23024e1fce546f4feefa>`_
+- Merge pull request #117 from fedora-infra/feature/embeddable-js-widget `a7c99c36c <https://github.com/fedora-infra/datagrepper/commit/a7c99c36c3f04fa1f42241204e058e60734a311d>`_
+- Add negative filters. `8a153c169 <https://github.com/fedora-infra/datagrepper/commit/8a153c1698e598161a41d02951ce0eb3717d00fc>`_
+- Update docs with new negative filters. `2814c1990 <https://github.com/fedora-infra/datagrepper/commit/2814c19907105c52617a84be3d0bea4d2061339e>`_
+- Merge pull request #120 from fedora-infra/feature/negative-filters `6826f440e <https://github.com/fedora-infra/datagrepper/commit/6826f440e713c813f6cc206e29fb2aeadeef2d0b>`_
+- Add possibility to query the database with a keyword and retrieve all messages having it `601642197 <https://github.com/fedora-infra/datagrepper/commit/6016421972817377221f30b8dd5e3b6641a449ba>`_
+- Merge pull request #121 from fedora-infra/feature/contains `9e2d2ea40 <https://github.com/fedora-infra/datagrepper/commit/9e2d2ea4080c62e98476aa6bfc2bc7076d3948ef>`_
 
 0.3.0
 -----
