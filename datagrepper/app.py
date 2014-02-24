@@ -344,7 +344,7 @@ def raw():
         body = "%s(%s);" % (callback, body)
 
     # return HTML content else json
-    if request_wants_html():
+    if not callback and request_wants_html():
         # convert string into python dictionary
         obj = json.loads(body)
         # extract the messages
