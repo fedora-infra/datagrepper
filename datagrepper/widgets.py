@@ -107,8 +107,7 @@ def widget_js():
 
     if flask.request.args.get('css', '').lower() == 'true':
         def static_url(filename):
-            default = "https://apps.fedoraproject.org/datagrepper"
-            return app.config.get('APP_PATH', default) + "/static/" + filename
+            return app.config['APP_PATH'] + "/static/" + filename
 
         css.append(css_helper % static_url('css/bootstrap.css'))
         css.append(css_helper % static_url('css/raw.css'))
