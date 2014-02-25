@@ -107,7 +107,7 @@ def widget_js():
 
     if flask.request.args.get('css', '').lower() == 'true':
         def static_url(filename):
-            return flask.url_for('static', filename=filename, _external=True)
+            return app.config['APP_PATH'] + "/static/" + filename
 
         css.append(css_helper % static_url('css/bootstrap.css'))
         css.append(css_helper % static_url('css/raw.css'))
