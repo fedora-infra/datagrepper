@@ -194,7 +194,7 @@ def count_all_messages():
     else:
         total = dm.Message.grep()[0]
 
-    return total
+    return int(total)
 
 
 @app.route('/')
