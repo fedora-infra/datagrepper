@@ -192,7 +192,7 @@ def count_all_messages():
         query = "SELECT reltuples FROM pg_class WHERE relname = 'messages';"
         total = dm.session.execute(query).first()[0]
     else:
-        total = dm.Message.grep()[0]
+        total = dm.Message.grep(defer=True)[0]
 
     return int(total)
 
