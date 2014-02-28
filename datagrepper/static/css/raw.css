@@ -18,3 +18,12 @@ p {
     color: #999;
     font-size: 13px;
 }
+
+// For the pygmentized json blobs
+.highlight {
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+}
+.highlight pre {
+    background-color: #272822;
+}

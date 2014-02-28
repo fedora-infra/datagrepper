@@ -31,6 +31,10 @@ import os
 import time
 import traceback
 
+import pygments
+import pygments.lexers
+import pygments.formatters
+
 from datetime import datetime
 import fedmsg
 import fedmsg.meta
@@ -412,9 +416,15 @@ def msg_id():
 
         if request_wants_html():
             # convert string into python dictionary
-            msg_string = fedmsg.encoding.dumps(msg)
-            msg_obj = json.loads(msg_string)
-            message_dict = message_card(msg_obj, size)
+            msg_string = pygments.highlight(
+                fedmsg.encoding.pretty_dumps(msg),
+                pygments.lexers.JavascriptLexer(),
+                pygments.formatters.HtmlFormatter(
+                    noclasses=True,
+                    style="monokai",
+                )
+            ).strip()
+            message_dict = message_card(msg, size)
 
             if is_raw == 'true':
                 message_dict['is_raw'] = 'true'

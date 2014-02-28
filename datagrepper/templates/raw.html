@@ -24,9 +24,9 @@
         {% endif %}
     </div>
     {% if size == 'extra-large' %}
-    <p>
+    {% autoescape false %}
 {{msg_string}}
-    </p>
+    {% endautoescape %}
     {% endif %}
 {% endfor %}
 
