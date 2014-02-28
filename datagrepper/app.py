@@ -244,7 +244,7 @@ def raw():
     # Paging arguments
     page = int(flask.request.args.get('page', 1))
     rows_per_page = int(flask.request.args.get('rows_per_page', 20))
-    order = flask.request.args.get('order', 'asc')
+    order = flask.request.args.get('order', 'desc')
     # adding size as paging arguments
     size = flask.request.args.get('size', 'large')
     # adding chrome as paging arguments

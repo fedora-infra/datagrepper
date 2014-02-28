@@ -199,7 +199,7 @@ Pagination arguments
   "asc" or "desc".  "asc" means ascending, i.e. from oldest to newest.
   "desc" means descending, i.e. from newest to oldest.
 
-  Default: "asc"
+  Default: "desc"
 
 Formatting arguments
 ====================
