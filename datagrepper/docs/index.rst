@@ -42,7 +42,7 @@ digestable::
             "end": 1366221938.0,
             "page": 1,
             "rows_per_page": 1,
-            "order": "asc",
+            "order": "desc",
             "start": 1364493938.0,
             "topics": [],
             "categories": [],
@@ -84,7 +84,7 @@ following query to get the next one::
             "end": 1366221938.0,
             "page": 2,
             "rows_per_page": 1,
-            "order": "asc",
+            "order": "desc",
             "start": 1364493938.0,
             "topics": [],
             "categories": [],
@@ -104,10 +104,10 @@ following query to get the next one::
     }
 
 
-By default, the order of rows retrieved is from oldest to newest ("ascending").
+By default, the order of rows retrieved is from newest to oldest ("descending")
 There is an ``order`` argument you can specify to set that how you like.  The
-default is "asc", but you can set it to "desc" for descending order, a.k.a.
-from newest to oldest.
+default is "desc", but you can set it to "asc" for ascending order, a.k.a.
+from oldest to newest.
 
 Only Bodhi messages (OR wiki)
 -----------------------------
