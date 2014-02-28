@@ -11,7 +11,8 @@
         <p><b>{{dict['title']}}</b></p>
         <p> {{dict['subtitle']}} </p>
         {% if 'msg_id' in dict %}
-            <a href="{{url_for('msg_id')}}?id={{dict['msg_id']}}&is_raw=true"><span class="details-history">Details</span></a>
+            <a href="{{url_for('msg_id')}}?id={{dict['msg_id']}}&is_raw=true&size=extra-large">
+                <span class="details-history">Details</span></a>
         {% endif %}
         {% if 'is_raw' in dict %}
             <a href="#" onclick="history.go(-1)">Go Back</a>
