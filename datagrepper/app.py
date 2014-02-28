@@ -284,7 +284,8 @@ def raw():
 
     # check size value
     if size not in ['small', 'medium', 'large']:
-        raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
+        raise ValueError("size must be in one of these 'small', \
+                         'medium' or 'large'")
 
     # checks chrome value
     if chrome not in ['true', 'false']:
@@ -336,39 +337,44 @@ def raw():
         status = 500
 
     body = fedmsg.encoding.dumps(output)
-
     mimetype = flask.request.headers.get('Accept')
+
+    # convert string into python dictionary
+    obj = json.loads(body)
+    # extract the messages
+    raw_message_list = obj["raw_messages"]
 
     if callback:
         mimetype = 'application/javascript'
         body = "%s(%s);" % (callback, body)
-
+    
     # return HTML content else json
     if request_wants_html():
-        # convert string into python dictionary
-        obj = json.loads(body)
-        # extract the messages
-        raw_message_list = obj["raw_messages"]
-
-        final_message_list = []
+        final_message_list = list()
 
         for msg in raw_message_list:
             # message_card module will handle size
             message = message_card(msg, size)
             # add msg_id to the message dictionary
-            if (msg["msg_id"] != None):
+            if (msg["msg_id"] is not None):
                 message['msg_id'] = msg["msg_id"]
             final_message_list.append(message)
-
         # removes boilerlate codes if chrome value is false
         if chrome == 'true':
-            return flask.render_template("base.html", size=size, response=final_message_list, heading="Raw Messages")
+            return flask.render_template("base.html", 
+                                         size=size, 
+                                         response=final_message_list, 
+                                         heading="Raw Messages")
         else:
-            return flask.render_template("raw.html", size=size, response=final_message_list)
-
+            return flask.render_template("raw.html", 
+                                         size=size, 
+                                         response=final_message_list)
     else:
-        return flask.Response(
-            response=body,
+        # return message_card as list of dict
+        results = [message_card(msg) for msg in raw_message_list]
+
+        return flask.Response (
+            response = str(results),
             status = status,
             mimetype = mimetype,
         )
@@ -394,7 +400,8 @@ def msg_id():
 
     # check size value
     if size not in ['small', 'medium', 'large']:
-        raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
+        raise ValueError("size must be in one of these 'small', \
+                         'medium' or 'large'")
     # checks chrome value
     if chrome not in ['true', 'false']:
         raise ValueError("chrome should be either 'true' or 'false'")
@@ -420,7 +427,10 @@ def msg_id():
                 message.append(message_card(obj, size))
 
             if chrome=='true':
-                return flask.render_template("base.html", response=message, heading="Message by ID")
+                return flask.render_template("base.html", 
+                                    response=message, 
+                                    heading="Message by ID"
+                                    )
             else:
                 return flask.render_template("raw.html", response=message)
 
