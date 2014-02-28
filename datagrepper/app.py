@@ -394,7 +394,7 @@ def msg_id():
 
     sizes = ['small', 'medium', 'large', 'extra-large']
     # check size value
-    if size not in :
+    if size not in sizes:
         raise ValueError("size must be in one of these '%s'" %
             "', '".join(sizes))
     # checks chrome value
