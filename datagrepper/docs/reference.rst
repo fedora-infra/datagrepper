@@ -228,9 +228,11 @@ Formatting arguments
 
 ``size``
   Argument need to be specified if you want to receive different kinds of message cards.
-  Options are: small, medium, large.
-  "small" contains link and title. "medium" contains link, title, icon and subtitle.
-  "large" contains link, title, icon, subtitle, secondary_icon and datetime.
+  Options are: small, medium, large, and extra-large.
+  ``"small"`` contains link and title. ``"medium"`` contains link, title, icon
+  and subtitle.  ``"large"`` contains link, title, icon, subtitle,
+  secondary_icon and datetime.  ``"extra-large"`` contains those of "large",
+  but it also displays the full JSON body of the raw message.
 
   Default: large
 

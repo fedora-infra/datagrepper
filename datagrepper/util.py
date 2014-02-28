@@ -106,23 +106,29 @@ def message_card(msg, size):
 
     msgDict = {}
 
-    if (size == 'large'):
+    if (size in ['extra-large']):
+        pass
+
+    if (size in ['extra-large', 'large']):
         # generate secondary icon associated with message
         secondary_icon = fedmsg.meta.msg2secondary_icon(msg, legacy=False, **config)
         msgDict['secondary_icon'] = secondary_icon
-    if (size in ['large', 'medium']):
+
+    if (size in ['extra-large', 'large', 'medium']):
         icon = fedmsg.meta.msg2icon(msg,legacy=False,**config)
         msgDict['icon'] = icon
         # generate subtitle associated with message
         subtitle = fedmsg.meta.msg2subtitle(msg, legacy=False, **config)
         msgDict['subtitle'] = subtitle
-    if (size in ['large', 'medium', 'small']):
+
+    if (size in ['extra-large', 'large', 'medium', 'small']):
         # generate URL associated with message
         link = fedmsg.meta.msg2link(msg, legacy=False, **config)
         msgDict['link'] = link
         # generate title associated with message
         title = fedmsg.meta.msg2title(msg, legacy=False, **config)
         msgDict['title'] = title
+
     # convert the timestamp in datetime object
     msgDict['date'] = arrow.get(msg['timestamp'])
 
