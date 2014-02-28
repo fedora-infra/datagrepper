@@ -77,7 +77,8 @@ $.each(datagrepper_attrs, function(i, attr) {
 });
 
 $.ajax(
-    '%(base)s/raw/?meta=link&meta=icon&meta=secondary_icon&meta=subtitle&meta=date', {
+    '%(base)s/raw/?meta=link&meta=icon' +
+    '&meta=secondary_icon&meta=subtitle&meta=date', {
         data: data,
         dataType: 'jsonp',
         success: datagrepper_success,

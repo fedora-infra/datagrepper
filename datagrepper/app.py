@@ -42,7 +42,12 @@ import fedmsg.config
 import datanommer.models as dm
 
 from datagrepper.dataquery import DataQuery
-from datagrepper.util import assemble_timerange, request_wants_html, message_card, meta_argument
+from datagrepper.util import (
+    assemble_timerange,
+    request_wants_html,
+    message_card,
+    meta_argument,
+)
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -287,8 +292,9 @@ def raw():
         raise ValueError("order must be either 'desc' or 'asc'")
 
     # check size value
-    if size not in ['small', 'medium', 'large']:
-        raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
+    possible_sizes = ['small', 'medium', 'large', 'extra-large']
+    if size not in possible_sizes:
+        raise ValueError("size must be in one of these %r" % possible_sizes)
 
     # checks chrome value
     if chrome not in ['true', 'false']:
@@ -360,21 +366,30 @@ def raw():
             # message_card module will handle size
             message = message_card(msg, size)
             # add msg_id to the message dictionary
-            if (msg["msg_id"] != None):
+            if (msg["msg_id"] is not None):
                 message['msg_id'] = msg["msg_id"]
             final_message_list.append(message)
 
         # removes boilerlate codes if chrome value is false
         if chrome == 'true':
-            return flask.render_template("base.html", size=size, response=final_message_list, heading="Raw Messages")
+            return flask.render_template(
+                "base.html",
+                size=size,
+                response=final_message_list,
+                heading="Raw Messages",
+            )
         else:
-            return flask.render_template("raw.html", size=size, response=final_message_list)
+            return flask.render_template(
+                "raw.html",
+                size=size,
+                response=final_message_list,
+            )
 
     else:
         return flask.Response(
             response=body,
-            status = status,
-            mimetype = mimetype,
+            status=status,
+            mimetype=mimetype,
         )
 
 
@@ -400,7 +415,8 @@ def msg_id():
     # check size value
     if size not in sizes:
         raise ValueError("size must be in one of these '%s'" %
-            "', '".join(sizes))
+                         "', '".join(sizes))
+
     # checks chrome value
     if chrome not in ['true', 'false']:
         raise ValueError("chrome should be either 'true' or 'false'")
@@ -438,10 +454,10 @@ def msg_id():
                 size=size,
                 response=[message_dict],
                 msg_string=msg_string,
-                heading="Message by ID")
-
+                heading="Message by ID",
+            )
         else:
-            return flask.Response (
+            return flask.Response(
                 response=fedmsg.encoding.dumps(msg),
                 status=200,
                 mimetype=mimetype,
