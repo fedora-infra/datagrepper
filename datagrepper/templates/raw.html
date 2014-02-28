@@ -22,5 +22,10 @@
         {% if size == 'large' %} - {{dict['date'].strftime('%Y-%m-%d %H:%M:%S')}}
         {% endif %}
     </div>
+    {% if size == 'extra-large' %}
+    <p>
+{{msg_string}}
+    </p>
+    {% endif %}
 {% endfor %}
 
