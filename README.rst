@@ -13,6 +13,11 @@ https://apps.fedoraproject.org/datagrepper/
 Hacking on datagrepper
 ----------------------
 
+Prerequisites
+~~~~~~~~~~~~~
+    * virtualenv
+    * Postgresql
+
 Setting up the stack
 ~~~~~~~~~~~~~~~~~~~~
 
