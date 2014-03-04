@@ -18,8 +18,6 @@ Prerequisites
     * virtualenvwrapper
     * Postgresql
 
-
-   
 Install postgresql and virtualenvwrapper::
 
    $ sudo yum install -y postgresql-server python-virtualenvwrapper
