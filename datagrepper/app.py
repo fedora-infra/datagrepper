@@ -437,7 +437,7 @@ def msg_id():
                 pygments.lexers.JavascriptLexer(),
                 pygments.formatters.HtmlFormatter(
                     noclasses=True,
-                    style="monokai",
+                    style="emacs",
                 )
             ).strip()
             message_dict = message_card(msg, size)
