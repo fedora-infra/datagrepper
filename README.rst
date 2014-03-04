@@ -18,13 +18,11 @@ Prerequisites
     * virtualenvwrapper
     * Postgresql
 
-.. note:: If you've tried installing postgres before and think you've
-   messed it up, you'll need to blow away the old databases with
-   ``$ rm -rf /var/lib/pgsql``
-   
-Install postgresql::
 
-   $ sudo yum install -y postgresql-server
+   
+Install postgresql and virtualenvwrapper::
+
+   $ sudo yum install -y postgresql-server python-virtualenvwrapper
 
 Setting up the stack
 ~~~~~~~~~~~~~~~~~~~~
@@ -53,10 +51,13 @@ running somewhere and continuously stuff each new `fedmsg
 just sitting down to hack on datagrepper, that won't be your situation
 so you'll need a dump of the database.
 
+.. note:: If you've tried installing postgres before and think you've
+   messed it up, you'll need to blow away the old databases with
+   ``$ rm -rf /var/lib/pgsql``
 
-Install fedmsg and initiate postgresql db::
+Install postgres (and fedmsg, while we're at it)::
 
-    $ sudo yum install -y fedmsg
+    $ sudo yum install -y postgresql-server fedmsg
     $ sudo postgresql-setup initdb
 
 Make sure postgres is set to allow connections over tcp/ip using password
