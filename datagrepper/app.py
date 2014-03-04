@@ -31,6 +31,10 @@ import os
 import time
 import traceback
 
+import pygments
+import pygments.lexers
+import pygments.formatters
+
 from datetime import datetime
 import fedmsg
 import fedmsg.meta
@@ -38,7 +42,12 @@ import fedmsg.config
 import datanommer.models as dm
 
 from datagrepper.dataquery import DataQuery
-from datagrepper.util import assemble_timerange, request_wants_html, message_card, meta_argument
+from datagrepper.util import (
+    assemble_timerange,
+    request_wants_html,
+    message_card,
+    meta_argument,
+)
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -192,9 +201,9 @@ def count_all_messages():
         query = "SELECT reltuples FROM pg_class WHERE relname = 'messages';"
         total = dm.session.execute(query).first()[0]
     else:
-        total = dm.Message.grep()[0]
+        total = dm.Message.grep(defer=True)[0]
 
-    return total
+    return int(total)
 
 
 @app.route('/')
@@ -244,7 +253,7 @@ def raw():
     # Paging arguments
     page = int(flask.request.args.get('page', 1))
     rows_per_page = int(flask.request.args.get('rows_per_page', 20))
-    order = flask.request.args.get('order', 'asc')
+    order = flask.request.args.get('order', 'desc')
     # adding size as paging arguments
     size = flask.request.args.get('size', 'large')
     # adding chrome as paging arguments
@@ -283,8 +292,9 @@ def raw():
         raise ValueError("order must be either 'desc' or 'asc'")
 
     # check size value
-    if size not in ['small', 'medium', 'large']:
-        raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
+    possible_sizes = ['small', 'medium', 'large', 'extra-large']
+    if size not in possible_sizes:
+        raise ValueError("size must be in one of these %r" % possible_sizes)
 
     # checks chrome value
     if chrome not in ['true', 'false']:
@@ -344,7 +354,7 @@ def raw():
         body = "%s(%s);" % (callback, body)
 
     # return HTML content else json
-    if request_wants_html():
+    if not callback and request_wants_html():
         # convert string into python dictionary
         obj = json.loads(body)
         # extract the messages
@@ -356,21 +366,30 @@ def raw():
             # message_card module will handle size
             message = message_card(msg, size)
             # add msg_id to the message dictionary
-            if (msg["msg_id"] != None):
+            if (msg["msg_id"] is not None):
                 message['msg_id'] = msg["msg_id"]
             final_message_list.append(message)
 
         # removes boilerlate codes if chrome value is false
         if chrome == 'true':
-            return flask.render_template("base.html", size=size, response=final_message_list, heading="Raw Messages")
+            return flask.render_template(
+                "base.html",
+                size=size,
+                response=final_message_list,
+                heading="Raw Messages",
+            )
         else:
-            return flask.render_template("raw.html", size=size, response=final_message_list)
+            return flask.render_template(
+                "raw.html",
+                size=size,
+                response=final_message_list,
+            )
 
     else:
         return flask.Response(
             response=body,
-            status = status,
-            mimetype = mimetype,
+            status=status,
+            mimetype=mimetype,
         )
 
 
@@ -392,9 +411,12 @@ def msg_id():
 
     meta = flask.request.args.getlist('meta')
 
+    sizes = ['small', 'medium', 'large', 'extra-large']
     # check size value
-    if size not in ['small', 'medium', 'large']:
-        raise ValueError("size must be in one of these 'small', 'medium' or 'large'")
+    if size not in sizes:
+        raise ValueError("size must be in one of these '%s'" %
+                         "', '".join(sizes))
+
     # checks chrome value
     if chrome not in ['true', 'false']:
         raise ValueError("chrome should be either 'true' or 'false'")
@@ -410,22 +432,32 @@ def msg_id():
 
         if request_wants_html():
             # convert string into python dictionary
-            obj = json.loads(fedmsg.encoding.dumps(msg))
-            message = []
+            msg_string = pygments.highlight(
+                fedmsg.encoding.pretty_dumps(msg),
+                pygments.lexers.JavascriptLexer(),
+                pygments.formatters.HtmlFormatter(
+                    noclasses=True,
+                    style="monokai",
+                )
+            ).strip()
+            message_dict = message_card(msg, size)
+
             if is_raw == 'true':
-                message_dict = message_card(obj, size)
                 message_dict['is_raw'] = 'true'
-                message.append(message_dict)
-            else:
-                message.append(message_card(obj, size))
 
-            if chrome=='true':
-                return flask.render_template("base.html", response=message, heading="Message by ID")
-            else:
-                return flask.render_template("raw.html", response=message)
+            template = 'base.html'
+            if chrome != 'true':
+                template = 'raw.html'
 
+            return flask.render_template(
+                template,
+                size=size,
+                response=[message_dict],
+                msg_string=msg_string,
+                heading="Message by ID",
+            )
         else:
-            return flask.Response (
+            return flask.Response(
                 response=fedmsg.encoding.dumps(msg),
                 status=200,
                 mimetype=mimetype,

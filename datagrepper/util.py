@@ -11,6 +11,7 @@ import json
 import time
 import fedmsg
 
+
 # http://flask.pocoo.org/snippets/45/
 # accept header returns json type content only
 def request_wants_html():
@@ -18,8 +19,8 @@ def request_wants_html():
         .best_match(['application/json', 'text/html', 'text/plain'])
     return best == 'text/html' and \
         flask.request.accept_mimetypes[best] > \
-        (flask.request.accept_mimetypes['application/json'] or \
-        flask.request.accept_mimetypes['text/plain'])
+        (flask.request.accept_mimetypes['application/json'] or
+         flask.request.accept_mimetypes['text/plain'])
 
 
 def json_return(data):
@@ -106,30 +107,37 @@ def message_card(msg, size):
 
     msgDict = {}
 
-    if (size == 'large'):
+    if (size in ['extra-large']):
+        pass
+
+    if (size in ['extra-large', 'large']):
         # generate secondary icon associated with message
-        secondary_icon = fedmsg.meta.msg2secondary_icon(msg, legacy=False, **config)
+        secondary_icon = fedmsg.meta.msg2secondary_icon(
+            msg, legacy=False, **config)
         msgDict['secondary_icon'] = secondary_icon
-    if (size in ['large', 'medium']):
-        icon = fedmsg.meta.msg2icon(msg,legacy=False,**config)
+
+    if (size in ['extra-large', 'large', 'medium']):
+        icon = fedmsg.meta.msg2icon(msg, legacy=False, **config)
         msgDict['icon'] = icon
         # generate subtitle associated with message
         subtitle = fedmsg.meta.msg2subtitle(msg, legacy=False, **config)
         msgDict['subtitle'] = subtitle
-    if (size in ['large', 'medium', 'small']):
+
+    if (size in ['extra-large', 'large', 'medium', 'small']):
         # generate URL associated with message
         link = fedmsg.meta.msg2link(msg, legacy=False, **config)
         msgDict['link'] = link
         # generate title associated with message
         title = fedmsg.meta.msg2title(msg, legacy=False, **config)
         msgDict['title'] = title
+
     # convert the timestamp in datetime object
     msgDict['date'] = arrow.get(msg['timestamp'])
 
     return msgDict
 
 
-def meta_argument(msg,meta):
+def meta_argument(msg, meta):
     """ Util to accept meta arguments for /raw and /id endpoint
         so that JSON include human-readable strings"""
 
@@ -142,24 +150,23 @@ def meta_argument(msg,meta):
     metas = {}
     config = fedmsg.config.load_config([], None)
     for metadata in meta:
-         # This one is exceptional
-         if metadata == 'date':
-             metas[metadata] = arrow.get(msg['timestamp']).humanize()
-             continue
+        # This one is exceptional
+        if metadata == 'date':
+            metas[metadata] = arrow.get(msg['timestamp']).humanize()
+            continue
 
-         # All the other metas use fedmsg.meta.msg2*
-         cmd = 'msg2%s' % metadata
-         metas[metadata] = getattr(
-             fedmsg.meta, cmd)(msg, **config)
+        # All the other metas use fedmsg.meta.msg2*
+        cmd = 'msg2%s' % metadata
+        metas[metadata] = getattr(
+            fedmsg.meta, cmd)(msg, **config)
 
-         # We have to do this because 'set' is not
-         # JSON-serializable.  In the next version of fedmsg, this
-         # will be handled automatically and we can just remove this
-         # statement https://github.com/fedora-infra/fedmsg/pull/139
-         if isinstance(metas[metadata], set):
+        # We have to do this because 'set' is not
+        # JSON-serializable.  In the next version of fedmsg, this
+        # will be handled automatically and we can just remove this
+        # statement https://github.com/fedora-infra/fedmsg/pull/139
+        if isinstance(metas[metadata], set):
             metas[metadata] = list(metas[metadata])
+
     msg['meta'] = metas
+
     return msg
-
-
-

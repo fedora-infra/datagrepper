@@ -1,6 +1,31 @@
 Changelog
 =========
 
+0.4.0
+-----
+
+- If the user is expecting jsonp, there's no way they want html... `c9e8d977f <https://github.com/fedora-infra/datagrepper/commit/c9e8d977fc3c166ccb68a9b4ed9bfa5c5deb49e4>`_
+- Fix widget css resources paths. `3129baed8 <https://github.com/fedora-infra/datagrepper/commit/3129baed8c49d0d8e2d0196b75145018b4faec0c>`_
+- Move APP_PATH config to the default_config module. `676bdef7a <https://github.com/fedora-infra/datagrepper/commit/676bdef7a43d0362ace984dc32e40bbcea446554>`_
+- Merge pull request #122 from fedora-infra/feature/fix-jsonp `609b3caf8 <https://github.com/fedora-infra/datagrepper/commit/609b3caf8e55ca279e17731cb5d99a824b095b35>`_
+- Merge pull request #123 from fedora-infra/feature/fix-widget-css `b0fa7940e <https://github.com/fedora-infra/datagrepper/commit/b0fa7940eb7bb7e2c3d1020939589ffe8c7720e8>`_
+- Make message count always be an int `03337713b <https://github.com/fedora-infra/datagrepper/commit/03337713b5047ebd34732493ae21d277a1df04ee>`_
+- Optimize count_all_messages() `aa1363950 <https://github.com/fedora-infra/datagrepper/commit/aa1363950efcaa291a213aff55b0be7cc4ce0fc1>`_
+- Merge pull request #124 from fedora-infra/int-messagecount `c5ea239e7 <https://github.com/fedora-infra/datagrepper/commit/c5ea239e7fcad58d724040c6354afd0661e2dacb>`_
+- Merge pull request #125 from fedora-infra/feature/defer-count-query `4df9a49fb <https://github.com/fedora-infra/datagrepper/commit/4df9a49fb5ede12d2459118b2a6058f559ebac2a>`_
+- Work the /id/ endpoint `4b57c84e1 <https://github.com/fedora-infra/datagrepper/commit/4b57c84e111a7012400bf9ebdee888f933328505>`_
+- Display the message in size extra-large `38403ef6a <https://github.com/fedora-infra/datagrepper/commit/38403ef6a192e2ffa49992143c4a0ffc31f1c9f3>`_
+- When linking to the id page, we have the space so go for the largest size `28e64402a <https://github.com/fedora-infra/datagrepper/commit/28e64402a8f5234017a094cac9df3d6c7872b348>`_
+- Update docs for extra-large size. `a04ed00a6 <https://github.com/fedora-infra/datagrepper/commit/a04ed00a654b835658e89f46b8c043f8f8728dc3>`_
+- Typofix. `5ae033c2a <https://github.com/fedora-infra/datagrepper/commit/5ae033c2aa4b200ff227585e8216c9fbd2c6a71a>`_
+- Colorized the json here. `7c6c5231b <https://github.com/fedora-infra/datagrepper/commit/7c6c5231b6e125480b753fa086d94134fa15c7d0>`_
+- Add extra-large to the message_card util. `58d877a45 <https://github.com/fedora-infra/datagrepper/commit/58d877a4530b84603c2fc2e97e105dfb348c84ff>`_
+- Make "desc" the default ordering to save on typing. `cb33da116 <https://github.com/fedora-infra/datagrepper/commit/cb33da116566e25fe3632cab2d2d1e150e831372>`_
+- Merge pull request #128 from fedora-infra/feature/default-is-desc `92fdb8f4f <https://github.com/fedora-infra/datagrepper/commit/92fdb8f4fcc9241b0f35414ccf14d981f93a8e51>`_
+- Merge pull request #127 from fedora-infra/feature/msg_in_card `934be9a09 <https://github.com/fedora-infra/datagrepper/commit/934be9a091c3c6299a4505e31dc36a85c29a6cb2>`_
+- PEP8/cosmetic. `834dad9a0 <https://github.com/fedora-infra/datagrepper/commit/834dad9a08c48c3e7626d223c1022de0348ad672>`_
+- Merge pull request #129 from fedora-infra/feature/pep8 `f6a93ede0 <https://github.com/fedora-infra/datagrepper/commit/f6a93ede0becb51825751a675321e298a481cd98>`_
+
 0.3.3
 -----
 

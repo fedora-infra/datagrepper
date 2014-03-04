@@ -77,7 +77,8 @@ $.each(datagrepper_attrs, function(i, attr) {
 });
 
 $.ajax(
-    '%(base)s/raw/?meta=link&meta=icon&meta=secondary_icon&meta=subtitle&meta=date', {
+    '%(base)s/raw/?meta=link&meta=icon' +
+    '&meta=secondary_icon&meta=subtitle&meta=date', {
         data: data,
         dataType: 'jsonp',
         success: datagrepper_success,
@@ -107,7 +108,7 @@ def widget_js():
 
     if flask.request.args.get('css', '').lower() == 'true':
         def static_url(filename):
-            return flask.url_for('static', filename=filename, _external=True)
+            return app.config['APP_PATH'] + "/static/" + filename
 
         css.append(css_helper % static_url('css/bootstrap.css'))
         css.append(css_helper % static_url('css/raw.css'))
