@@ -13,6 +13,15 @@ https://apps.fedoraproject.org/datagrepper/
 Hacking on datagrepper
 ----------------------
 
+Prerequisites
+~~~~~~~~~~~~~
+    * virtualenvwrapper
+    * Postgresql
+
+Install postgresql and virtualenvwrapper::
+
+   $ sudo yum install -y postgresql-server python-virtualenvwrapper
+
 Setting up the stack
 ~~~~~~~~~~~~~~~~~~~~
 
