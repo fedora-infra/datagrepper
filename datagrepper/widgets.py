@@ -55,7 +55,7 @@ var datagrepper_success = function(json) {
             '<p>' + meta.subtitle + '</p>' +
             '</div>';
         card = card + '<div class="datetime">' + meta['date'] + '</div>';
-        $("#datagrepper-widget").append(card);
+        $("div#datagrepper-widget").append(card);
     });
 }
 
@@ -70,7 +70,7 @@ var datagrepper_attrs = [
     'user', 'package', 'category', 'topic',
     'order', 'rows_per_page', 'page', 'size'];
 $.each(datagrepper_attrs, function(i, attr) {
-    var value = $('script:last').attr("data-" + attr);
+    var value = $('script#datagrepper-widget').attr("data-" + attr);
     if (value != undefined) {
         data[attr] = value;
     }
@@ -115,11 +115,9 @@ def widget_js():
 
     # This, ridiculously, will find the place in the DOM of the script tag
     # responsible for running this javascript at the time of its execution.
-    # The "last" script tag on the page during page load is the tag responsible
-    # for the code run at that time.  This allows us to inject our graph
-    # in-place; i.e., wherever the user includes our tag, that's where the
-    # graph will unpack itself.
-    calls.insert(0, "$('script:last').before('%s');" % raw_widget.strip())
+    # This allows us to inject our graph in-place; i.e., wherever the user
+    # includes our tag, that's where the graph will unpack itself.
+    calls.insert(0, "$('script#datagrepper-widget').before('%s');" % raw_widget.strip())
     calls.extend(css)
 
     # Just for debugging...
