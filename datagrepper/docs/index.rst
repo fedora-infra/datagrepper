@@ -21,7 +21,7 @@ convert 2 days to 172800 seconds first.  Then we can use `HTTPie
 <https://github.com/jkbr/httpie#httpie-a-cli-curl-like-tool-for-humans>`_
 like this::
 
-    $ http get {{URL}}raw/ delta==172800
+    $ http --json get {{URL}}raw/ delta==172800
 
 Paging results
 --------------
@@ -30,7 +30,7 @@ You're going to get a large JSON response that's too big to read
 through.  Try limiting the number of results to make it more
 digestable::
 
-    $ http get {{URL}}raw/ \
+    $ http --json get {{URL}}raw/ \
         delta==172800 \
         rows_per_page==1
 
@@ -71,7 +71,7 @@ Your ``rows_per_page`` is there.  It has a sibling value ``page`` which
 is a pointer to which "page" of data you are on.  You could issue the
 following query to get the next one::
 
-    $ http get {{URL}}raw/ \
+    $ http --json get {{URL}}raw/ \
         delta==172800 \
         rows_per_page==1 \
         page==2
@@ -117,7 +117,7 @@ messages that come across the Fedora Infrastructure's message bus.
 You can limit the scope of your query to only one kind of message
 by specifying a ``category``::
 
-    $ http get {{URL}}raw/ \
+    $ http --json get {{URL}}raw/ \
         delta==172800 \
         category==bodhi
 
@@ -126,7 +126,7 @@ the ``arguments`` dict as *categories* (plural!)  You can specify more
 than one category and messages that match *either* category will be returned.
 They are **OR**'d together::
 
-    $ http get {{URL}}raw/ \
+    $ http --json get {{URL}}raw/ \
         delta==172800 \
         category==bodhi \
         category==wiki
@@ -137,14 +137,14 @@ Messages for a particular users and packages
 Just like categories, you can search for events relating to one or multiple
 users::
 
-    $ http get {{URL}}raw/ \
+    $ http --json get {{URL}}raw/ \
         delta==172800 \
         user==toshio \
         user==pingou
 
 Same goes for packages::
 
-    $ http get {{URL}}raw/ \
+    $ http --json get {{URL}}raw/ \
         delta==172800 \
         package==nethack
 
@@ -155,7 +155,7 @@ There are corresponding *negative filters* for each of the above mentioned
 positive filters.  For instance, if you wanted to get all messages **except for
 Koji messages**, you could use this query:
 
-    $ http get {{URL}}raw/ \
+    $ http --json get {{URL}}raw/ \
         delta==172800 \
         not_category==buildsys
 
@@ -163,7 +163,7 @@ You can combine positive and negative filters as you might expect to, for
 instance, get all messages relating to the user toshio **except** for Ask
 Fedora activity:
 
-    $ http get {{URL}}raw/ \
+    $ http --json get {{URL}}raw/ \
         delta==172800 \
         user==toshio \
         not_category==askbot
@@ -179,7 +179,7 @@ like `Conjunctive Normal Form (CNF)
 For example, this query will return all messages from the past 2 days where
 *(category==bodhi OR category==wiki) AND (user==toshio OR user==pingou)*::
 
-    $ http get {{URL}}raw/ \
+    $ http --json get {{URL}}raw/ \
         delta==172800 \
         category==bodhi \
         category==wiki \
@@ -192,7 +192,7 @@ Topics list
 If you don't know what topics are available for you to query, you can use the
 ``/topics`` endpoint with no arguments::
 
-    $ http get {{URL}}topics/
+    $ http --json get {{URL}}topics/
 
 Bulk queries
 ------------
@@ -205,4 +205,4 @@ The arguments are the same as ``/raw``.
 
 You can check on your job's status with the ``/status`` endpoint::
 
-    $ http get {{URL}}status/ id==1
+    $ http --json get {{URL}}status/ id==1
