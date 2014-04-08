@@ -64,7 +64,7 @@ digestable::
 In the above output, the contents of ``raw_messages`` has been omitted for
 readability.  Notice a few things: first, the ``arguments`` dict describes
 all the parameters that datagrepper used to execute your query.  The
-``start`` and ``end`` timestamps are included (there were derived from
+``start`` and ``end`` timestamps are included (they were derived from
 the ``delta`` that you supplied). 
 
 Your ``rows_per_page`` is there.  It has a sibling value ``page`` which
