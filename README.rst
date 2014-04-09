@@ -115,7 +115,7 @@ In a browser, visit http://localhost:5000 to see the docs.
 You can quick test that you can get data by running::
 
     $ sudo yum install -y httpie
-    $ http get localhost:5000/raw/ delta==1000000 rows_per_page==1
+    $ http get localhost:5000/raw delta==1000000 rows_per_page==1
 
 Running the job runner
 ~~~~~~~~~~~~~~~~~~~~~~

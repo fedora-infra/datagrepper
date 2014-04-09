@@ -349,6 +349,10 @@ def raw():
 
     mimetype = flask.request.headers.get('Accept')
 
+    # Our default - http://da.gd/vIIV
+    if mimetype == '*/*':
+        mimetype = 'application/json'
+
     if callback:
         mimetype = 'application/javascript'
         body = "%s(%s);" % (callback, body)
