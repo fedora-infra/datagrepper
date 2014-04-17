@@ -413,6 +413,7 @@ def msg_id():
     # is_raw checks if card comes from /raw url
     is_raw = flask.request.args.get('is_raw', 'false')
 
+    callback = flask.request.args.get('callback', None)
     meta = flask.request.args.getlist('meta')
 
     sizes = ['small', 'medium', 'large', 'extra-large']
@@ -434,7 +435,7 @@ def msg_id():
         if meta:
             msg = meta_argument(msg, meta)
 
-        if request_wants_html():
+        if not callback and request_wants_html():
             # convert string into python dictionary
             msg_string = pygments.highlight(
                 fedmsg.encoding.pretty_dumps(msg),
@@ -461,8 +462,14 @@ def msg_id():
                 heading="Message by ID",
             )
         else:
+            body = fedmsg.encoding.dumps(msg)
+
+            if callback:
+                mimetype = 'application/javascript'
+                body = "%s(%s);" % (callback, body)
+
             return flask.Response(
-                response=fedmsg.encoding.dumps(msg),
+                response=body,
                 status=200,
                 mimetype=mimetype,
             )
