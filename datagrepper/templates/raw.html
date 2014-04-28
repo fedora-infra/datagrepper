@@ -17,11 +17,11 @@
         {% if 'is_raw' in dict %}
             <a href="#" onclick="history.go(-1)">Go Back</a>
         {% endif %}
-    </div>
-    <div class="datetime">
+    <span class="datetime pull-right">
         {{dict['date'].humanize()}}
         {% if size == 'large' %} - {{dict['date'].strftime('%Y-%m-%d %H:%M:%S')}}
         {% endif %}
+    </span>
     </div>
     {% if size == 'extra-large' %}
     {% autoescape false %}

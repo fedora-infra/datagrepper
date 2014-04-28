@@ -153,7 +153,7 @@ Everything but the...
 
 There are corresponding *negative filters* for each of the above mentioned
 positive filters.  For instance, if you wanted to get all messages **except for
-Koji messages**, you could use this query:
+Koji messages**, you could use this query::
 
     $ http get {{URL}}raw \
         delta==172800 \
@@ -161,7 +161,7 @@ Koji messages**, you could use this query:
 
 You can combine positive and negative filters as you might expect to, for
 instance, get all messages relating to the user toshio **except** for Ask
-Fedora activity:
+Fedora activity::
 
     $ http get {{URL}}raw \
         delta==172800 \
