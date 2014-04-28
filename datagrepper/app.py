@@ -252,7 +252,7 @@ def raw():
 
     # Paging arguments
     page = int(flask.request.args.get('page', 1))
-    rows_per_page = int(flask.request.args.get('rows_per_page', 20))
+    rows_per_page = int(flask.request.args.get('rows_per_page', 25))
     order = flask.request.args.get('order', 'desc')
     # adding size as paging arguments
     size = flask.request.args.get('size', 'large')
@@ -380,7 +380,6 @@ def raw():
                 "base.html",
                 size=size,
                 response=final_message_list,
-                heading="Raw Messages",
             )
         else:
             return flask.render_template(
