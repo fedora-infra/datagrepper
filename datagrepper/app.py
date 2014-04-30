@@ -380,6 +380,7 @@ def raw():
                 "base.html",
                 size=size,
                 response=final_message_list,
+                autoscroll=True,
             )
         else:
             return flask.render_template(
