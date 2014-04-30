@@ -12,7 +12,7 @@ $(document).ready(function(){
     var _request_in_progress = false;
     var param = getUrlVars();
     if (param.page === undefined) {param.page = 1;}
-    var _page = param.page;  // Hang on to that..
+    var _page = parseInt(param.page);  // Hang on to that..
 
     var margin = 100;
 
