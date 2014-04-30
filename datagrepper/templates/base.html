@@ -35,6 +35,19 @@
           {% include 'raw.html' %}
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+          <div class="panel panel-default">
+            <div class="panel-body text-center">
+                Loading... please wait.
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <script src="static/jquery-2.1.0.min.js"></script>
+    {% if autoscroll %}
+    <script src="static/autoscroll.js"></script>
+    {% endif %}
   </body>
 </html>
