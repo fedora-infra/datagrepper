@@ -17,7 +17,6 @@ $(document).ready(function(){
     var margin = 100;
 
     function autoscroll(){
-        console.log('lol');
         if ($(window).scrollTop() + margin >= $(document).height() - $(window).height()){
             if (_request_in_progress) { return; }
             _request_in_progress = true;
