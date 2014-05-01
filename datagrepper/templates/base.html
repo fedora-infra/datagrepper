@@ -22,19 +22,31 @@
 
   <body>
     <div class="container">
-      <div class="page-header">
-        {% if heading %}
-        <h1>{{heading}}</h1>
-        {% else %}
-        <h1>Datagrepper Messages</h1>
-        {% endif %}
-        <p>See <a href="../">the documentation</a> for information on how to construct queries.</p>
+
+      <div class="page-header row">
+        <div class="col-md-6">
+          {% if heading %}
+          <h1>{{heading}}</h1>
+          {% else %}
+          <h1>Datagrepper Messages</h1>
+          {% endif %}
+          <p>See <a href="../">the documentation</a> for information on how to construct queries.</p>
+        </div>
+        <div class="col-md-4 col-md-offset-1 hidden">
+          <div class="panel panel-default">
+            <div class="panel-body text-center">
+              <span id="messages-pending"></span> Click to show.
+            </div>
+          </div>
+        </div>
       </div>
+
       <div class="row">
-        <div class="col-md-12">
+        <div id="message-container" class="col-md-12">
           {% include 'raw.html' %}
         </div>
       </div>
+
       <div class="row">
         <div class="col-md-4 col-md-offset-4">
           <div class="panel panel-default">
@@ -44,10 +56,12 @@
           </div>
         </div>
       </div>
+
     </div>
     <script src="static/jquery-2.1.0.min.js"></script>
     {% if autoscroll %}
     <script src="static/autoscroll.js"></script>
+    <script src="static/live.js"></script>
     {% endif %}
   </body>
 </html>
