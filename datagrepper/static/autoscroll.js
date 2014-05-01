@@ -4,7 +4,8 @@ $(document).ready(function(){
         var hashes = window.location.search.slice(1).split('&');
         for(var i = 0; i < hashes.length; i++) {
             hash = hashes[i].split('=');
-            vars[hash[0]] = hash[1];
+            if (vars[hash[0]] === undefined) { vars[hash[0]] = [];}
+            vars[hash[0]].push(hash[1]);
         }
         return vars;
     }
@@ -12,7 +13,7 @@ $(document).ready(function(){
     var _request_in_progress = false;
     var param = getUrlVars();
     if (param.page === undefined) {param.page = 1;}
-    var _page = param.page;  // Hang on to that..
+    var _page = parseInt(param.page);  // Hang on to that..
 
     var margin = 100;
 
@@ -27,7 +28,7 @@ $(document).ready(function(){
             param.chrome = 'false';
             $.ajax({
                 url: "raw",
-                data: $.param(param),
+                data: $.param(param, traditional=true),
                 dataType: 'html',
                 success: function(html){
                     $("#loader").hide();
