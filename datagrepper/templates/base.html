@@ -10,14 +10,14 @@
     <!-- Only allow websockets connections to fedoraproject.org. -->
     <meta http-equiv="Content-Security-Policy" content="connect-src '*.fedoraproject.org'">
 
-    <link rel="shortcut icon" href="static/favicon.png">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
 
 
     <title>Datagrepper</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="static/css/raw.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/raw.css') }}" rel="stylesheet">
     <style type="text/css">
       div {
           white-space:normal;
@@ -35,7 +35,7 @@
           {% else %}
           <h1>fedmsg <small>messages</small></h1>
           {% endif %}
-          <p>See <a href="../">the documentation</a> for information on how to construct queries.</p>
+          <p>See <a href="{{ url_for('index') }}">the documentation</a> for information on how to construct queries.</p>
         </div>
         <div class="col-md-4 col-md-offset-1 hidden">
           <div class="panel panel-default">
@@ -63,10 +63,10 @@
       </div>
 
     </div>
-    <script src="static/jquery-2.1.0.min.js"></script>
+    <script src="{{ url_for('static', filename='jquery-2.1.0.min.js') }}"></script>
     {% if autoscroll %}
-    <script src="static/autoscroll.js"></script>
-    <script src="static/live.js"></script>
+    <script src="{{ url_for('static', filename='autoscroll.js') }}"></script>
+    <script src="{{ url_for('static', filename='live.js') }}"></script>
     {% endif %}
   </body>
 </html>
