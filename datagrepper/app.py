@@ -252,7 +252,7 @@ def raw():
 
     # Paging arguments
     page = int(flask.request.args.get('page', 1))
-    rows_per_page = int(flask.request.args.get('rows_per_page', 20))
+    rows_per_page = int(flask.request.args.get('rows_per_page', 25))
     order = flask.request.args.get('order', 'desc')
     # adding size as paging arguments
     size = flask.request.args.get('size', 'large')
@@ -349,6 +349,10 @@ def raw():
 
     mimetype = flask.request.headers.get('Accept')
 
+    # Our default - http://da.gd/vIIV
+    if mimetype == '*/*':
+        mimetype = 'application/json'
+
     if callback:
         mimetype = 'application/javascript'
         body = "%s(%s);" % (callback, body)
@@ -376,7 +380,7 @@ def raw():
                 "base.html",
                 size=size,
                 response=final_message_list,
-                heading="Raw Messages",
+                autoscroll=True,
             )
         else:
             return flask.render_template(
@@ -409,6 +413,7 @@ def msg_id():
     # is_raw checks if card comes from /raw url
     is_raw = flask.request.args.get('is_raw', 'false')
 
+    callback = flask.request.args.get('callback', None)
     meta = flask.request.args.getlist('meta')
 
     sizes = ['small', 'medium', 'large', 'extra-large']
@@ -430,14 +435,14 @@ def msg_id():
         if meta:
             msg = meta_argument(msg, meta)
 
-        if request_wants_html():
+        if not callback and request_wants_html():
             # convert string into python dictionary
             msg_string = pygments.highlight(
                 fedmsg.encoding.pretty_dumps(msg),
                 pygments.lexers.JavascriptLexer(),
                 pygments.formatters.HtmlFormatter(
                     noclasses=True,
-                    style="monokai",
+                    style="emacs",
                 )
             ).strip()
             message_dict = message_card(msg, size)
@@ -457,8 +462,14 @@ def msg_id():
                 heading="Message by ID",
             )
         else:
+            body = fedmsg.encoding.dumps(msg)
+
+            if callback:
+                mimetype = 'application/javascript'
+                body = "%s(%s);" % (callback, body)
+
             return flask.Response(
-                response=fedmsg.encoding.dumps(msg),
+                response=body,
                 status=200,
                 mimetype=mimetype,
             )

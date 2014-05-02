@@ -4,47 +4,69 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+    <meta name="description" content="History of the fedmsg bus">
+    <meta name="author" content="Ralph Bean">
 
-    <title>Raw Message</title>
+    <!-- Only allow websockets connections to fedoraproject.org. -->
+    <meta http-equiv="Content-Security-Policy" content="connect-src '*.fedoraproject.org'">
+
+    <link rel="shortcut icon" href="static/favicon.png">
+
+
+    <title>Datagrepper</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="static/css/bootstrap.css" rel="stylesheet">
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/css/raw.css" rel="stylesheet">
     <style type="text/css">
-
-    .jumbotron h1 {
-        font-size: 50px;
-        line-height: 1;
-    }
-
-    .jumbotron {
-        font-size: 60px 0;
-        text-align: center;
-    }
-
-    div {
-        white-space:normal;
-    }
-
+      div {
+          white-space:normal;
+      }
     </style>
   </head>
 
   <body>
-    <div class="jumbotron">
-    {% if heading %}
-        <h2>{{heading}}</h2>
-    {% else %}
-        <h2>Datagrepper Messages</h2>
-    {% endif %}
-    </div>
-    <br/><br/>
-
     <div class="container">
-        {% include 'raw.html' %}
-    </div>
 
+      <div class="page-header row">
+        <div class="col-md-6">
+          {% if heading %}
+          <h1>{{heading}}</h1>
+          {% else %}
+          <h1>fedmsg <small>messages</small></h1>
+          {% endif %}
+          <p>See <a href="../">the documentation</a> for information on how to construct queries.</p>
+        </div>
+        <div class="col-md-4 col-md-offset-1 hidden">
+          <div class="panel panel-default">
+            <div class="panel-body text-center">
+              <span id="messages-pending"></span> Click to show.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div id="message-container" class="col-md-12">
+          {% include 'raw.html' %}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+          <div class="panel panel-default">
+            <div class="panel-body text-center">
+                Loading... please wait.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <script src="static/jquery-2.1.0.min.js"></script>
+    {% if autoscroll %}
+    <script src="static/autoscroll.js"></script>
+    <script src="static/live.js"></script>
+    {% endif %}
   </body>
 </html>

@@ -13,6 +13,15 @@ https://apps.fedoraproject.org/datagrepper/
 Hacking on datagrepper
 ----------------------
 
+Prerequisites
+~~~~~~~~~~~~~
+    * virtualenvwrapper
+    * Postgresql
+
+Install postgresql and virtualenvwrapper::
+
+   $ sudo yum install -y postgresql-server python-virtualenvwrapper
+
 Setting up the stack
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -78,7 +87,7 @@ shell to setup the DB, the user, and privileges::
 Back in the bash shell (but still as the `postgres` user), grab a DB dump and
 restore it::
 
-    $ wget http://ralph.fedorapeople.org/datanommer-2014-01-31.dump.xz
+    $ wget http://infrastructure.fedoraproject.org/infra/db-dumps/datanommer.dump.xz
     $ xzcat datanommer-2014-01-31.dump.xz | psql datanommer
 
 Last step, run datagrepper
@@ -106,7 +115,7 @@ In a browser, visit http://localhost:5000 to see the docs.
 You can quick test that you can get data by running::
 
     $ sudo yum install -y httpie
-    $ http get localhost:5000/raw/ delta==1000000 rows_per_page==1
+    $ http get localhost:5000/raw delta==1000000 rows_per_page==1
 
 Running the job runner
 ~~~~~~~~~~~~~~~~~~~~~~

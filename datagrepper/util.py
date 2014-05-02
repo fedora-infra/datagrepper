@@ -14,13 +14,11 @@ import fedmsg
 
 # http://flask.pocoo.org/snippets/45/
 # accept header returns json type content only
+# However, if the accept header is */*, then return json.
 def request_wants_html():
     best = flask.request.accept_mimetypes \
         .best_match(['application/json', 'text/html', 'text/plain'])
-    return best == 'text/html' and \
-        flask.request.accept_mimetypes[best] > \
-        (flask.request.accept_mimetypes['application/json'] or
-         flask.request.accept_mimetypes['text/plain'])
+    return best == 'text/html'
 
 
 def json_return(data):
