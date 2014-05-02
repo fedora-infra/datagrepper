@@ -1,6 +1,46 @@
 Changelog
 =========
 
+0.4.1
+-----
+
+- Update README.rst `b17d8dde7 <https://github.com/fedora-infra/datagrepper/commit/b17d8dde75bbacec6cea275cd1c0a11970e2d778>`_
+- Update README.rst `ffac3f811 <https://github.com/fedora-infra/datagrepper/commit/ffac3f81182847d45938638469bac94ac15db571>`_
+- Update README.rst `8404c70c0 <https://github.com/fedora-infra/datagrepper/commit/8404c70c038c82a0e6377dc20cbbf636d1e2f400>`_
+- Update README.rst `752b912f7 <https://github.com/fedora-infra/datagrepper/commit/752b912f70475fa27b9615e4d7f56877abe6418c>`_
+- Use a pygments style that exists on old, old el6. `d671c8d27 <https://github.com/fedora-infra/datagrepper/commit/d671c8d274e7ff1c4c882ce92b9b7e001e387312>`_
+- remove unused css. `60134c1b0 <https://github.com/fedora-infra/datagrepper/commit/60134c1b0f09bdd52fe8d9f34dbd7645400309fe>`_
+- Merge pull request #131 from fedora-infra/feature/old-pygments `57ca7245f <https://github.com/fedora-infra/datagrepper/commit/57ca7245f20a7db331715d36583686e75102ad2e>`_
+- Merge pull request #130 from haseebgit/develop `eef1af9a4 <https://github.com/fedora-infra/datagrepper/commit/eef1af9a40fdd446b8d07f276eb0109ae63f8121>`_
+- Require an id on the widget script tag to avoid assuming it is last on the page. `5292d5087 <https://github.com/fedora-infra/datagrepper/commit/5292d50871ff36c4ec0788c7d79eafb6649aa699>`_
+- Update the docs to include the script id `6596b10ea <https://github.com/fedora-infra/datagrepper/commit/6596b10ea0182e5cdae18ae6262380debaabc239>`_
+- Update the docs to show how you can customize the widget style `6ef4603c7 <https://github.com/fedora-infra/datagrepper/commit/6ef4603c7419a35e634994d6e0e82043f100c957>`_
+- Use http with "--json" everywhere `808caee4e <https://github.com/fedora-infra/datagrepper/commit/808caee4e1028336813b5ab2580652dd97a6e7b5>`_
+- Also, convert /raw/ to /raw... `e77048b30 <https://github.com/fedora-infra/datagrepper/commit/e77048b302c6f08f884872b40b7d6fb72f674755>`_
+- Typofix. `caeb2ad34 <https://github.com/fedora-infra/datagrepper/commit/caeb2ad3484212a6a3a32ede567ebdbc7a732821>`_
+- Revert the "--json" advice. `82a89a266 <https://github.com/fedora-infra/datagrepper/commit/82a89a266b73b3c847dbb4c9925b2be13787a34f>`_
+- Fix header handling. `ee0f3e69b <https://github.com/fedora-infra/datagrepper/commit/ee0f3e69b714ab87e4a3854e94deba938bb5a811>`_
+- Merge pull request #133 from fedora-infra/feature/widget-id `96ded5554 <https://github.com/fedora-infra/datagrepper/commit/96ded5554ca9b11d43ae1462091f5c68d364a0d3>`_
+- Merge pull request #134 from fedora-infra/feature/httpie-with-json `ed26cfc20 <https://github.com/fedora-infra/datagrepper/commit/ed26cfc201fcf749666694cae660be91baae032d>`_
+- Make the msg_id endpoint support jsonp just like the raw endpoint. `c9d540812 <https://github.com/fedora-infra/datagrepper/commit/c9d5408120128b9a64368c6fe4f995ef53623afb>`_
+- Merge pull request #135 from fedora-infra/feature/jsonp-for-msg_id `f6f89acf1 <https://github.com/fedora-infra/datagrepper/commit/f6f89acf1329a002218f7d28eb5621873bd9fd30>`_
+- Point at the new db dump.  Thanks @nirik! `3e15e8d38 <https://github.com/fedora-infra/datagrepper/commit/3e15e8d38b60e31ec9cb5ec2c1989ec45cca90c8>`_
+- Use latest bootstrap and fix style on the docs pages. `668c77656 <https://github.com/fedora-infra/datagrepper/commit/668c7765607a81b7a32609da7d52fe6bced7ca67>`_
+- Fix "raw page" css to be a little more sane, especially on mobile. `524f17d44 <https://github.com/fedora-infra/datagrepper/commit/524f17d44e8633820cf89e4f35ea926db6890c29>`_
+- Merge pull request #136 from fedora-infra/feature/mobile-view `1478d00fd <https://github.com/fedora-infra/datagrepper/commit/1478d00fdc4709c2567a44a498dde2d8266a7802>`_
+- Autoscrolling on the /raw endpoint. `73ecd9f39 <https://github.com/fedora-infra/datagrepper/commit/73ecd9f393e713464966427fbb69123c11ad7d03>`_
+- Remove goofy debugging. `dede0183e <https://github.com/fedora-infra/datagrepper/commit/dede0183e4e6082eea28f6618afb9111760daa19>`_
+- Merge pull request #137 from fedora-infra/feature/autoscroll `ddc5e47b5 <https://github.com/fedora-infra/datagrepper/commit/ddc5e47b56fe5186e2393585dc1f1f814bee2f2c>`_
+- Set a favicon for the query page. `c30c16328 <https://github.com/fedora-infra/datagrepper/commit/c30c16328657fac19528eb7695c7a1fca9e8e192>`_
+- Just say no to javascript. `b0adf9b00 <https://github.com/fedora-infra/datagrepper/commit/b0adf9b007790ba12cf524ec782dec18b4b7316e>`_
+- Allow "traditional" multidict. `b766cb870 <https://github.com/fedora-infra/datagrepper/commit/b766cb8703585c09d2dd0214447dc64cf3140960>`_
+- Merge pull request #138 from fedora-infra/feature/fix-the-wat `8525498e2 <https://github.com/fedora-infra/datagrepper/commit/8525498e26b9e39c98a1f866ae4b94e6964d6dd0>`_
+- Now with websockets! `c78c14d2b <https://github.com/fedora-infra/datagrepper/commit/c78c14d2b4de45eecc1b437cc476962b8cf1f1a4>`_
+- Add CSP for websockets. `96d8e649b <https://github.com/fedora-infra/datagrepper/commit/96d8e649bf5a47535fa2bb13c00d34bf2e070df3>`_
+- Remove unused css. `fec9d7f34 <https://github.com/fedora-infra/datagrepper/commit/fec9d7f34c8d1a5c5b6b0e65c0dd3a813832c1d0>`_
+- Make this title a little more friendly. `d7e4e1abc <https://github.com/fedora-infra/datagrepper/commit/d7e4e1abc6f98212b27411b005386c133b26b73e>`_
+- Merge pull request #139 from fedora-infra/feature/websockets `c5803db67 <https://github.com/fedora-infra/datagrepper/commit/c5803db677761b8275fc2620b75efcd061375d79>`_
+
 0.4.0
 -----
 
