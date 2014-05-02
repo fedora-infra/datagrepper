@@ -32,7 +32,7 @@ $(document).ready(function(){
                 dataType: 'html',
                 success: function(html){
                     $("#loader").hide();
-                    $(".col-md-12").append(html);
+                    $("#message-container").append(html);
                     _request_in_progress = false;
                     autoscroll();
                 }

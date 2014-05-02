@@ -7,6 +7,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <!-- Only allow websockets connections to fedoraproject.org. -->
+    <meta http-equiv="Content-Security-Policy" content="connect-src '*.fedoraproject.org'">
+
     <!-- Le styles -->
     <link href="static/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
@@ -14,7 +17,6 @@
         padding-top: 20px;
         padding-bottom: 40px;
       }
-
       /* Custom container */
       .container-narrow {
         margin: 0 auto;
@@ -23,34 +25,16 @@
       .container-narrow > hr {
         margin: 30px 0;
       }
-
       /* Smaller heading sizes */
       .marketing h1 {
         font-size: 28px;
       }
-
       .marketing h2 {
         font-size: 24.5px;
       }
-
       .marketing h3 {
         font-size: 21px;
       }
-
-      /* Main marketing message and sign up button */
-      .jumbotron {
-        margin: 60px 0;
-        text-align: center;
-      }
-      .jumbotron h1 {
-        font-size: 72px;
-        line-height: 1;
-      }
-      .jumbotron .btn {
-        font-size: 21px;
-        padding: 14px 24px;
-      }
-
       /* Supporting marketing content */
       .marketing {
         margin: 60px 0;
@@ -61,7 +45,6 @@
       .odometer {
             font-size: 90px;
       }
-
       .docutils td, th {
         padding: 4px;
       }
@@ -93,6 +76,7 @@
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
           <li{% if request.endpoint == 'index' %} class="active"{% endif %}><a href="{{ url_for('index') }}">Getting started</a></li>
+          <li><a href="{{ url_for('raw') }}">Feed</a></li>
           <li{% if request.endpoint == 'reference' %} class="active"{% endif %}><a href="{{ url_for('reference') }}">Reference</a></li>
           <li{% if request.endpoint == 'widget' %} class="active"{% endif %}><a href="{{ url_for('widget') }}">Embedding</a></li>
           <li><a href="https://github.com/fedora-infra/datagrepper">Source</a></li>
