@@ -42,10 +42,14 @@ var datagrepper_success = function(json) {
         var meta = msg.meta;
         var card = '<div class="message-card">';
         if (meta.icon) {
-            card = card +
-                '<a href="' + meta.link + '">' +
-                '<img src="' + meta.icon + '"/>' +
-                '</a>';
+            if (meta.link) {
+                card = card +
+                    '<a href="' + meta.link + '">' +
+                    '<img src="' + meta.icon + '"/>' +
+                    '</a>';
+            } else {
+                card = card + '<img src="' + meta.icon + '"/>';
+            }
         }
         if (meta.secondary_icon) {
             card = card +
