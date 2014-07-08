@@ -1,7 +1,6 @@
 arrow
 Flask
 Flask-OpenID
-Flask-SQLAlchemy
 kitchen
 datanommer.models>=0.6.0
 fedmsg>=0.7.0
