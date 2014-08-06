@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.4.2
+-----
+
+- Fix relative links. `6ac26604f <https://github.com/fedora-infra/datagrepper/commit/6ac26604fdf7ca1cf28d112f8016e1e96c87b5d8>`_
+- Merge pull request #140 from fedora-infra/feature/static-files `aed1bd0fd <https://github.com/fedora-infra/datagrepper/commit/aed1bd0fde1e42c1403b8443fd8b0990340fa18b>`_
+- Only show links in the widget if they're not null. `dd282e687 <https://github.com/fedora-infra/datagrepper/commit/dd282e6871fdefb71a01c30f8ccb131e9e1c0c3c>`_
+- Only show links in the raw template if they're not null. `c91efb5bc <https://github.com/fedora-infra/datagrepper/commit/c91efb5bc778659a845c46d5abc6049df3340d14>`_
+- Merge pull request #141 from fedora-infra/feature/fix-null-links `924ae006a <https://github.com/fedora-infra/datagrepper/commit/924ae006ade6d8965e2f23ceecb9dd1b31743825>`_
+- Patch out flask-sqlalchemy. `3d332a96f <https://github.com/fedora-infra/datagrepper/commit/3d332a96f30675233f48b504a67c73a48e1f7cd2>`_
+
 0.4.1
 -----
 
