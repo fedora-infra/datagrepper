@@ -1,9 +1,15 @@
 {% for dict in response %}
     <div class="message-card">
-        {% if dict.get('icon') %}
-            <a href={{dict['link']}}><img src= {{dict['icon']}}></a>
+        {% if dict.get('link') %}
+          {% if dict.get('icon') %}
+          <a href={{dict['link']}}><img src= {{dict['icon']}}></a>
+          {% else %}
+          <a href={{dict['link']}}>Link</a>
+          {% endif %}
         {% else %}
-            <a href={{dict['link']}}>Link</a>
+          {% if dict.get('icon') %}
+          <img src= {{dict['icon']}}>
+          {% endif %}
         {% endif %}
         {% if dict.get('secondary_icon') %}
         <img src={{dict['secondary_icon']}}></a>

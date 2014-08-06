@@ -59,7 +59,7 @@ $(document).ready(function() {
             pending_count = 0;
             $("#messages-pending").parent().parent().parent().addClass('hidden');
             $.ajax({
-                url: "raw",
+                url: window.location.pathname,
                 dataType: 'html',
                 data: params,
                 error: error,

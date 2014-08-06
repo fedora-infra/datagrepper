@@ -17,7 +17,6 @@
 import json
 import flask
 from flask.ext.openid import OpenID
-from flask.ext.sqlalchemy import SQLAlchemy
 
 from bunch import Bunch
 import codecs
@@ -57,8 +56,8 @@ app.config.from_envvar('DATAGREPPER_CONFIG')
 app.secret_key = app.config['SECRET_KEY']
 
 # Set up datagrepper database
-db = SQLAlchemy(app)
-from datagrepper.models import Job, STRSTATUS
+#db = SQLAlchemy(app)
+#from datagrepper.models import Job, STRSTATUS
 
 # Set up OpenID
 oid = OpenID(app)

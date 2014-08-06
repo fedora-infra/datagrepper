@@ -27,7 +27,7 @@ $(document).ready(function(){
             param.page = _page;
             param.chrome = 'false';
             $.ajax({
-                url: "raw",
+                url: window.location.pathname,
                 data: $.param(param, traditional=true),
                 dataType: 'html',
                 success: function(html){
