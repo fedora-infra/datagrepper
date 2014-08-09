@@ -128,6 +128,8 @@ def message_card(msg, size):
         # generate title associated with message
         title = fedmsg.meta.msg2title(msg, legacy=False, **config)
         msgDict['title'] = title
+        msgDict['topic_link'] = msg['topic']
+
 
     # convert the timestamp in datetime object
     msgDict['date'] = arrow.get(msg['timestamp'])
