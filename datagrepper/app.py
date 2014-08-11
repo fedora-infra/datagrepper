@@ -479,9 +479,9 @@ def msg_id():
     else:
         flask.abort(404)
 
-@app.route('/charts/line/')
-@app.route('/charts/line')
-def charts():
+@app.route('/charts/<chart_type>/')
+@app.route('/charts/<chart_type>')
+def charts(chart_type):
     """ Main API entry point. """
 
     # Perform our complicated datetime logic
@@ -508,6 +508,26 @@ def charts():
     end = end or datetime.utcnow()
     start = start or end - timedelta(days=365)
 
+    chart_types = [
+        'Line', 'StackedLine', 'XY', 'Bar', 'HorizontalBar',
+        'StackedBar', 'HorizontalStackedBar', 'Funnel', 'Pyramid',
+        'VerticalPyramid', 'Dot', 'Gauge']
+    if chart_type not in chart_types:
+        flask.abort(404)
+
+    style = flask.request.args.get('style', 'default')
+    style = pygal.style.styles[style]
+
+    chart = getattr(pygal, chart_type)(
+        # TODO -figure out how to add interpolation and other options here
+        # width would be nice.  and title.
+        # and 'human readable'?
+        #interpolate=True,
+        x_label_rotation=45,
+        style=style,
+    )
+
+
     lookup = locals()
     factor_names = flask.request.args.getlist('split_on')
     factor_names = [name for name in factor_names if lookup[name]]
@@ -525,10 +545,6 @@ def charts():
             categories=categories,
             topics=topics,
             contains=contains,
-        )
-
-        chart = pygal.Line(
-            x_label_rotation=45,
         )
 
         labels = [arrow.get(i).humanize() for i, _ in daterange(start, end, N)]
