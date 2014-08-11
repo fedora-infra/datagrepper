@@ -43,6 +43,7 @@ import fedmsg
 import fedmsg.meta
 import fedmsg.config
 import datanommer.models as dm
+from moksha.common.lib.converters import asbool
 
 from datagrepper.dataquery import DataQuery
 from datagrepper.util import (
@@ -508,21 +509,59 @@ def charts(chart_type):
     end = end or datetime.utcnow()
     start = start or end - timedelta(days=365)
 
-    chart_types = [
-        'Line', 'StackedLine', 'XY', 'Bar', 'HorizontalBar',
-        'StackedBar', 'HorizontalStackedBar', 'Funnel', 'Pyramid',
-        'VerticalPyramid', 'Dot', 'Gauge']
+    human_readable = flask.request.args.get('human_readable', True, asbool)
+    logarithmic = flask.request.args.get('logarithmic', False, asbool)
+    show_x_labels = flask.request.args.get('show_x_labels', True, asbool)
+    show_y_labels = flask.request.args.get('show_y_labels', True, asbool)
+    show_dots = flask.request.args.get('show_dots', True, asbool)
+    fill = flask.request.args.get('fill', False, asbool)
+
+    title = flask.request.args.get('title', 'fedmsg events')
+    width = flask.request.args.get('width', 800, int)
+    height = flask.request.args.get('height', 800, int)
+
+    interpolation = flask.request.args.get('interpolation', None)
+    interpolation_types = [
+        None,
+        'quadratic',
+        'cubic',
+    ]
+    if interpolation not in interpolation_types:
+        flask.abort(404, "%s not in %r" % (interpolation, interpolation_types))
+
+    chart_types = {
+        'line': 'Line',
+        'stackedline': 'StackedLine',
+        'xy': 'XY',
+        'bar': 'Bar',
+        'horizontalbar': 'HorizontalBar',
+        'stackedbar': 'StackedBar',
+        'horizontalstackedbar': 'HorizontalStackedBar',
+        'funnel': 'Funnel',
+        'pyramid': 'Pyramid',
+        'VerticalPyramid': 'VerticalPyramid',
+        'dot': 'Dot',
+        'gauge': 'Gauge',
+    }
     if chart_type not in chart_types:
-        flask.abort(404)
+        flask.abort(404, "%s not in %r" % (chart_type, chart_types))
 
     style = flask.request.args.get('style', 'default')
+    if style not in pygal.style.styles:
+        flask.abort(404, "%s not in %r" % (style, pygal.style.styles))
     style = pygal.style.styles[style]
 
-    chart = getattr(pygal, chart_type)(
-        # TODO -figure out how to add interpolation and other options here
-        # width would be nice.  and title.
-        # and 'human readable'?
-        #interpolate=True,
+    chart = getattr(pygal, chart_types[chart_type])(
+        human_readable=human_readable,
+        logarithmic=logarithmic,
+        show_x_labels=show_x_labels,
+        show_y_labels=show_y_labels,
+        show_dots=show_dots,
+        fill=fill,
+        title=title,
+        width=width,
+        height=height,
+        interpolate=interpolation,
         x_label_rotation=45,
         style=style,
     )
@@ -534,7 +573,11 @@ def charts(chart_type):
     factor_values = [lookup[name] for name in factor_names]
     factors = list(itertools.product(*factor_values))
 
-    N = int(flask.request.args.get('N', 12))
+    N = int(flask.request.args.get('N', 10))
+    if N < 3:
+        flask.abort(500, 'N must be greater than 3')
+    if N > 15:
+        flask.abort(500, 'N must be less than 15')
 
     try:
         labels = []
@@ -547,7 +590,11 @@ def charts(chart_type):
             contains=contains,
         )
 
-        labels = [arrow.get(i).humanize() for i, _ in daterange(start, end, N)]
+        dates = [i for i, _ in daterange(start, end, N)]
+        if human_readable:
+            labels = [arrow.get(i).humanize() for i in dates]
+        else:
+            labels = [unicode(arrow.get(i).date()) for i in dates]
 
         for factor in factors:
             for i, name in enumerate(factor_names):
