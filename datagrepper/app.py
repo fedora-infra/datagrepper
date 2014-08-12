@@ -180,7 +180,7 @@ def preload_docs(endpoint):
     api_docs = markupsafe.Markup(api_docs)
     return api_docs
 
-htmldocs = dict.fromkeys(['index', 'reference', 'widget'])
+htmldocs = dict.fromkeys(['index', 'reference', 'widget', 'charts'])
 for key in htmldocs:
     htmldocs[key] = preload_docs(key)
 
@@ -220,6 +220,12 @@ def index():
 @app.route('/reference/')
 @app.route('/reference')
 def reference():
+    return flask.render_template('index.html', docs=load_docs(flask.request))
+
+
+@app.route('/charts/')
+@app.route('/charts')
+def charts():
     return flask.render_template('index.html', docs=load_docs(flask.request))
 
 
@@ -482,8 +488,8 @@ def msg_id():
 
 @app.route('/charts/<chart_type>/')
 @app.route('/charts/<chart_type>')
-def charts(chart_type):
-    """ Main API entry point. """
+def make_charts(chart_type):
+    """ Return SVGs graphing db content. """
 
     # Perform our complicated datetime logic
     start = flask.request.args.get('start', None)
@@ -539,7 +545,7 @@ def charts(chart_type):
         'horizontalstackedbar': 'HorizontalStackedBar',
         'funnel': 'Funnel',
         'pyramid': 'Pyramid',
-        'VerticalPyramid': 'VerticalPyramid',
+        'verticalpyramid': 'VerticalPyramid',
         'dot': 'Dot',
         'gauge': 'Gauge',
     }
