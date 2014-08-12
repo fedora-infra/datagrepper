@@ -133,18 +133,44 @@ Other options
 -------------
 
 - ``title``, Set a title on the plot.
-- ``width``, (int), Defaults to ``800``.  Sets the width of the plot.
-- ``height``, (int), Defaults to ``600``.  Sets the height of the plot.
+
+.. image:: http://localhost:5000/charts/line?height=300&title=Just%20an%20example%20title
+
+- ``N``, (int), the number of data points in the graph (the resolution of
+  the x-axis).
+
+.. image:: http://localhost:5000/charts/line?N=3&height=300&title=With%20N=3
+
+- ``width``, (int), Defaults to ``800``.  Sets the width of the plot in pixels.
+- ``height``, (int), Defaults to ``600``.  Sets the height of the plot in pixels.
+
 - ``interpolation``, (boolean), Defaults to ``None``. You can also pass it
   ``cubic`` or ``quadratic``.
+
+.. image:: http://localhost:5000/charts/line?interpolation=cubic&height=300&title=Cubic%20Interpolation
+
 - ``human_readable``, (boolean), Defaults to ``True``.  Converts numbers to
   nicer-to-read numbers.
+
+.. image:: http://localhost:5000/charts/line?human_readable=False&height=300&title=Less%20readable,%20maybe..
+
 - ``logarithmic``, (boolean), Defaults to ``False``.  Logarithmically scales
   the y-axis.
+
+.. image:: http://localhost:5000/charts/line?logarithmic=True&height=300&title=Logarithmic
+
 - ``show_x_labels``, (boolean), Defaults to ``True``.  Show/hide the x-axis
   labels.
 - ``show_y_labels``, (boolean), Defaults to ``True``.  Show/hide the y-ayis
   labels.
+
+.. image:: http://localhost:5000/charts/line?show_x_labels=False&show_y_labels=False&height=300&title=Sans%20labels
+
 - ``show_dots``, (boolean), Defaults to ``True``.  Show/hide the datapoints.
+
+.. image:: http://localhost:5000/charts/line?show_dots=False&height=300&title=Hidden%20dots
+
 - ``fill``, (boolean), Defaults to ``False``.  Fill the area under curves in
   line plots.
+
+.. image:: http://localhost:5000/charts/stackedline?fill=True&height=300&title=Area%20under%20the%20curve
