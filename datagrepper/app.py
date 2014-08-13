@@ -30,15 +30,20 @@ import os
 import time
 import traceback
 
+import arrow
+import itertools
+import pygal
+
 import pygments
 import pygments.lexers
 import pygments.formatters
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import fedmsg
 import fedmsg.meta
 import fedmsg.config
 import datanommer.models as dm
+from moksha.common.lib.converters import asbool
 
 from datagrepper.dataquery import DataQuery
 from datagrepper.util import (
@@ -175,7 +180,7 @@ def preload_docs(endpoint):
     api_docs = markupsafe.Markup(api_docs)
     return api_docs
 
-htmldocs = dict.fromkeys(['index', 'reference', 'widget'])
+htmldocs = dict.fromkeys(['index', 'reference', 'widget', 'charts'])
 for key in htmldocs:
     htmldocs[key] = preload_docs(key)
 
@@ -215,6 +220,12 @@ def index():
 @app.route('/reference/')
 @app.route('/reference')
 def reference():
+    return flask.render_template('index.html', docs=load_docs(flask.request))
+
+
+@app.route('/charts/')
+@app.route('/charts')
+def charts():
     return flask.render_template('index.html', docs=load_docs(flask.request))
 
 
@@ -474,6 +485,170 @@ def msg_id():
             )
     else:
         flask.abort(404)
+
+@app.route('/charts/<chart_type>/')
+@app.route('/charts/<chart_type>')
+def make_charts(chart_type):
+    """ Return SVGs graphing db content. """
+
+    # Perform our complicated datetime logic
+    start = flask.request.args.get('start', None)
+    end = flask.request.args.get('end', None)
+    delta = flask.request.args.get('delta', None)
+    start, end, delta = assemble_timerange(start, end, delta)
+
+    # Further filters, all ANDed together in CNF style.
+    users = flask.request.args.getlist('user')
+    packages = flask.request.args.getlist('package')
+    categories = flask.request.args.getlist('category')
+    topics = flask.request.args.getlist('topic')
+    contains = flask.request.args.getlist('contains')
+
+    # Still more filters.. negations of the previous ones.
+    not_users = flask.request.args.getlist('not_user')
+    not_packages = flask.request.args.getlist('not_package')
+    not_categories = flask.request.args.getlist('not_category')
+    not_topics = flask.request.args.getlist('not_topic')
+
+    end = end and datetime.fromtimestamp(end)
+    start = start and datetime.fromtimestamp(start)
+    end = end or datetime.utcnow()
+    start = start or end - timedelta(days=365)
+
+    human_readable = flask.request.args.get('human_readable', True, asbool)
+    logarithmic = flask.request.args.get('logarithmic', False, asbool)
+    show_x_labels = flask.request.args.get('show_x_labels', True, asbool)
+    show_y_labels = flask.request.args.get('show_y_labels', True, asbool)
+    show_dots = flask.request.args.get('show_dots', True, asbool)
+    fill = flask.request.args.get('fill', False, asbool)
+
+    title = flask.request.args.get('title', 'fedmsg events')
+    width = flask.request.args.get('width', 800, int)
+    height = flask.request.args.get('height', 800, int)
+
+    interpolation = flask.request.args.get('interpolation', None)
+    interpolation_types = [
+        None,
+        'quadratic',
+        'cubic',
+    ]
+    if interpolation not in interpolation_types:
+        flask.abort(404, "%s not in %r" % (interpolation, interpolation_types))
+
+    chart_types = {
+        'line': 'Line',
+        'stackedline': 'StackedLine',
+        'xy': 'XY',
+        'bar': 'Bar',
+        'horizontalbar': 'HorizontalBar',
+        'stackedbar': 'StackedBar',
+        'horizontalstackedbar': 'HorizontalStackedBar',
+        'funnel': 'Funnel',
+        'pyramid': 'Pyramid',
+        'verticalpyramid': 'VerticalPyramid',
+        'dot': 'Dot',
+        'gauge': 'Gauge',
+    }
+    if chart_type not in chart_types:
+        flask.abort(404, "%s not in %r" % (chart_type, chart_types))
+
+    style = flask.request.args.get('style', 'default')
+    if style not in pygal.style.styles:
+        flask.abort(404, "%s not in %r" % (style, pygal.style.styles))
+    style = pygal.style.styles[style]
+
+    chart = getattr(pygal, chart_types[chart_type])(
+        human_readable=human_readable,
+        logarithmic=logarithmic,
+        show_x_labels=show_x_labels,
+        show_y_labels=show_y_labels,
+        show_dots=show_dots,
+        fill=fill,
+        title=title,
+        width=width,
+        height=height,
+        interpolate=interpolation,
+        x_label_rotation=45,
+        style=style,
+    )
+
+
+    lookup = locals()
+    factor_names = flask.request.args.getlist('split_on')
+    factor_names = [name for name in factor_names if lookup[name]]
+    factor_values = [lookup[name] for name in factor_names]
+    factors = list(itertools.product(*factor_values))
+
+    N = int(flask.request.args.get('N', 10))
+    if N < 3:
+        flask.abort(500, 'N must be greater than 3')
+    if N > 15:
+        flask.abort(500, 'N must be less than 15')
+
+    try:
+        labels = []
+
+        kwargs = dict(
+            users=users,
+            packages=packages,
+            categories=categories,
+            topics=topics,
+            contains=contains,
+        )
+
+        dates = [i for i, _ in daterange(start, end, N)]
+        if human_readable:
+            labels = [arrow.get(i).humanize() for i in dates]
+        else:
+            labels = [unicode(arrow.get(i).date()) for i in dates]
+
+        for factor in factors:
+            for i, name in enumerate(factor_names):
+                kwargs[name] = [factor[i]]
+
+            values = []
+
+            for i, j in daterange(start, end, N):
+                count, _, _ = dm.Message.grep(
+                    start=i,
+                    end=j,
+                    rows_per_page=None,
+                    defer=True,
+                    not_users=not_users,
+                    not_packages=not_packages,
+                    not_categories=not_categories,
+                    not_topics=not_topics,
+                    **kwargs
+                )
+                values.append(count)
+            tag = factor and " & ".join(factor) or "events"
+            chart.add(tag, values)
+
+        chart.x_labels = labels
+        output = chart.render()
+        status = 200
+        mimetype = 'image/svg+xml'
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        output = "Error, %r" % e
+        status = 500
+        mimetype = 'text/html'
+
+    return flask.Response(
+        response=output,
+        status=status,
+        mimetype=mimetype,
+    )
+
+
+def daterange(start, stop, steps):
+    """ A generator for stepping through time. """
+    delta = (stop - start) / steps
+    current = start
+    while current + delta <= stop:
+        yield current, current + delta
+        current += delta
 
 
 @app.route('/messagecount/')
