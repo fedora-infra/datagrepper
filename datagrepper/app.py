@@ -335,6 +335,8 @@ def raw():
         messages = [msg.__json__() for msg in messages]
         if grouped:
             messages = fedmsg.meta.conglomerate(messages, **fedmsg_config)
+            for message in messages:
+                message['date'] = arrow.get(message['timestamp']).humanize()
         elif meta:
             for message in messages:
                 message = meta_argument(message, meta)
