@@ -272,6 +272,7 @@ def raw():
     # Response formatting arguments
     callback = flask.request.args.get('callback', None)
     meta = flask.request.args.getlist('meta')
+    grouped = flask.request.args.get('grouped', False, asbool)
 
     arguments = dict(
         start=start,
@@ -290,6 +291,7 @@ def raw():
         rows_per_page=rows_per_page,
         order=order,
         meta=meta,
+        grouped=grouped,
     )
 
     if page < 1:
@@ -331,7 +333,9 @@ def raw():
 
         # Convert our messages from sqlalchemy objects to json-like dicts
         messages = [msg.__json__() for msg in messages]
-        if meta:
+        if grouped:
+            messages = fedmsg.meta.conglomerate(messages, **fedmsg_config)
+        elif meta:
             for message in messages:
                 message = meta_argument(message, meta)
 
@@ -377,11 +381,19 @@ def raw():
         final_message_list = []
 
         for msg in raw_message_list:
-            # message_card module will handle size
-            message = message_card(msg, size)
-            # add msg_id to the message dictionary
-            if (msg["msg_id"] is not None):
-                message['msg_id'] = msg["msg_id"]
+            if not grouped:
+                # message_card module will handle size
+                message = message_card(msg, size)
+                # add msg_id to the message dictionary
+                if (msg["msg_id"] is not None):
+                    message['msg_id'] = msg["msg_id"]
+            else:
+                message = msg
+                message['msg_id'] = None
+                if len(message['msg_ids']) == 1:
+                    message['msg_id'] = message['msg_ids'][0]
+                message['date'] = arrow.get(message['timestamp'])
+
             final_message_list.append(message)
 
         # removes boilerlate codes if chrome value is false

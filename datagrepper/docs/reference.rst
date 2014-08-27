@@ -219,6 +219,12 @@ Formatting arguments
 
   Default: None
 
+``grouped``
+  Argument to specify if the server should attempt to group together similar
+  messages.  Must be one of either "true" or "false".
+
+  Default: false
+
 ``chrome``
   "chrome" decides whether the messages should be displayed with html boiler-plate
   or not. Must be one of either "true" or "false". "true" means with boiler-plate and
