@@ -3,7 +3,7 @@ Flask
 Flask-OpenID
 kitchen
 datanommer.models>=0.6.0
-fedmsg>=0.7.0
+fedmsg>=0.10.0
 docutils
 backports.lzma
 lockfile
