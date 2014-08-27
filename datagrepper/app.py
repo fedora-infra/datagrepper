@@ -387,8 +387,8 @@ def raw():
                 # message_card module will handle size
                 message = message_card(msg, size)
                 # add msg_id to the message dictionary
-                if (msg["msg_id"] is not None):
-                    message['msg_id'] = msg["msg_id"]
+                if (msg['msg_id'] is not None):
+                    message['msg_id'] = msg['msg_id']
             else:
                 message = msg
                 message['msg_id'] = None
