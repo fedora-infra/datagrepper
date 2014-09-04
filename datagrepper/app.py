@@ -52,6 +52,8 @@ from datagrepper.util import (
     message_card,
     meta_argument,
 )
+from pkg_resources import get_distribution
+
 
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
@@ -82,6 +84,13 @@ cache = dogpile.cache.make_region().configure(
 
 import datagrepper.widgets
 
+
+@app.context_processor
+def inject_variable():
+    """ Inject some global variables into all templates
+    """
+    return {'models_version': get_distribution('datanommer.models').version,
+            'grepper_version': get_distribution('datagrepper').version}
 
 @app.before_request
 def check_auth():
