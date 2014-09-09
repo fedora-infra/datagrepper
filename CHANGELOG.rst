@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.5.1
+-----
+
+- Hide charts for now. `f7cc99859 <https://github.com/fedora-infra/datagrepper/commit/f7cc99859e7e4b313021e70eeabf810a73a25b5e>`_
+- Merge pull request #153 from fedora-infra/feature/hide-charts-for-now `116ec2a56 <https://github.com/fedora-infra/datagrepper/commit/116ec2a56ad0fe86ee2660ea8e7bebfe1581fca4>`_
+
 0.5.0
 -----
 
