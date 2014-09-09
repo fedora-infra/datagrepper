@@ -359,6 +359,9 @@ def raw():
         )
         status = 200
     except Exception as e:
+        import traceback
+        traceback.print_exc()
+
         output = dict(
             error=str(e),
             arguments=arguments,
