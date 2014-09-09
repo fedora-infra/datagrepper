@@ -77,6 +77,7 @@
         <ul class="nav nav-pills pull-right">
           <li{% if request.endpoint == 'index' %} class="active"{% endif %}><a href="{{ url_for('index') }}">Getting started</a></li>
           <li><a href="{{ url_for('raw') }}">Feed</a></li>
+          <li{% if request.endpoint == 'charts' %} class="active"{% endif %}><a href="{{ url_for('charts') }}">Charts</a></li>
           <li{% if request.endpoint == 'reference' %} class="active"{% endif %}><a href="{{ url_for('reference') }}">Reference</a></li>
           <li{% if request.endpoint == 'widget' %} class="active"{% endif %}><a href="{{ url_for('widget') }}">Embedding</a></li>
           <li><a href="https://github.com/fedora-infra/datagrepper">Source</a></li>
@@ -137,6 +138,21 @@
       <div class="footer">
       </div>
 
+    <div id="footer">
+        <div class="container">
+            <p class="text-muted credit">
+            Datagrepper is Powered by <a href="http://fedmsg.com">fedmsg</a>. The
+            <a href="https://github.com/fedora-infra/datagrepper">source</a>
+            and
+            <a href="https://github.com/fedora-infra/datagrepper/issues">issue tracker</a>
+            are available on github.
+            </p>
+            <p class="text-muted">
+            Running <code>datagrepper-{{grepper_version}}</code>,
+            <code>datanommer.models-{{models_version}}</code>
+            </p>
+        </div>
+    </div>
     </div> <!-- /container -->
 </body></html>
 {# vim: set ts=2 sw=2 sta et syn=htmldjango: #}

@@ -1,6 +1,27 @@
 Changelog
 =========
 
+0.5.0
+-----
+
+- Link topic to topic filter on raw page `e6dfe37e5 <https://github.com/fedora-infra/datagrepper/commit/e6dfe37e5e5feb894b9a9c7a90e04b32a7678eba>`_
+- Merge pull request #148 from sayanchowdhury/hyperlink-topics `fbe0c1af5 <https://github.com/fedora-infra/datagrepper/commit/fbe0c1af518513e2f689f9325ff05b420a124c65>`_
+- First draft of dataviewer. `1abeabd41 <https://github.com/fedora-infra/datagrepper/commit/1abeabd4139523efdbff98a0883dc2b7a4a7d8f6>`_
+- Allow different chart types and different styles. `1031a0d77 <https://github.com/fedora-infra/datagrepper/commit/1031a0d7783d5c007b388a849533f314e554f0e6>`_
+- lots more options. `87663ab88 <https://github.com/fedora-infra/datagrepper/commit/87663ab88f3f6996034ea4461b7d6b83991e3dcc>`_
+- New req. `9bac15dd5 <https://github.com/fedora-infra/datagrepper/commit/9bac15dd59e736dcb557002bf32ae70ae046df53>`_
+- First draft of docs. `f041bbb87 <https://github.com/fedora-infra/datagrepper/commit/f041bbb874b3cac3516da87e5997134ceb2d86fd>`_
+- Add more example images. `bbafaf97e <https://github.com/fedora-infra/datagrepper/commit/bbafaf97eeb7ead212dc66ac239cac4710038477>`_
+- Undo fedmsg.d silliness for #149. `efd308d26 <https://github.com/fedora-infra/datagrepper/commit/efd308d26d02bcc0e7332a540843e17c4d3915be>`_
+- Merge pull request #149 from fedora-infra/feature/dataviewer `02322579c <https://github.com/fedora-infra/datagrepper/commit/02322579c5486419fcbc44d4a8ffad5291f32ddf>`_
+- Fix README for the xzcat command `8b4eda7f3 <https://github.com/fedora-infra/datagrepper/commit/8b4eda7f3911e06beeedc93d8d429329c19fe3e9>`_
+- Use new fedmsg.meta.conglomerate features. `dca29fadf <https://github.com/fedora-infra/datagrepper/commit/dca29fadf92bab9ec821c21cda3d2ed04b94029b>`_
+- Get conglomerate stuff working with the embeddable widget too. `6e38c806d <https://github.com/fedora-infra/datagrepper/commit/6e38c806dc89da51eb7f866ea1eba1988776009a>`_
+- Quote consistency. `d83201f7c <https://github.com/fedora-infra/datagrepper/commit/d83201f7cbda6ee94cacac6c5be59a085aa4904c>`_
+- Merge pull request #150 from fedora-infra/feature/grouped `86b0e0d95 <https://github.com/fedora-infra/datagrepper/commit/86b0e0d95dc9ed46192dd625d18b105abb0aca9b>`_
+- Added a basic version footer to datagrepper templates. The foot is ripped from the fmn.web footer `4104f4486 <https://github.com/fedora-infra/datagrepper/commit/4104f44862b0a81303e2c7abcefc65ed5f4d22e8>`_
+- Merge pull request #151 from rossdylan/feature/version_footer `266680683 <https://github.com/fedora-infra/datagrepper/commit/2666806834a2b15765b46170aebc36738de67dad>`_
+
 0.4.2
 -----
 

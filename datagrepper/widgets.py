@@ -40,6 +40,7 @@ work = """
 var datagrepper_success = function(json) {
     $.each(json.raw_messages, function(i, msg) {
         var meta = msg.meta;
+        if (meta === undefined) { meta = msg; }
         var card = '<div class="message-card">';
         if (meta.icon) {
             if (meta.link) {
@@ -72,7 +73,8 @@ var data = {
 // Check to see if the user has asked us to filter the firehose.
 var datagrepper_attrs = [
     'user', 'package', 'category', 'topic',
-    'order', 'rows_per_page', 'page', 'size'];
+    'order', 'rows_per_page', 'page', 'size',
+    'grouped'];
 $.each(datagrepper_attrs, function(i, attr) {
     var value = $('script#datagrepper-widget').attr("data-" + attr);
     if (value != undefined) {

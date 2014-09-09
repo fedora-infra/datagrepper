@@ -62,6 +62,21 @@
         </div>
       </div>
 
+    <div id="footer">
+        <div class="container">
+            <p class="text-muted credit">
+            Datagrepper is Powered by <a href="http://fedmsg.com">fedmsg</a>. The
+            <a href="https://github.com/fedora-infra/datagrepper">source</a>
+            and
+            <a href="https://github.com/fedora-infra/datagrepper/issues">issue tracker</a>
+            are available on github.
+            </p>
+            <p class="text-muted">
+            Running <code>datagrepper-{{grepper_version}}</code>,
+            <code>datanommer.models-{{models_version}}</code>
+            </p>
+        </div>
+    </div>
     </div>
     <script src="{{ url_for('static', filename='jquery-2.1.0.min.js') }}"></script>
     {% if autoscroll %}

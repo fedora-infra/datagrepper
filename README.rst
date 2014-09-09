@@ -88,7 +88,7 @@ Back in the bash shell (but still as the `postgres` user), grab a DB dump and
 restore it::
 
     $ wget http://infrastructure.fedoraproject.org/infra/db-dumps/datanommer.dump.xz
-    $ xzcat datanommer-2014-01-31.dump.xz | psql datanommer
+    $ xzcat datanommer.dump.xz | psql datanommer
 
 Last step, run datagrepper
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
