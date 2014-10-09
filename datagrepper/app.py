@@ -256,6 +256,9 @@ def raw():
     delta = flask.request.args.get('delta', None)
     start, end, delta = assemble_timerange(start, end, delta)
 
+    start_id = flask.request.args.get('start_id', None)
+    end_id = flask.request.args.get('end_id', None)
+
     # Further filters, all ANDed together in CNF style.
     users = flask.request.args.getlist('user')
     packages = flask.request.args.getlist('package')
@@ -287,6 +290,8 @@ def raw():
         start=start,
         delta=delta,
         end=end,
+        start_id=start_id,
+        end_id=end_id,
         users=users,
         packages=packages,
         categories=categories,
@@ -321,6 +326,17 @@ def raw():
     if chrome not in ['true', 'false']:
         raise ValueError("chrome should be either 'true' or 'false'")
 
+    if start or end or delta:
+        start_id = None
+        end_id = None
+
+    if start_id and end_id:
+        start_msg = dm.Message.query.filter_by(msg_id=start_id).first()
+        end_msg = dm.Message.query.filter_by(msg_id=end_id).first()
+        start = start_msg.timestamp
+        end = end_msg.timestamp
+        start, end, delta = assemble_timerange(start.strftime('%s'),
+                end.strftime('%s'), None)
     try:
         # This fancy classmethod does all of our search for us.
         total, pages, messages = dm.Message.grep(
