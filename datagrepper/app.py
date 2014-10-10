@@ -329,14 +329,16 @@ def raw():
     if start or end or delta:
         start_id = None
         end_id = None
+    else:
+        if start_id:
+            start_msg = dm.Message.query.filter_by(msg_id=start_id).first()
+            start = start_msg.timestamp.strftime('%s')
+        if end_id:
+            end_msg = dm.Message.query.filter_by(msg_id=end_id).first()
+            end = end_msg.timestamp.strftime('%s')
 
-    if start_id and end_id:
-        start_msg = dm.Message.query.filter_by(msg_id=start_id).first()
-        end_msg = dm.Message.query.filter_by(msg_id=end_id).first()
-        start = start_msg.timestamp
-        end = end_msg.timestamp
-        start, end, delta = assemble_timerange(start.strftime('%s'),
-                end.strftime('%s'), None)
+        start, end, delta = assemble_timerange(start, end, delta)
+
     try:
         # This fancy classmethod does all of our search for us.
         total, pages, messages = dm.Message.grep(
