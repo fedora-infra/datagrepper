@@ -21,7 +21,7 @@
                 <span class="details-history">Details</span></a>
         {% endif %}
         {% if 'is_raw' in dict %}
-            <a href="#" onclick="history.go(-1)">Go Back</a>
+            <a href="#" onclick="window.history.go(-1); return false;">Go Back</a>
         {% endif %}
     <span class="datetime pull-right">
         {{dict['date'].humanize()}}
