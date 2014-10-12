@@ -180,6 +180,22 @@ Filter arguments
 
   Default: no topics
 
+``start_id``
+  Returns results starting with message id ``start_id``.
+
+  This argument is ignored if either of the arguments ``start``, ``end`` or
+  ``delta`` is already present.
+
+  Default: None
+
+``end_id``
+  Returns results ending with message id ``end_id``.
+
+  This argument is ignored if either of the arguments ``start``, ``end`` or
+  ``delta`` is already present.
+
+  Default: None
+
 Pagination arguments
 ====================
 
