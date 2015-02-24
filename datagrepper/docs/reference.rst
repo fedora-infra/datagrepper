@@ -14,8 +14,7 @@ explicitly requested, in which case datagrepper returns the appropriate ``applic
 /raw
 ----
 
-The ``/raw`` endpoint provides limited query support, but is "instant" and does
-not require your query to be put into a job queue.
+The ``/raw`` endpoint returns lists of messages.
 
 Response format
 ===============
@@ -260,54 +259,9 @@ Formatting arguments
   Checks whether the card is coming from /raw url or not. Must be one of either "true" or "false".
   If card is from /raw url then it will be "true" otherwise "false".
 
-/submit
--------
-
-The ``/submit`` endpoint allows you to submit a job for more data than ``/raw``
-allows.
-
-The arguments are the same as ``/raw``.
-
-The status of a job (including a URL where you can download the data, if the
-job is complete) is available from the ``/status`` endpoint.
-
-Response format
-===============
-
-.. code-block:: javascript
-
-    {
-        "job_id": 1,
-        "options": {
-            "category": [ ... ],
-            "topic": [ ... ],
-            "start": null,
-            ...
-        }
-    }
-
-/status
--------
-
-Returns the status of a job. If the job is finished, also returns the filename.
-
-Response format
-===============
-
-.. code-block:: javascript
-
-    {
-        "id": 1,
-        "state": "done",
-        "url": "http://..."
-    }
-
-Valid states include ``free``, ``open``, ``done``, ``failed``, and ``deleted``.
-``url`` is displayed for the ``done`` state only.
-
 /topics
 -------
 
 Returns a list of all topics in the datanommer database. Takes no arguments.
 
-This is cached hourly, so sometimes it will take a while to generate.
+This is cached hourly, and it often takes a while to generate.
