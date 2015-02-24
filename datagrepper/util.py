@@ -25,12 +25,6 @@ def json_return(data):
     return flask.Response(json.dumps(data), mimetype='application/json')
 
 
-def generate_api_key():
-    rand = str(random.getrandbits(256))
-    timestamp = str(int(time.time() * 1000))
-    return hashlib.sha224(rand + timestamp).hexdigest()
-
-
 def datetime_to_seconds(dt):
     """ Name this, just because its confusing. """
     return time.mktime(dt.timetuple())

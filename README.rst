@@ -35,10 +35,6 @@ Install dependencies::
     $ pip install -r requirements.txt
     $ pip install psycopg2
 
-Set up the fedmsg consumer for the job runner::
-
-    $ python setup.py develop
-
 Configuring Postgresql (and getting some data)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -116,11 +112,3 @@ You can quick test that you can get data by running::
 
     $ sudo yum install -y httpie
     $ http get localhost:5000/raw delta==1000000 rows_per_page==1
-
-Running the job runner
-~~~~~~~~~~~~~~~~~~~~~~
-
-Without starting ``fedmsg-hub``, the job runner won't actually run jobs::
-
-    $ workon datagrepper
-    $ fedmsg-hub
