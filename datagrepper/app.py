@@ -350,7 +350,7 @@ def raw():
                 message = msg
                 message['msg_id'] = None
                 if len(message['msg_ids']) == 1:
-                    message['msg_id'] = message['msg_ids'][0]
+                    message['msg_id'] = message['msg_ids'].keys()[0]
                 message['date'] = arrow.get(message['timestamp'])
 
             final_message_list.append(message)
