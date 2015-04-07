@@ -35,6 +35,11 @@ $(document).ready(function(){
                     $("#loader").addClass('hidden');
                     _request_in_progress = false;
 
+                    if (html.length == 0) {
+                        // Then this is the last page.  Stop.
+                        return;
+                    }
+
                     $("#message-container").append(html);
                     autoscroll();
                 }
