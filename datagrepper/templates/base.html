@@ -83,5 +83,36 @@
     <script src="{{ url_for('static', filename='autoscroll.js') }}"></script>
     <script src="{{ url_for('static', filename='live.js') }}"></script>
     {% endif %}
+
+    {% if fedmenu_url is defined %}
+    <script src="{{fedmenu_url}}/js/fedora-libravatar.js"></script>
+    <script src="{{fedmenu_url}}/js/fedmenu.js"></script>
+    <script>
+      fedmenu({
+          'url': '{{fedmenu_data_url}}',
+          'mimeType': 'application/javascript',
+          'position': 'bottom-right',
+          {% if arguments is defined %}
+            {% if arguments['users'] | length > 0 %}
+              'user': "{{arguments['users'][0]}}",
+            {% endif %}
+            {% if arguments['packages'] | length > 0 %}
+              'package': "{{arguments['packages'][0]}}",
+            {% endif %}
+          {% elif response is defined %}
+            {% if response | length == 1 %}
+              {% if response[0]['usernames'] | length > 0 %}
+                'user': "{{response[0]['usernames'][0]}}",
+              {% endif %}
+              {% if response[0]['packages'] | length > 0 %}
+                'package': "{{response[0]['packages'][0]}}",
+              {% endif %}
+            {% endif %}
+          {% endif %}
+      });
+    </script>
+    {% endif %}
+
+
   </body>
 </html>
