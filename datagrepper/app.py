@@ -74,8 +74,16 @@ import datagrepper.widgets
 def inject_variable():
     """ Inject some global variables into all templates
     """
-    return {'models_version': get_distribution('datanommer.models').version,
-            'grepper_version': get_distribution('datagrepper').version}
+    extras = {
+        'models_version': get_distribution('datanommer.models').version,
+        'grepper_version': get_distribution('datagrepper').version,
+    }
+
+    if 'fedmenu_url' in fedmsg_config:
+        extras['fedmenu_url'] = fedmsg_config['fedmenu_url']
+        extras['fedmenu_data_url'] = fedmsg_config['fedmenu_data_url']
+
+    return extras
 
 
 def modify_rst(rst):
@@ -361,6 +369,7 @@ def raw():
                 "base.html",
                 size=size,
                 response=final_message_list,
+                arguments=arguments,
                 autoscroll=True,
             )
         else:
@@ -368,6 +377,7 @@ def raw():
                 "raw.html",
                 size=size,
                 response=final_message_list,
+                arguments=arguments,
             )
 
     else:
