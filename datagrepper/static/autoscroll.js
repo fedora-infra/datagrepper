@@ -21,7 +21,7 @@ $(document).ready(function(){
         if ($(window).scrollTop() + margin >= $(document).height() - $(window).height()){
             if (_request_in_progress) { return; }
             _request_in_progress = true;
-            $("#loader").show();
+            $("#loader").removeClass('hidden');
             var param = getUrlVars();
             _page = _page + 1;
             param.page = _page;
@@ -31,9 +31,16 @@ $(document).ready(function(){
                 data: $.param(param, traditional=true),
                 dataType: 'html',
                 success: function(html){
-                    $("#loader").hide();
-                    $("#message-container").append(html);
+
+                    $("#loader").addClass('hidden');
                     _request_in_progress = false;
+
+                    if (html.length == 0) {
+                        // Then this is the last page.  Stop.
+                        return;
+                    }
+
+                    $("#message-container").append(html);
                     autoscroll();
                 }
             });
