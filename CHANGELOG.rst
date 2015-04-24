@@ -1,6 +1,23 @@
 Changelog
 =========
 
+0.6.0
+-----
+
+- Log exceptions here. `1bc16dfc3 <https://github.com/fedora-infra/datagrepper/commit/1bc16dfc34b074f42778df2bdb481e2e3e84a351>`_
+- Remove dataquery stuff `b0ef34324 <https://github.com/fedora-infra/datagrepper/commit/b0ef34324bf643c755b7c5ac3630b8d0ffc7f0b8>`_
+- Merge pull request #158 from fedora-infra/feature/remove-dataquery `1f1b78afd <https://github.com/fedora-infra/datagrepper/commit/1f1b78afd311fbe9f97bde1f1a0912288337c760>`_
+- Fix squirrely odometer css. `eab9bed0a <https://github.com/fedora-infra/datagrepper/commit/eab9bed0ac16ab1ec4f111506f75b9c42e67f3d2>`_
+- Merge pull request #159 from fedora-infra/feature/squirrely-css `0aaa91b71 <https://github.com/fedora-infra/datagrepper/commit/0aaa91b71117bcac94a134b757bc454c4124329d>`_
+- The api changed here and we need to adapt. `c264ead90 <https://github.com/fedora-infra/datagrepper/commit/c264ead902f9a8f4c11bf880ac83a8e3ce068bfc>`_
+- Merge pull request #163 from fedora-infra/feature/api-changes `2a0a1f0d9 <https://github.com/fedora-infra/datagrepper/commit/2a0a1f0d92b1025bd832f9b7d38406ba01602a4f>`_
+- Don't show the loading widget on the single-message page. `72cb18a75 <https://github.com/fedora-infra/datagrepper/commit/72cb18a753cbe66781f9bfd04d2b868a63bd2535>`_
+- Show and hide the loading widget the way it was originally intended. `47d127aaf <https://github.com/fedora-infra/datagrepper/commit/47d127aaf3dfbeccc0b77a61967d74ff9d5594ee>`_
+- Stop the autoscroll chain once we reach the last page of data. `ac02b145b <https://github.com/fedora-infra/datagrepper/commit/ac02b145b83e59d2d32743ad4351aa77fd1d632f>`_
+- Add fedmenu. `a7a128bc2 <https://github.com/fedora-infra/datagrepper/commit/a7a128bc252e7e3437de83b1ffc2551f50ee82a8>`_
+- Merge pull request #164 from fedora-infra/feature/loading-widget `141f8f12c <https://github.com/fedora-infra/datagrepper/commit/141f8f12c0623814b787d6ae6e66322d7d896f27>`_
+- Merge pull request #165 from fedora-infra/feature/fedmenu `b253c5030 <https://github.com/fedora-infra/datagrepper/commit/b253c503000bb7a0f81776f596d62a50d980ea94>`_
+
 0.5.1
 -----
 
