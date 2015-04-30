@@ -8,7 +8,7 @@
     <meta name="author" content="Ralph Bean">
 
     <!-- Only allow websockets connections to fedoraproject.org. -->
-    <meta http-equiv="Content-Security-Policy" content="connect-src '*.fedoraproject.org'">
+    <meta http-equiv="Content-Security-Policy" content="connect-src https://*.fedoraproject.org wss://*.fedoraproject.org">
 
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
 
