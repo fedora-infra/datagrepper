@@ -1,5 +1,4 @@
-
-$(document).ready(function() {
+var setup_websocket = function(socket_url) {
     var pending_count = 0;
 
     function getUrlVars() {
@@ -25,8 +24,6 @@ $(document).ready(function() {
 
         if ("WebSocket" in window) {
             // Let us open a web socket
-            var socket_url = "wss://hub.fedoraproject.org:9939";
-            //var socket_url = "wss://209.132.181.16:9939";
             var ws = new WebSocket(socket_url);
             ws.onopen = function(e) {
                 // Web Socket is connected, send data using send()
@@ -70,4 +67,4 @@ $(document).ready(function() {
             });
         })
     }
-});
+};

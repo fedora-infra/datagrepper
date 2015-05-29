@@ -83,7 +83,14 @@
     <script src="{{ url_for('static', filename='jquery-2.1.0.min.js') }}"></script>
     {% if autoscroll %}
     <script src="{{ url_for('static', filename='autoscroll.js') }}"></script>
+    {% if websocket_address is defined %}
     <script src="{{ url_for('static', filename='live.js') }}"></script>
+    <script>
+      $(document).ready(function() {
+          setup_websocket("{{websocket_address}}");
+      });
+    </script>
+    {% endif %}
     {% endif %}
 
     {% if fedmenu_url is defined %}

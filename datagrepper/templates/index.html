@@ -101,6 +101,7 @@
         <span id="odometer" class="odometer centered visible-sm visible-md visible-lg">{{total}}</span>
       </div>
 
+      {% if websocket_address is defined %}
       <script>
           var count = {{total}};
           $(document).ready(function() {
@@ -112,7 +113,7 @@
             if ("WebSocket" in window)
             {
                 // Let us open a web socket
-                var ws = new WebSocket("wss://hub.fedoraproject.org:9939");
+                var ws = new WebSocket("{{ websocket_address }}");
                 ws.onopen = function(e)
                 {
                     // Web Socket is connected, send data using send()
@@ -128,6 +129,7 @@
             }
           }
       </script>
+      {% endif %}
       {% endif %}
 
       <div class="row marketing">
