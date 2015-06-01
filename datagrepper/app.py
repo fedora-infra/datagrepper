@@ -83,6 +83,9 @@ def inject_variable():
         extras['fedmenu_url'] = fedmsg_config['fedmenu_url']
         extras['fedmenu_data_url'] = fedmsg_config['fedmenu_data_url']
 
+    if 'websocket_address' in fedmsg_config:
+        extras['websocket_address'] = fedmsg_config['websocket_address']
+
     return extras
 
 
