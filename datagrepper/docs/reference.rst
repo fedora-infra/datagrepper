@@ -258,10 +258,3 @@ Formatting arguments
 ``is_raw``
   Checks whether the card is coming from /raw url or not. Must be one of either "true" or "false".
   If card is from /raw url then it will be "true" otherwise "false".
-
-/topics
--------
-
-Returns a list of all topics in the datanommer database. Takes no arguments.
-
-This is cached hourly, and it often takes a while to generate.

@@ -112,7 +112,7 @@ from oldest to newest.
 Only Bodhi messages (OR wiki)
 -----------------------------
 
-There is a `long list <http://fedmsg.com/en/latest/topics/>`_ of types of
+There is a `long list <http://fedora-fedmsg.rtfd.org/en/latest/topics.html>`_ of types of
 messages that come across the Fedora Infrastructure's message bus.
 You can limit the scope of your query to only one kind of message
 by specifying a ``category``::
@@ -192,7 +192,3 @@ Topics list
 If you don't know what topics are available for you to query, check the `list
 of topics in the documentation
 <https://fedora-fedmsg.readthedocs.org/en/latest/topics.html>`_.
-
-You can also use the ``/topics`` endpoint with no arguments::
-
-    $ http get {{URL}}topics/
