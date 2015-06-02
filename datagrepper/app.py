@@ -644,3 +644,16 @@ def not_found(error):
         status=404,
         mimetype='application/json',
     )
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return flask.Response(
+        response=fedmsg.encoding.dumps({
+            'error': 'internal_error',
+            'detail': str(error),
+            'traceback': traceback.format_exc(),
+        }),
+        status=500,
+        mimetype='application/json',
+    )
