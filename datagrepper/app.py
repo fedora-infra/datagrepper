@@ -599,6 +599,11 @@ def make_charts(chart_type):
                 )
                 values.append(count)
             tag = factor and " & ".join(factor) or "events"
+
+            # Truncate things to make charts prettier
+            if tag.startswith('org.fedoraproject.prod.'):
+                tag = tag[len('org.fedoraproject.prod.'):]
+
             chart.add(tag, values)
 
         chart.x_labels = labels
