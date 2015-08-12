@@ -18,7 +18,7 @@
         <p> {{dict['subtitle']}} </p>
         {% if dict.get('msg_id') %}
             <a href="{{url_for('msg_id')}}?id={{dict['msg_id']}}&is_raw=true&size=extra-large">
-                <span class="details-history">Details</span></a>
+                <span class="details-history">JSON</span></a>
         {% endif %}
         {% if 'is_raw' in dict %}
             <a href="#" onclick="history.go(-1)">Go Back</a>
