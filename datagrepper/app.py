@@ -194,6 +194,11 @@ def widget():
     return flask.render_template('index.html', docs=load_docs(flask.request))
 
 
+@app.route('/raw', methods=['POST'])
+def post_raw():
+    flask.abort(405)
+
+
 # Instant requests
 @app.route('/raw/')
 @app.route('/raw')
@@ -384,6 +389,12 @@ def raw():
         )
 
 
+@app.route('/id', methods=['POST'])
+def post_id():
+    flask.abort(405)
+
+
+# Instant requests
 # Get a message by msg_id
 @app.route('/id/')
 @app.route('/id')
@@ -463,6 +474,13 @@ def msg_id():
     else:
         flask.abort(404)
 
+
+@app.route('/charts/<chart_type', methods=['POST'])
+def post_charts(chart_type):
+    flask.abort(405)
+
+
+# Instant requests
 @app.route('/charts/<chart_type>/')
 @app.route('/charts/<chart_type>')
 def make_charts(chart_type):
@@ -633,6 +651,12 @@ def daterange(start, stop, steps):
         current += delta
 
 
+@app.route('/messagecount', methods=['POST'])
+def post_messagecount():
+    flask.abort(405)
+
+
+# Instant requests
 @app.route('/messagecount/')
 @app.route('/messagecount')
 def messagecount():
