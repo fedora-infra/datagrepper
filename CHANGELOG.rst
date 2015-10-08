@@ -1,4 +1,12 @@
 
+0.7.1
+-----
+
+Commits
+
+- fb52f6908 Typofix.
+  https://github.com/fedora-infra/datagrepper/commit/fb52f6908
+
 0.7.0
 -----
 
