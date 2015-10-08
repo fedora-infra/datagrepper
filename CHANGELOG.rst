@@ -1,3 +1,44 @@
+
+0.7.0
+-----
+
+Notably, the /topics endpoint (which never worked) has been removed in
+this release.
+
+
+Pull Requests
+
+- (@ralphbean)      #166, Be more explicit with Content-Security-Policy.
+  https://github.com/fedora-infra/datagrepper/pull/166
+- (@ralphbean)      #167, Make the websocket configurable.
+  https://github.com/fedora-infra/datagrepper/pull/167
+- (@ralphbean)      #168, Remove /topics endpoint
+  https://github.com/fedora-infra/datagrepper/pull/168
+- (@ralphbean)      #169, Return JSON with tracebacks for internal server errors.
+  https://github.com/fedora-infra/datagrepper/pull/169
+- (@ralphbean)      #170, Truncate charts to make things prettier.
+  https://github.com/fedora-infra/datagrepper/pull/170
+- (@ralphbean)      #174, JSON, not Details.
+  https://github.com/fedora-infra/datagrepper/pull/174
+- (@pypingou)       #176, Raise a 405 error upon POST queries
+  https://github.com/fedora-infra/datagrepper/pull/176
+
+Commits
+
+- 96e109bd9 Be more explicit with Content-Security-Policy.
+  https://github.com/fedora-infra/datagrepper/commit/96e109bd9
+- 41701ae80 Make the websocket configurable.
+  https://github.com/fedora-infra/datagrepper/commit/41701ae80
+- 5abbb8d40 Remove /topics endpoint
+  https://github.com/fedora-infra/datagrepper/commit/5abbb8d40
+- 0abb45e8f Return JSON with tracebacks for internal server errors.
+  https://github.com/fedora-infra/datagrepper/commit/0abb45e8f
+- 073e5493c Truncate charts to make things prettier.
+  https://github.com/fedora-infra/datagrepper/commit/073e5493c
+- df1ae1e69 JSON, not Details.
+  https://github.com/fedora-infra/datagrepper/commit/df1ae1e69
+- ccdac3445 Raise a 405 error upon POST queries
+  https://github.com/fedora-infra/datagrepper/commit/ccdac3445
 Changelog
 =========
 
