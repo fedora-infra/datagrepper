@@ -475,7 +475,7 @@ def msg_id():
         flask.abort(404)
 
 
-@app.route('/charts/<chart_type', methods=['POST'])
+@app.route('/charts/<chart_type>', methods=['POST'])
 def post_charts(chart_type):
     flask.abort(405)
 
