@@ -1,5 +1,5 @@
 {% for dict in response %}
-    <div class="message-card">
+    <tr><td class="raw-icons">
         {% if dict.get('link') %}
           {% if dict.get('icon') %}
           <a href={{dict['link']}}><img src= {{dict['icon']}}></a>
@@ -14,21 +14,24 @@
         {% if dict.get('secondary_icon') %}
         <img src={{dict['secondary_icon']}}></a>
         {% endif %}
-        <p><a href="{{url_for('raw')}}?topic={{dict['topic_link']}}"><b>{{dict['title']}}</b></a></p>
-        <p> {{dict['subtitle']}} </p>
+      </td>
+        <td class="raw-message">
+          <a href="{{url_for('raw')}}?topic={{dict['topic_link']}}"><b>{{dict['title']}}</b></a>
+          {{dict['subtitle']}}
         {% if dict.get('msg_id') %}
             <a href="{{url_for('msg_id')}}?id={{dict['msg_id']}}&is_raw=true&size=extra-large">
                 <span class="details-history">JSON</span></a>
         {% endif %}
+        </td>
         {% if 'is_raw' in dict %}
             <a href="#" onclick="history.go(-1)">Go Back</a>
         {% endif %}
-    <span class="datetime pull-right">
+    <td class="datetime pull-right">
         {{dict['date'].humanize()}}
         {% if size == 'large' %} - {{dict['date'].strftime('%Y-%m-%d %H:%M:%S')}}
         {% endif %}
-    </span>
-    </div>
+    </td>
+          </tr>
     {% if size == 'extra-large' %}
     {% autoescape false %}
 {{msg_string}}

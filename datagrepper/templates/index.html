@@ -34,30 +34,33 @@
     <link rel="apple-touch-icon-precomposed" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-57-precomposed.png">
     -->
     <link rel="shortcut icon" href="static/favicon.png">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,400italic,700italic,300italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.013/css/hack-extended.min.css">
     <!-- Odometr includes -->
     <link rel="stylesheet" href="static/css/odometer.css" />
-    <script src="static/jquery-2.1.0.min.js"></script>
     <script src="static/odometer.js"></script>
   </head>
 
   <body>
 
-    <div class="container-narrow">
-
-      <div class="masthead">
-        <ul class="nav nav-pills pull-right">
-          <li{% if request.endpoint == 'index' %} class="active"{% endif %}><a href="{{ url_for('index') }}">Getting started</a></li>
-          <li><a href="{{ url_for('raw') }}">Feed</a></li>
-          <!-- <li{% if request.endpoint == 'charts' %} class="active"{% endif %}><a href="{{ url_for('charts') }}">Charts</a></li> -->
-          <li{% if request.endpoint == 'reference' %} class="active"{% endif %}><a href="{{ url_for('reference') }}">Reference</a></li>
-          <li{% if request.endpoint == 'widget' %} class="active"{% endif %}><a href="{{ url_for('widget') }}">Embedding</a></li>
-          <li><a href="https://github.com/fedora-infra/datagrepper">Source</a></li>
-          <li><a href="https://github.com/fedora-infra/datagrepper/issues">Issues</a></li>
-        </ul>
-        <h3 class="muted">datagrepper</h3>
-      </div>
-
-      <hr>
+                <div class="masthead">
+                        <div class="container-narrow"><img src="static/datagrepper.png" height=40px /></div>
+                </div>
+                <nav class="navbar navbar-light navbar-underline p-t-0 p-b-0">
+                <div class="container-narrow">
+                        <ul class="nav navbar-nav nav-justified nav-underline">
+                            <li{% if request.endpoint == 'index' %} class="active nav-item"{% else %} class="nav-item" {% endif %}><a class="nav-link" href="{{ url_for('index') }}">Getting&nbsp;started</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('raw') }}">Feed</a></li>
+                            <!-- <li{% if request.endpoint == 'charts' %} class="active"{% endif %}><a href="{{ url_for('charts') }}">Charts</a></li> -->
+                            <li{% if request.endpoint == 'reference' %} class="active nav-item" {% else %} class="nav-item" {% endif %}><a class="nav-link" href="{{ url_for('reference') }}">Reference</a></li>
+                            <li{% if request.endpoint == 'widget' %} class="active nav-item" {% else %} class="nav-item" {% endif %}><a class="nav-link" href="{{ url_for('widget') }}">Embedding</a></li>
+                            <li class="nav-item"><a class="nav-link" href="https://github.com/fedora-infra/datagrepper">Source</a></li>
+                            <li class="nav-item"><a class="nav-link" href="https://github.com/fedora-infra/datagrepper/issues">Issues</a></li>
+                        </ul>
+                </div>
+                </nav>
+                <div class="bodycontent p-t-lg p-b-lg">
+                <div class="container-narrow">
 
       {% if request.endpoint == 'index' %}
       <div class="page-header">
@@ -105,14 +108,10 @@
           {{ docs }}
         </div>
       </div>
-
-      <hr>
-
-      <div class="footer">
-      </div>
-
-    <div id="footer">
-        <div class="container">
+</div>
+</div>
+    <div class="footer p-t p-b text-center">
+        <div class="container-narrow">
             <p class="text-muted credit">
             Datagrepper is Powered by <a href="http://fedmsg.com">fedmsg</a>. The
             <a href="https://github.com/fedora-infra/datagrepper">source</a>
@@ -126,6 +125,8 @@
             </p>
         </div>
     </div>
-    </div> <!-- /container -->
+
+    <script src="static/jquery-2.1.0.min.js"></script>
+    <script src="https://ryanlerch.fedorapeople.org/fedora-bootstrap/fedora-bootstrap.min.js"></script>
 </body></html>
 {# vim: set ts=2 sw=2 sta et syn=htmldjango: #}
