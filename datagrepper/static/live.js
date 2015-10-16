@@ -33,7 +33,7 @@ var setup_websocket = function(socket_url) {
             ws.onmessage = function (evt) {
                 pending_count = pending_count + 1;
                 $("#messages-pending").html(pending_count + " new messages. Click to Show")
-                $("#messages-pending").removeClass('hidden');
+                $("#messages-pending").show();
             };
             ws.onclose = function(e){ws=null;};
             ws.onerror = function(e){ws=null;WebSocketSetup(attempts + 1);};
@@ -54,7 +54,7 @@ var setup_websocket = function(socket_url) {
             params['rows_per_page'] = pending_count;
             params = $.param(params, traditional=true);
             pending_count = 0;
-            $("#messages-pending").addClass('hidden');
+            $("#messages-pending").hide();
             $.ajax({
                 url: window.location.pathname,
                 dataType: 'html',
