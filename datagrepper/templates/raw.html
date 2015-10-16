@@ -22,19 +22,15 @@
             <a href="{{url_for('msg_id')}}?id={{dict['msg_id']}}&is_raw=true&size=extra-large">
                 <span class="details-history">JSON</span></a>
         {% endif %}
-        </td>
         {% if 'is_raw' in dict %}
             <a href="#" onclick="history.go(-1)">Go Back</a>
         {% endif %}
+        </td>
+
     <td class="datetime">
         {{dict['date'].humanize()}}
         {% if size == 'large' %} - {{dict['date'].strftime('%Y-%m-%d %H:%M:%S')}}
         {% endif %}
     </td>
           </tr>
-    {% if size == 'extra-large' %}
-    {% autoescape false %}
-{{msg_string}}
-    {% endautoescape %}
-    {% endif %}
 {% endfor %}

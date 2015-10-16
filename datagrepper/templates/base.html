@@ -72,6 +72,11 @@
           <table class="table table-sm" id="message-container">
             {% include 'raw.html' %}
           </table>
+              {% if size == 'extra-large' %}
+                {% autoescape false %}
+                  {{msg_string}}
+                {% endautoescape %}
+              {% endif %}
         </div>
 
         {% if response | length > 1 %}
