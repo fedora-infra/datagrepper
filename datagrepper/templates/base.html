@@ -11,12 +11,12 @@
     <meta http-equiv="Content-Security-Policy" content="connect-src https://*.fedoraproject.org wss://*.fedoraproject.org">
 
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
-
+    <link rel="stylesheet" href="static/css/fedora-bootstrap-fonts.css">
 
     <title>Datagrepper</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="https://apps.fedoraproject.org/global/fedora-bootstrap-1.0/fedora-bootstrap.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/raw.css') }}" rel="stylesheet">
     <style type="text/css">
       div {
@@ -26,60 +26,88 @@
   </head>
 
   <body>
-    <div class="container">
 
-      <div class="page-header row">
-        <div class="col-md-6">
-          {% if heading %}
-          <h1>{{heading}}</h1>
-          {% else %}
-          <h1>fedmsg <small>messages</small></h1>
-          {% endif %}
-          <p>See <a href="{{ url_for('index') }}">the documentation</a> for information on how to construct queries.</p>
-        </div>
-        <div class="col-md-4 col-md-offset-1 hidden">
-          <div class="panel panel-default">
-            <div class="panel-body text-center">
-              <span id="messages-pending"></span> Click to show.
+    <div class="masthead">
+      <div class="container">
+        <img src="static/datagrepper.png" height=40px />
+      </div>
+    </div>
+
+    <nav class="navbar navbar-light navbar-underline p-t-0 p-b-0">
+      <div class="container-narrow">
+        <ul class="nav navbar-nav nav-justified nav-underline">
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Getting&nbsp;started</a></li>
+            <li class="nav-item active"><a class="nav-link" href="{{ url_for('raw') }}">Feed</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('reference') }}">Reference</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('widget') }}">Embedding</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://github.com/fedora-infra/datagrepper">Source</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://github.com/fedora-infra/datagrepper/issues">Issues</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="bodycontent p-t-lg">
+      <div class="container">
+        <div class="page-header row">
+          <div class="col-md-6">
+            {% if heading %}
+            <h1>{{heading}}</h1>
+            {% else %}
+            <h1>fedmsg <small>messages</small></h1>
+            {% endif %}
+            <p>See <a href="{{ url_for('index') }}">the documentation</a> for information on how to construct queries.</p>
+          </div>
+          <div class="col-md-4 col-md-offset-1 hidden">
+            <div class="panel panel-default">
+              <div class="panel-body text-center">
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="row">
-        <div id="message-container" class="col-md-12">
-          {% include 'raw.html' %}
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3 m-b">
+            <span id="messages-pending" class="btn btn-secondary btn-block hidden" role="button"></span>
+          </div>
+          <table class="table table-sm" id="message-container">
+            {% include 'raw.html' %}
+          </table>
+              {% if size == 'extra-large' %}
+                {% autoescape false %}
+                  {{msg_string}}
+                {% endautoescape %}
+              {% endif %}
         </div>
-      </div>
 
-      {% if response | length > 1 %}
-      <div id="loader" class="row hidden">
-        <div class="col-md-4 col-md-offset-4">
-          <div class="panel panel-default">
-            <div class="panel-body text-center">
-                Loading... please wait.
+        {% if response | length > 1 %}
+        <div id="loader" class="row">
+          <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+              <div class="panel-body text-center">
+                  Loading... please wait.
+              </div>
             </div>
           </div>
         </div>
+        {% endif %}
       </div>
-      {% endif %}
+    </div>
 
-    <div id="footer">
-        <div class="container">
-            <p class="text-muted credit">
-            Datagrepper is Powered by <a href="http://fedmsg.com">fedmsg</a>. The
-            <a href="https://github.com/fedora-infra/datagrepper">source</a>
-            and
-            <a href="https://github.com/fedora-infra/datagrepper/issues">issue tracker</a>
-            are available on github.
-            </p>
-            <p class="text-muted">
-            Running <code>datagrepper-{{grepper_version}}</code>,
-            <code>datanommer.models-{{models_version}}</code>
-            </p>
-        </div>
+    <div class="footer p-t p-b text-center">
+      <div class="container">
+        <p class="text-muted credit">
+          Datagrepper is Powered by <a href="http://fedmsg.com">fedmsg</a>. The
+          <a href="https://github.com/fedora-infra/datagrepper">source</a>
+          and
+          <a href="https://github.com/fedora-infra/datagrepper/issues">issue tracker</a>
+          are available on github.
+        </p>
+        <p class="text-muted">
+          Running <code>datagrepper-{{grepper_version}}</code>,
+          <code>datanommer.models-{{models_version}}</code>
+          </p>
+      </div>
     </div>
-    </div>
+
     <script src="{{ url_for('static', filename='jquery-2.1.0.min.js') }}"></script>
     {% if autoscroll %}
     <script src="{{ url_for('static', filename='autoscroll.js') }}"></script>
@@ -92,7 +120,9 @@
     </script>
     {% endif %}
     {% endif %}
-
+    <script>
+      $("#messages-pending").hide();
+    </script>
     {% if fedmenu_url is defined %}
     <script src="{{fedmenu_url}}/js/fedora-libravatar.js"></script>
     <script src="{{fedmenu_url}}/js/fedmenu.js"></script>
@@ -121,7 +151,5 @@
       });
     </script>
     {% endif %}
-
-
   </body>
 </html>

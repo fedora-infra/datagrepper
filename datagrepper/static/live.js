@@ -32,8 +32,8 @@ var setup_websocket = function(socket_url) {
             };
             ws.onmessage = function (evt) {
                 pending_count = pending_count + 1;
-                $("#messages-pending").html(pending_count + " new messages.")
-                $("#messages-pending").parent().parent().parent().removeClass('hidden');
+                $("#messages-pending").html(pending_count + " new messages. Click to Show")
+                $("#messages-pending").show();
             };
             ws.onclose = function(e){ws=null;};
             ws.onerror = function(e){ws=null;WebSocketSetup(attempts + 1);};
@@ -48,13 +48,13 @@ var setup_websocket = function(socket_url) {
     if (window.location.search == "") {
         WebSocketSetup(1);
 
-        $("#messages-pending").parent().click(function(evt) {
+        $("#messages-pending").click(function(evt) {
             var params = getUrlVars();
             params['chrome'] = 'false';
             params['rows_per_page'] = pending_count;
             params = $.param(params, traditional=true);
             pending_count = 0;
-            $("#messages-pending").parent().parent().parent().addClass('hidden');
+            $("#messages-pending").hide();
             $.ajax({
                 url: window.location.pathname,
                 dataType: 'html',
