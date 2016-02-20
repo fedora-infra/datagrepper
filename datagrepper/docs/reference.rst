@@ -1,7 +1,7 @@
 General API notes
 -----------------
 
-All API calls (currently) permit GET and POST requests with the same arguments.
+All API calls (currently) permit only GET requests.
 
 A trailing slash is optional on all API endpoints. There is no difference
 between using one and not using one.
