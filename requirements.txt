@@ -1,7 +1,9 @@
 arrow
-Flask
 datanommer.models>=0.6.0
-fedmsg>=0.10.0
 docutils
+fedmsg>=0.10.0
 fedmsg_meta_fedora_infrastructure
+Flask
+moksha.common
 pygal
+pygments
