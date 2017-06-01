@@ -126,7 +126,9 @@ def preload_docs(endpoint):
     """ Utility to load an RST file and turn it into fancy HTML. """
 
     here = os.path.dirname(os.path.abspath(__file__))
-    fname = os.path.join(here, 'docs', endpoint + '.rst')
+    default = os.path.join(here, 'docs')
+    directory = app.config.get('DATAGREPPER_DOC_PATH', default)
+    fname = os.path.join(directory, endpoint + '.rst')
     with codecs.open(fname, 'r', 'utf-8') as f:
         rst = f.read()
 
