@@ -79,6 +79,10 @@ def inject_variable():
     if 'websocket_address' in fedmsg_config:
         extras['websocket_address'] = fedmsg_config['websocket_address']
 
+    # Only allow websockets connections to fedoraproject.org, for instance
+    if 'content_security_policy' in fedmsg_config:
+        extras['content_security_policy'] = fedmsg_config['content_security_policy']
+
     return extras
 
 

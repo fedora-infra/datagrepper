@@ -16,4 +16,6 @@ config = {
     #'fedmenu_data_url': 'http://threebean.org/fedmenu/dev-data.js',
 
     #'websocket_address': 'wss://hub.fedoraproject.org:9939',
+
+    #'content_security_policy': 'connect-src https://*.fedoraproject.org wss://*.fedoraproject.org'
 }

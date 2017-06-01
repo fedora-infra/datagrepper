@@ -7,8 +7,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <!-- Only allow websockets connections to fedoraproject.org. -->
-    <meta http-equiv="Content-Security-Policy" content="connect-src https://*.fedoraproject.org wss://*.fedoraproject.org">
+    {% if content_security_policy is defined %}
+    <meta http-equiv="Content-Security-Policy" content="{{ content_security_policy }}">
+    {% endif %}
 
     <!-- Le styles -->
     <link href="https://apps.fedoraproject.org/global/fedora-bootstrap-1.0/fedora-bootstrap.min.css" rel="stylesheet">
