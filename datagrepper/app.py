@@ -344,7 +344,7 @@ def raw():
         # convert string into python dictionary
         obj = json.loads(body)
         # extract the messages
-        raw_message_list = obj["raw_messages"]
+        raw_message_list = obj.get("raw_messages", [])
 
         final_message_list = []
 
