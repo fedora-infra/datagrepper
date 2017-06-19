@@ -72,6 +72,16 @@ def inject_variable():
         'grepper_version': get_distribution('datagrepper').version,
     }
 
+    style = {
+        'message_bus_link': 'http://fedmsg.com',
+        'message_bus_shortname': 'fedmsg',
+        'message_bus_longname': 'fedmsg bus',
+        'theme_css_url': 'https://apps.fedoraproject.org/global/fedora-bootstrap-1.0/fedora-bootstrap.min.css',
+        'datagrepper_logo': 'static/datagrepper.png',
+    }
+    for key, default in style.items():
+        extras[key] = fedmsg_config.get(key, default)
+
     if 'fedmenu_url' in fedmsg_config:
         extras['fedmenu_url'] = fedmsg_config['fedmenu_url']
         extras['fedmenu_data_url'] = fedmsg_config['fedmenu_data_url']

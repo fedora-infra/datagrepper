@@ -17,7 +17,7 @@
     <title>Datagrepper</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="https://apps.fedoraproject.org/global/fedora-bootstrap-1.0/fedora-bootstrap.min.css" rel="stylesheet">
+    <link href="{{theme_css_url}}" rel="stylesheet"> -->
     <link href="{{ url_for('static', filename='css/raw.css') }}" rel="stylesheet">
     <style type="text/css">
       div {
@@ -30,7 +30,7 @@
 
     <div class="masthead">
       <div class="container">
-        <img src="static/datagrepper.png" height=40px />
+        <img src="{{datagrepper_logo}}" height=40px />
       </div>
     </div>
 
@@ -53,7 +53,7 @@
             {% if heading %}
             <h1>{{heading}}</h1>
             {% else %}
-            <h1>fedmsg <small>messages</small></h1>
+            <h1>{{message_bus_shortname}} <small>messages</small></h1>
             {% endif %}
             <p>See <a href="{{ url_for('index') }}">the documentation</a> for information on how to construct queries.</p>
           </div>
@@ -96,7 +96,7 @@
     <div class="footer p-t p-b text-center">
       <div class="container">
         <p class="text-muted credit">
-          Datagrepper is Powered by <a href="http://fedmsg.com">fedmsg</a>. The
+          Datagrepper is Powered by <a href="{{message_bus_docs}}">{{message_bus_shortname}}</a>. The
           <a href="https://github.com/fedora-infra/datagrepper">source</a>
           and
           <a href="https://github.com/fedora-infra/datagrepper/issues">issue tracker</a>

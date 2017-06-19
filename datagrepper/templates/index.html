@@ -12,7 +12,7 @@
     {% endif %}
 
     <!-- Le styles -->
-    <link href="https://apps.fedoraproject.org/global/fedora-bootstrap-1.0/fedora-bootstrap.min.css" rel="stylesheet">
+    <link href="{{theme_css_url}}" rel="stylesheet"> -->
     <style type="text/css">
       .odometer {
         font-size: 70px;
@@ -44,7 +44,7 @@
   <body>
 
                 <div class="masthead">
-                        <div class="container-narrow"><img src="static/datagrepper.png" height=40px /></div>
+                  <div class="container-narrow"><img src="{{datagrepper_logo}}" height=40px /></div>
                 </div>
                 <nav class="navbar navbar-light navbar-underline p-t-0 p-b-0">
                 <div class="container-narrow">
@@ -64,10 +64,10 @@
 
       {% if request.endpoint == 'index' %}
       <div class="page-header">
-        <h1>JSON fedmsg API</h1>
+        <h1>JSON {{message_bus_shortname}} API</h1>
         <p class="lead">Using HTTP GET requests, you can query for all
-        kinds of historical data from the <a href="http://fedmsg.com">
-        fedmsg bus</a>:  events by username, by package, by message
+        kinds of historical data from the <a href="{{message_bus_docs}}">
+        {{message_bus_longname}}</a>: events by username, by package, by message
         source, by topic&hellip; you name it.</p>
         <span id="odometer" class="odometer centered visible-sm visible-md visible-lg">{{total}}</span>
       </div>
@@ -113,7 +113,7 @@
     <div class="footer p-t p-b text-center">
         <div class="container-narrow">
             <p class="text-muted credit">
-            Datagrepper is Powered by <a href="http://fedmsg.com">fedmsg</a>. The
+            Datagrepper is Powered by <a href="{{message_bus_docs}}">{{message_bus_shortname}}</a>. The
             <a href="https://github.com/fedora-infra/datagrepper">source</a>
             and
             <a href="https://github.com/fedora-infra/datagrepper/issues">issue tracker</a>
