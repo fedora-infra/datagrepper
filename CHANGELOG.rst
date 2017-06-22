@@ -1,4 +1,73 @@
 
+0.8.0
+-----
+
+Pull Requests
+
+- (@ryanlerch)      #177, Update to new Fedora Bootstrap
+  https://github.com/fedora-infra/datagrepper/pull/177
+- (@cydrobolt)      #180, POST requests are not allowed
+  https://github.com/fedora-infra/datagrepper/pull/180
+- (@jeremycline)    #184, Update requirements.txt for current dependencies
+  https://github.com/fedora-infra/datagrepper/pull/184
+- (@rowright)       #187, added UTC to the raw page
+  https://github.com/fedora-infra/datagrepper/pull/187
+- (@ralphbean)      #188, When people click on the feed, send them to a more gentle query.
+  https://github.com/fedora-infra/datagrepper/pull/188
+- (@ralphbean)      #193, Make the docs path configurable.
+  https://github.com/fedora-infra/datagrepper/pull/193
+- (@ralphbean)      #192, Make the Content-Security-Policy configurable.
+  https://github.com/fedora-infra/datagrepper/pull/192
+- (@ralphbean)      #191, Be nice in case there's a 500 error in flight.
+  https://github.com/fedora-infra/datagrepper/pull/191
+- (@ralphbean)      #194, Remove an unused link.
+  https://github.com/fedora-infra/datagrepper/pull/194
+- (@ralphbean)      #195, Make some aspects of the datagrepper UI themeable.
+  https://github.com/fedora-infra/datagrepper/pull/195
+
+Commits
+
+- 2015443af swapped over to use fedorabootstrap 1.0
+  https://github.com/fedora-infra/datagrepper/commit/2015443af
+- 2d8238ac2 ad images and change templates to work with the new fedorabootstrap
+  https://github.com/fedora-infra/datagrepper/commit/2d8238ac2
+- f1a05c27e removed pull-right class to stop gap appearing
+  https://github.com/fedora-infra/datagrepper/commit/f1a05c27e
+- 35e53eef5 added font imports to feed page
+  https://github.com/fedora-infra/datagrepper/commit/35e53eef5
+- 70c64e6e4 made the rows on the feed page thinner
+  https://github.com/fedora-infra/datagrepper/commit/70c64e6e4
+- 8339f4069 fixed the messages pending button at top of page
+  https://github.com/fedora-infra/datagrepper/commit/8339f4069
+- 46313f88c make pending msg button hidden on load
+  https://github.com/fedora-infra/datagrepper/commit/46313f88c
+- 36ec89049 made pending msg button hide properly and fix autoscroll
+  https://github.com/fedora-infra/datagrepper/commit/36ec89049
+- d5caf0131 made the json appear at the bottom again on the raw display
+  https://github.com/fedora-infra/datagrepper/commit/d5caf0131
+- 855fd11ea removed old fonts
+  https://github.com/fedora-infra/datagrepper/commit/855fd11ea
+- 955be6080 added new fonts instead of using external cdn
+  https://github.com/fedora-infra/datagrepper/commit/955be6080
+- b021034e7 POST requests are not allowed
+  https://github.com/fedora-infra/datagrepper/commit/b021034e7
+- 5d2eaa529 Update requirements.txt for current dependencies
+  https://github.com/fedora-infra/datagrepper/commit/5d2eaa529
+- 8ffcca4f4 added UTC to the raw page
+  https://github.com/fedora-infra/datagrepper/commit/8ffcca4f4
+- 2f8911ab3 When people click on the feed, send them to a more gentle query.
+  https://github.com/fedora-infra/datagrepper/commit/2f8911ab3
+- 6ddf3e9e9 Be nice in case there's a 500 error in flight.
+  https://github.com/fedora-infra/datagrepper/commit/6ddf3e9e9
+- 09afabfbf Make the Content-Security-Policy configurable.
+  https://github.com/fedora-infra/datagrepper/commit/09afabfbf
+- 829db4bef Make the docs path configurable.
+  https://github.com/fedora-infra/datagrepper/commit/829db4bef
+- 587b64c94 Remove an unused link.
+  https://github.com/fedora-infra/datagrepper/commit/587b64c94
+- ce866f3de Make some aspects of the datagrepper UI themeable.
+  https://github.com/fedora-infra/datagrepper/commit/ce866f3de
+
 0.7.1
 -----
 
