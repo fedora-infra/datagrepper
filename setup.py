@@ -35,7 +35,7 @@ def get_requires(filename="requirements.txt"):
 setup(
     name='datagrepper',
     description='A webapp to query fedmsg history',
-    version='0.7.1',
+    version='0.8.0',
     author='Ian Weller and Ralph Bean',
     author_email='ianweller@fedoraproject.org, ralph@fedoraproject.org',
     license='GPLv2+',
