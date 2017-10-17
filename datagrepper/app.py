@@ -296,6 +296,10 @@ def raw():
         raise flask.BadRequest('When using contains, specify a start at most '
                                'eight months into the past')
 
+    if contains and not (category or topic):
+        raise flask.BadRequest('When using contains, specify either a topic or'
+                               ' a category as well')
+
     try:
         # This fancy classmethod does all of our search for us.
         total, pages, messages = dm.Message.grep(
