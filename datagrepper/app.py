@@ -292,6 +292,10 @@ def raw():
     if chrome not in ['true', 'false']:
         raise ValueError("chrome should be either 'true' or 'false'")
 
+    if contains and start < (datetime.utcnow() - timedelta(weeks=4*8)):
+        raise flask.BadRequest('When using contains, specify a start at most '
+                               'eight months into the past')
+
     try:
         # This fancy classmethod does all of our search for us.
         total, pages, messages = dm.Message.grep(
