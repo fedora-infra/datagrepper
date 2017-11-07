@@ -1,38 +1,32 @@
 .. |crarr| unicode:: U+021B5 .. DOWNWARDS ARROW WITH CORNER LEFTWARDS
 
-Prerequisites
--------------
+Pre-requisites
+--------------
 
-If you've never interacted with a JSON API before, you should check out
-the handy command-line tool `HTTPie
-<https://github.com/jkbr/httpie#httpie-a-cli-curl-like-tool-for-humans>`_.
-All our examples here will use it.  To install it on Fedora run ``$ sudo
-yum -y install httpie``.
+datagrepper interacts with a JSON API with a tool called HTTPie_. All examples
+here use it. Use this command to install it on Fedora::
 
-If you get stuck here, feel free to drop into the ``#fedora-apps``
-channel on `freenode <http://fedoraproject.org/wiki/How_to_use_IRC>`_ to
-ask questions or even just to give us a high five if everything goes well.
+   sudo dnf install httpie
+
 
 Requesting all messages in the last 2 days
 ------------------------------------------
 
-datagrepper takes all time arguments in `seconds`, so we'll need to
-convert 2 days to 172800 seconds first.  Then we can use `HTTPie
-<https://github.com/jkbr/httpie#httpie-a-cli-curl-like-tool-for-humans>`_
-like this::
+datagrepper takes time arguments in `seconds`. So, we need to convert two days
+to 172,800 seconds first. Then, we can use HTTPie_ to get the JSON payload::
 
-    $ http get {{URL}}raw delta==172800
+   http get {{URL}}raw delta==172800
+
 
 Paging results
 --------------
 
-You're going to get a large JSON response that's too big to read
-through.  Try limiting the number of results to make it more
-digestable::
+The previous example is a large JSON response that's too big to read through.
+Limit the number of results to make it more digestable::
 
-    $ http get {{URL}}raw \
-        delta==172800 \
-        rows_per_page==1
+   http get {{URL}}raw \
+      delta==172800 \
+      rows_per_page==1
 
 .. code-block:: javascript
 
@@ -61,20 +55,22 @@ digestable::
         "total": 2052
     }
 
-In the above output, the contents of ``raw_messages`` has been omitted for
-readability.  Notice a few things: first, the ``arguments`` dict describes
-all the parameters that datagrepper used to execute your query.  The
-``start`` and ``end`` timestamps are included (they were derived from
-the ``delta`` that you supplied). 
+In this example, ``raw_messages`` was omitted for readability.
 
-Your ``rows_per_page`` is there.  It has a sibling value ``page`` which
-is a pointer to which "page" of data you are on.  You could issue the
-following query to get the next one::
+Notice a few things.
 
-    $ http get {{URL}}raw \
-        delta==172800 \
-        rows_per_page==1 \
-        page==2
+#. **``arguments`` dict**: Describes all parameters datagrepper uses to execute
+   query
+#. **Timestamps**: ``start`` and ``end`` included (derived from your ``delta``)
+#. **Pagination**: ``rows_per_page`` shows the rows per page, its sibling value
+   ``page`` is pointer to "page" of data you are on
+
+Use this command to get to the next page::
+
+   http get {{URL}}raw \
+      delta==172800 \
+      rows_per_page==1 \
+      page==2
 
 .. code-block:: javascript
 
@@ -103,92 +99,100 @@ following query to get the next one::
         "total": 2052
     }
 
+The number of rows are retrieved from newest to oldest ("descending"). The
+``order`` argument lets you specify that. The default is ``desc``, but you can
+set it to ``asc`` for ascending order (i.e. oldest to newest).
 
-By default, the order of rows retrieved is from newest to oldest ("descending")
-There is an ``order`` argument you can specify to set that how you like.  The
-default is "desc", but you can set it to "asc" for ascending order, a.k.a.
-from oldest to newest.
 
 Only Bodhi messages (OR wiki)
 -----------------------------
 
-There is a `long list <http://fedora-fedmsg.rtfd.org/en/latest/topics.html>`_ of types of
-messages that come across the Fedora Infrastructure's message bus.
-You can limit the scope of your query to only one kind of message
-by specifying a ``category``::
+There is a `list of topics`_ that come across Fedora's messaging bus
+(**fedmsg**). Specify a ``category`` to limit your message to one kind of
+topic::
 
-    $ http get {{URL}}raw \
-        delta==172800 \
-        category==bodhi
+   http get {{URL}}raw \
+      delta==172800 \
+      category==bodhi
 
-Note that, in this example, ``category`` is singular but it comes back in
-the ``arguments`` dict as *categories* (plural!)  You can specify more
-than one category and messages that match *either* category will be returned.
-They are **OR**'d together::
+Here, ``category`` is singular but comes back in the ``arguments`` dict as
+*categories* (plural)! You can specify multiple categories and messages that
+match *either* category will return. They are ``OR``'d together::
 
-    $ http get {{URL}}raw \
-        delta==172800 \
-        category==bodhi \
-        category==wiki
+   http get {{URL}}raw \
+      delta==172800 \
+      category==bodhi \
+      category==wiki
 
-Messages for a particular users and packages
---------------------------------------------
+Messages for specific users and packages
+----------------------------------------
 
-Just like categories, you can search for events relating to one or multiple
-users::
+Search for events relating to multiple users with this query::
 
-    $ http get {{URL}}raw \
-        delta==172800 \
-        user==toshio \
-        user==pingou
+   http get {{URL}}raw \
+      delta==172800 \
+      user==toshio \
+      user==pingou
 
-Same goes for packages::
+Same for packages::
 
-    $ http get {{URL}}raw \
-        delta==172800 \
-        package==nethack
+   http get {{URL}}raw \
+      delta==172800 \
+      package==nethack
 
-Everything but the...
----------------------
 
-There are corresponding *negative filters* for each of the above mentioned
-positive filters.  For instance, if you wanted to get all messages **except for
-Koji messages**, you could use this query::
+Excluding data
+--------------
 
-    $ http get {{URL}}raw \
-        delta==172800 \
-        not_category==buildsys
+For each positive filter, there is a corresponding *negative filter*. If you
+want to query all messages **except for Koji messages**, use this query::
 
-You can combine positive and negative filters as you might expect to, for
-instance, get all messages relating to the user toshio **except** for Ask
-Fedora activity::
+   http get {{URL}}raw \
+      delta==172800 \
+      not_category==buildsys
 
-    $ http get {{URL}}raw \
-        delta==172800 \
-        user==toshio \
-        not_category==askbot
+Positive and negative filters are combinable. This query returns all messages
+except for user ``toshio``'s *Ask Fedora* activity::
+
+   http get {{URL}}raw \
+      delta==172800 \
+      user==toshio \
+      not_category==askbot
+
 
 Putting it all together (CNF)
 -----------------------------
 
-If you specify multiple ``category`` filters and multiple ``user`` filters
-and multiple ``package`` filters, they are merged together in a way that looks
-like `Conjunctive Normal Form (CNF)
-<http://en.wikipedia.org/wiki/Conjunctive_normal_form>`_.
+Multiple ``category``, ``user``, and ``package`` filters are merged together in
+a way that looks like `Conjunctive Normal Form`_ (CNF).
 
-For example, this query will return all messages from the past 2 days where
+The following query returns all messages from the past two days where
 *(category==bodhi OR category==wiki) AND (user==toshio OR user==pingou)*::
 
-    $ http get {{URL}}raw \
-        delta==172800 \
-        category==bodhi \
-        category==wiki \
-        user==toshio \
-        user==pingou
+   http get {{URL}}raw \
+      delta==172800 \
+      category==bodhi \
+      category==wiki \
+      user==toshio \
+      user==pingou
+
 
 Topics list
 -----------
 
 If you don't know what topics are available for you to query, check the `list
-of topics in the documentation
-<https://fedora-fedmsg.readthedocs.org/en/latest/topics.html>`_.
+of topics`_ in the documentation.
+
+
+Get help
+--------
+
+If you get stuck, join ``#fedora-apps`` on freenode_ to ask questions. Or, if
+everything is awesome, we welcome high-fives and karma cookies.
+
+
+.. _`HTTPie`: https://github.com/jkbr/httpie#httpie-a-cli-curl-like-tool-for-humans
+.. _`list of topics`: http://fedmsg.com/en/latest/topics.html
+.. _`Conjunctive Normal Form`: https://wikipedia.org/wiki/Conjunctive_normal_form
+.. _`freenode`: https://fedoraproject.org/wiki/How_to_use_IRC
+

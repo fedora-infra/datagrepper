@@ -7,3 +7,6 @@
 dist
 build
 *.egg
+
+# Sphinx built documentation (for testing docs generation)
+datagrepper/docs/_build/
