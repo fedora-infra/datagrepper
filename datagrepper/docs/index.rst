@@ -3,8 +3,9 @@
 Pre-requisites
 --------------
 
-datagrepper interacts with a JSON API with a tool called HTTPie_. All examples
-here use it. Use this command to install it on Fedora::
+As an alternative to cURL, HTTPie_ is a tool you can use to interact with a JSON
+API, like datagrepper. All examples in this guide use HTTPie. Use this command
+to install it on Fedora::
 
    sudo dnf install httpie
 
@@ -24,9 +25,7 @@ Paging results
 The previous example is a large JSON response that's too big to read through.
 Limit the number of results to make it more digestable::
 
-   http get {{URL}}raw \
-      delta==172800 \
-      rows_per_page==1
+   http get {{URL}}raw delta==172800 rows_per_page==1
 
 .. code-block:: javascript
 
