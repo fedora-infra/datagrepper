@@ -23,6 +23,7 @@ import docutils.examples
 import jinja2
 import markupsafe
 import os
+import re
 import traceback
 
 import arrow
@@ -52,6 +53,8 @@ from pkg_resources import get_distribution
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
 app.config.from_envvar('DATAGREPPER_CONFIG')
+app.config['CORS_DOMAINS'] = map(re.compile, app.config.get('CORS_DOMAINS', []))
+app.config['CORS_HEADERS'] = map(re.compile, app.config.get('CORS_HEADERS', []))
 
 # Read in the datanommer DB URL from /etc/fedmsg.d/ (or a local fedmsg.d/)
 fedmsg_config = fedmsg.config.load_config()
@@ -94,6 +97,44 @@ def inject_variable():
         extras['content_security_policy'] = fedmsg_config['content_security_policy']
 
     return extras
+
+
+def match_regex_list(val, regexes):
+    for regex in regexes:
+        if regex.match(val):
+            return True
+    return False
+
+
+def filter_regex_list(vals, regexes):
+    return [val for val in vals if match_regex_list(val, regexes)]
+
+
+@app.after_request
+def add_cors(response):
+    """Allow CORS for domains specified in the config"""
+    if 'Origin' in flask.request.headers:
+        # Handle a CORS request
+        origin = flask.request.headers['Origin']
+        if flask.request.method in app.config['CORS_METHODS'] and \
+           match_regex_list(origin, app.config['CORS_DOMAINS']):
+            response.headers['Access-Control-Allow-Origin'] = origin
+            if 'Access-Control-Request-Method' in flask.request.headers:
+                response.headers['Access-Control-Allow-Methods'] = ', '.join(app.config['CORS_METHODS'])
+            if 'Access-Control-Request-Headers' in flask.request.headers:
+                requested_headers = flask.request.headers['Access-Control-Request-Headers']
+                requested_headers = [h.strip() for h in requested_headers.split(',')]
+                allowed_headers = filter_regex_list(requested_headers, app.config['CORS_HEADERS'])
+                if allowed_headers:
+                    response.headers['Access-Control-Allow-Headers'] = ', '.join(allowed_headers)
+            if flask.request.method == 'OPTIONS':
+                # Special handling for pre-flight requests
+                if 'Vary' in response.headers:
+                    response.headers['Vary'] = response.headers['Vary'] + ', Origin'
+                else:
+                    response.headers['Vary'] = 'Origin'
+                response.headers['Access-Control-Max-Age'] = app.config['CORS_MAX_AGE']
+    return response
 
 
 def modify_rst(rst):
