@@ -1,4 +1,35 @@
 
+0.9.0
+-----
+
+Pull Requests
+
+-                   #198, Merge pull request #198 from fedora-infra/nopy26
+  https://github.com/fedora-infra/datagrepper/pull/198
+-                   #200, Merge pull request #200 from jflory7/change/improve-docs
+  https://github.com/fedora-infra/datagrepper/pull/200
+-                   #203, Merge pull request #203 from mikebonnet/cors-lite
+  https://github.com/fedora-infra/datagrepper/pull/203
+
+Commits
+
+- d19f4ee6d Require a recentish start if contains is used
+  https://github.com/fedora-infra/datagrepper/commit/d19f4ee6d
+- 7040d8239 Also require topic or category
+  https://github.com/fedora-infra/datagrepper/commit/7040d8239
+- 4dd5b5eac SQLAlchemy no longer supports py2.6, drop the tests on it
+  https://github.com/fedora-infra/datagrepper/commit/4dd5b5eac
+- 83469ea04 Rewrite documentation to improve readability
+  https://github.com/fedora-infra/datagrepper/commit/83469ea04
+- 7b3e6acc3 Add test script for testing reST doc generation
+  https://github.com/fedora-infra/datagrepper/commit/7b3e6acc3
+- 76fd54f2f Update Sphinx extensions, settings; minor docs reformatting
+  https://github.com/fedora-infra/datagrepper/commit/76fd54f2f
+- 85901d0d6 Add virtualenvs to .gitignore
+  https://github.com/fedora-infra/datagrepper/commit/85901d0d6
+- af6180989 a very simple CORS implementation
+  https://github.com/fedora-infra/datagrepper/commit/af6180989
+
 0.8.0
 -----
 
