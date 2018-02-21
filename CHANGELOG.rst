@@ -1,4 +1,9 @@
 
+0.9.1
+-----
+
+Resolve merge conflict in 0.9.0 release.
+
 0.9.0
 -----
 
