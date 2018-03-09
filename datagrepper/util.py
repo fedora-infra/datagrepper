@@ -5,8 +5,6 @@ from datetime import (
     datetime,
     timedelta,
 )
-import hashlib
-import random
 import json
 import time
 import fedmsg
