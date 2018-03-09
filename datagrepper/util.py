@@ -126,7 +126,6 @@ def message_card(msg, size):
         msgDict['title'] = title
         msgDict['topic_link'] = msg['topic']
 
-
     # convert the timestamp in datetime object
     msgDict['date'] = arrow.get(msg['timestamp'])
 

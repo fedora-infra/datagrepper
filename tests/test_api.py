@@ -8,12 +8,12 @@ from mock import MagicMock, patch
 with patch.dict(os.environ, DATAGREPPER_CONFIG='/dev/null'):
     import datagrepper.app
 
+
 class TestAPI(unittest.TestCase):
 
     def setUp(self):
         datagrepper.app.app.testing = True
         self.client = datagrepper.app.app.test_client()
-
 
     @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
     def test_raw_defaults(self, grep):
@@ -27,9 +27,9 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(kws['rows_per_page'], 25)
         self.assertEqual(kws['order'], 'desc')
         for arg in ['users', 'packages', 'categories', 'topics', 'contains',
-                    'not_users', 'not_packages', 'not_categories', 'not_topics']:
+                    'not_users', 'not_packages', 'not_categories', 'not_topics'
+                    ]:
             self.assertEqual(kws[arg], [])
-
 
     @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
     def test_raw_default_result(self, grep):
@@ -50,14 +50,13 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(query.filter_by.call_args, ((), {'msg_id': 'one'}))
 
-
-    @patch('datagrepper.app.count_all_messages', autospec=True, return_value=42)
+    @patch('datagrepper.app.count_all_messages',
+           autospec=True, return_value=42)
     def test_count(self, count_all_messages):
         resp = self.client.get('/messagecount')
         self.assertEqual(resp.status_code, 200)
         result = json.loads(resp.get_data())
         self.assertEqual(result, {'messagecount': 42})
-
 
     @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
     def test_chart_line(self, grep):
