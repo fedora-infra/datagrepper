@@ -333,11 +333,11 @@ def raw():
     if chrome not in ['true', 'false']:
         raise ValueError("chrome should be either 'true' or 'false'")
 
-    if contains and start < (datetime.utcnow() - timedelta(weeks=4*8)):
+    if contains and datetime.fromtimestamp(start) < (datetime.utcnow() - timedelta(weeks=4*8)):
         raise flask.BadRequest('When using contains, specify a start at most '
                                'eight months into the past')
 
-    if contains and not (category or topic):
+    if contains and not (categories or topics):
         raise flask.BadRequest('When using contains, specify either a topic or'
                                ' a category as well')
 
