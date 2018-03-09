@@ -45,7 +45,7 @@ def assemble_timerange(start, end, delta):
     """ Util to handle our complicated datetime logic. """
 
     # Complicated combination of default start, end, delta arguments.
-    now = datetime_to_seconds(datetime.now())
+    now = datetime_to_seconds(datetime.utcnow())
 
     if not delta and not start and not end:
         pass
