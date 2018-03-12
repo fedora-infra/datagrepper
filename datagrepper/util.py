@@ -5,8 +5,6 @@ from datetime import (
     datetime,
     timedelta,
 )
-import hashlib
-import random
 import json
 import time
 import fedmsg
@@ -47,7 +45,7 @@ def assemble_timerange(start, end, delta):
     """ Util to handle our complicated datetime logic. """
 
     # Complicated combination of default start, end, delta arguments.
-    now = datetime_to_seconds(datetime.now())
+    now = datetime_to_seconds(datetime.utcnow())
 
     if not delta and not start and not end:
         pass
@@ -127,7 +125,6 @@ def message_card(msg, size):
         title = fedmsg.meta.msg2title(msg, legacy=False, **config)
         msgDict['title'] = title
         msgDict['topic_link'] = msg['topic']
-
 
     # convert the timestamp in datetime object
     msgDict['date'] = arrow.get(msg['timestamp'])
