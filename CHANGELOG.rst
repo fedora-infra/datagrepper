@@ -1,4 +1,25 @@
 
+0.9.2
+-----
+
+Pull Requests
+
+- Fix a 500 error when using "contains" #204, Merge pull request #204 from fedora-infra/fix-500
+  https://github.com/fedora-infra/datagrepper/pull/204
+
+Commits
+
+- 9ed123c26 Fix 500 error in "contains" queries.
+  https://github.com/fedora-infra/datagrepper/commit/9ed123c26
+- 741c8d0e7 Remove unused imports.
+  https://github.com/fedora-infra/datagrepper/commit/741c8d0e7
+- 488fad49a Some pep8 cleanup.
+  https://github.com/fedora-infra/datagrepper/commit/488fad49a
+- e2fea1c2f Should always use UTC.
+  https://github.com/fedora-infra/datagrepper/commit/e2fea1c2f
+- 9add974ad .gitignore for .eggs/
+  https://github.com/fedora-infra/datagrepper/commit/9add974ad
+
 0.9.1
 -----
 
