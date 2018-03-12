@@ -1,4 +1,9 @@
 
+0.9.3
+-----
+
+Resolving git branch merge conflicts.
+
 0.9.2
 -----
 
