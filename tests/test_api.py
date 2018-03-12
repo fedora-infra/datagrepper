@@ -41,6 +41,11 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(result['total'], 0)
         self.assertEqual(result['raw_messages'], [])
 
+    @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
+    def test_raw_contains_delta(self, grep):
+        # At one point, this would produce a traceback/500.
+        resp = self.client.get('/raw?delta=14400&category=wat&contains=foo')
+        self.assertEqual(resp.status_code, 200)
 
     @patch('datagrepper.app.dm.Message.query', autospec=True)
     def test_id(self, query):
