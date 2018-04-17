@@ -47,6 +47,14 @@ class TestAPI(unittest.TestCase):
         resp = self.client.get('/raw?delta=14400&category=wat&contains=foo')
         self.assertEqual(resp.status_code, 200)
 
+    @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
+    def test_raw_contains_without_delta(self, grep):
+        """ https://github.com/fedora-infra/datagrepper/issues/206 """
+        resp = self.client.get('/raw?category=wat&contains=foo')
+        self.assertEqual(resp.status_code, 400)
+        target = "When using contains, specify a start at most eight months"
+        assert target in resp.data, "%r not in %r" % (target, resp.data)
+
     @patch('datagrepper.app.dm.Message.query', autospec=True)
     def test_id(self, query):
         msg = query.filter_by.return_value.first.return_value
