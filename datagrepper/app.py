@@ -39,6 +39,8 @@ import fedmsg
 import fedmsg.meta
 import fedmsg.config
 import datanommer.models as dm
+
+from werkzeug.exceptions import BadRequest
 from moksha.common.lib.converters import asbool
 
 from datagrepper.util import (
@@ -333,13 +335,13 @@ def raw():
     if chrome not in ['true', 'false']:
         raise ValueError("chrome should be either 'true' or 'false'")
 
-    if contains and datetime.fromtimestamp(start) < (datetime.utcnow() - timedelta(weeks=4*8)):
-        raise flask.BadRequest('When using contains, specify a start at most '
-                               'eight months into the past')
+    if contains and datetime.fromtimestamp(start or 0) < (datetime.utcnow() - timedelta(weeks=4*8)):
+        raise BadRequest('When using contains, specify a start at most '
+                         'eight months into the past')
 
     if contains and not (categories or topics):
-        raise flask.BadRequest('When using contains, specify either a topic or'
-                               ' a category as well')
+        raise BadRequest('When using contains, specify either a topic or'
+                         ' a category as well')
 
     try:
         # This fancy classmethod does all of our search for us.
