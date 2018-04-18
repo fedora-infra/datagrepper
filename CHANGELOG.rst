@@ -1,4 +1,17 @@
 
+0.9.4
+-----
+
+Pull Requests
+
+-                   #207, Merge pull request #207 from fedora-infra/pesky-error-handling
+  https://github.com/fedora-infra/datagrepper/pull/207
+
+Commits
+
+- 71d8ef88a Fix two bugs.
+  https://github.com/fedora-infra/datagrepper/commit/71d8ef88a
+
 0.9.3
 -----
 
