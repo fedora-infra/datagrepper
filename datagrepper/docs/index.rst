@@ -191,7 +191,7 @@ everything is awesome, we welcome high-fives and karma cookies.
 
 
 .. _`HTTPie`: https://github.com/jkbr/httpie#httpie-a-cli-curl-like-tool-for-humans
-.. _`list of topics`: http://fedmsg.com/en/latest/topics.html
+.. _`list of topics`: http://fedora-fedmsg.readthedocs.io/en/latest/topics.html
 .. _`Conjunctive Normal Form`: https://wikipedia.org/wiki/Conjunctive_normal_form
 .. _`freenode`: https://fedoraproject.org/wiki/How_to_use_IRC
 
