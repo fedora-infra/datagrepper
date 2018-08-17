@@ -139,6 +139,13 @@ def add_cors(response):
     return response
 
 
+@app.teardown_appcontext
+def remove_session(exc):
+    """Remove the session, which rolls back the transaction in progress. This is safe because Datagrepper
+       never makes modifications to the database."""
+    dm.session.remove()
+
+
 def modify_rst(rst):
     """ Downgrade some of our rst directives if docutils is too old. """
 
