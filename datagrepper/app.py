@@ -55,8 +55,8 @@ from pkg_resources import get_distribution
 app = flask.Flask(__name__)
 app.config.from_object('datagrepper.default_config')
 app.config.from_envvar('DATAGREPPER_CONFIG')
-app.config['CORS_DOMAINS'] = map(re.compile, app.config.get('CORS_DOMAINS', []))
-app.config['CORS_HEADERS'] = map(re.compile, app.config.get('CORS_HEADERS', []))
+app.config['CORS_DOMAINS'] = list(map(re.compile, app.config.get('CORS_DOMAINS', [])))
+app.config['CORS_HEADERS'] = list(map(re.compile, app.config.get('CORS_HEADERS', [])))
 
 # Read in the datanommer DB URL from /etc/fedmsg.d/ (or a local fedmsg.d/)
 fedmsg_config = fedmsg.config.load_config()

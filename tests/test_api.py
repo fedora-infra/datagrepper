@@ -52,7 +52,7 @@ class TestAPI(unittest.TestCase):
         """ https://github.com/fedora-infra/datagrepper/issues/206 """
         resp = self.client.get('/raw?category=wat&contains=foo')
         self.assertEqual(resp.status_code, 400)
-        target = "When using contains, specify a start at most eight months"
+        target = b"When using contains, specify a start at most eight months"
         assert target in resp.data, "%r not in %r" % (target, resp.data)
 
     @patch('datagrepper.app.dm.Message.query', autospec=True)
@@ -76,5 +76,5 @@ class TestAPI(unittest.TestCase):
         resp = self.client.get('/charts/line')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.mimetype, 'image/svg+xml')
-        self.assertIn('<svg xmlns:xlink="http://www.w3.org/1999/xlink',
+        self.assertIn(b'<svg xmlns:xlink="http://www.w3.org/1999/xlink',
                       resp.get_data())
