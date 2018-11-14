@@ -1,4 +1,31 @@
 
+0.9.5
+-----
+
+Pull Requests
+
+- #210, Merge pull request #210 from abitrolly/patch-1
+  https://github.com/fedora-infra/datagrepper/pull/210
+- #213, Merge pull request #213 from mikebonnet/request-txns
+  https://github.com/fedora-infra/datagrepper/pull/213
+- #214, Merge pull request #214 from mikebonnet/python3
+  https://github.com/fedora-infra/datagrepper/pull/214
+
+Commits
+
+- 7ab64fab3 0.9.4
+  https://github.com/fedora-infra/datagrepper/commit/7ab64fab3
+- cdcecf841 Fix broken link to fedmsg list of topics
+  https://github.com/fedora-infra/datagrepper/commit/cdcecf841
+- bc46a1f4c add transaction handling
+  https://github.com/fedora-infra/datagrepper/commit/bc46a1f4c
+- 2a923f03b minor tweaks to enable datagrepper to run under Python 3
+  https://github.com/fedora-infra/datagrepper/commit/2a923f03b
+- acdfe10cb remove dangling comment closure
+  https://github.com/fedora-infra/datagrepper/commit/acdfe10cb
+- a5f34c15e 0.9.4
+  https://github.com/fedora-infra/datagrepper/commit/a5f34c15e
+
 0.9.4
 -----
 
