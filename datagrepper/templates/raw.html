@@ -2,17 +2,17 @@
     <tr><td class="raw-icons">
         {% if dict.get('link') %}
           {% if dict.get('icon') %}
-          <a href={{dict['link']}}><img src= {{dict['icon']}}></a>
+          <a href="{{dict['link']}}"><img src="{{dict['icon']}}"></a>
           {% else %}
-          <a href={{dict['link']}}>Link</a>
+          <a href="{{dict['link']}}">Link</a>
           {% endif %}
         {% else %}
           {% if dict.get('icon') %}
-          <img src= {{dict['icon']}}>
+          <img src="{{dict['icon']}}">
           {% endif %}
         {% endif %}
         {% if dict.get('secondary_icon') %}
-        <img src={{dict['secondary_icon']}}></a>
+        <img src="{{dict['secondary_icon']}}"></a>
         {% endif %}
       </td>
         <td class="raw-message">
