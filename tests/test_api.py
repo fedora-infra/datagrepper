@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0+
 # Copyright 2018 Mike Bonnet <mikeb@redhat.com>
 
+from datetime import datetime, timedelta
 import json
 import os
 import unittest
@@ -46,6 +47,19 @@ class TestAPI(unittest.TestCase):
         # At one point, this would produce a traceback/500.
         resp = self.client.get('/raw?delta=14400&category=wat&contains=foo')
         self.assertEqual(resp.status_code, 200)
+
+    @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
+    def test_raw_contains_delta_and_start(self, grep):
+        resp = self.client.get('/raw?start=1564503781&delta=600')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(grep.call_args[0], ())
+        kws = grep.call_args[1]
+
+        expected_start = datetime.fromtimestamp(1564503781)
+        self.assertEqual(kws['start'], expected_start)
+
+        expected_end = expected_start + timedelta(seconds=600)
+        self.assertEqual(kws['end'], expected_end)
 
     @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
     def test_raw_contains_without_delta(self, grep):

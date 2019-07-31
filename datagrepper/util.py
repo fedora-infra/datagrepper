@@ -54,7 +54,8 @@ def assemble_timerange(start, end, delta):
             if start is None:
                 end = float(now)
             else:
-                end = float(start) + float(delta)
+                start = float(start)
+                end = start + float(delta)
 
         end = datetime.fromtimestamp(float(end))
 
