@@ -101,10 +101,6 @@ def message_card(msg, size):
     if (size in ['extra-large']):
         pass
 
-    # For rendering fedmenu
-    msgDict['usernames'] = list(fedmsg.meta.msg2usernames(msg, **config))
-    msgDict['packages'] = list(fedmsg.meta.msg2packages(msg, **config))
-
     if (size in ['extra-large', 'large']):
         # generate secondary icon associated with message
         secondary_icon = fedmsg.meta.msg2secondary_icon(
