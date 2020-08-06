@@ -274,7 +274,8 @@ def raw():
     # Perform our complicated datetime logic
     start = flask.request.args.get('start', None)
     end = flask.request.args.get('end', None)
-    delta = flask.request.args.get('delta', None)
+    default_delta = app.config['DEFAULT_QUERY_DELTA']
+    delta = flask.request.args.get('delta', default_delta)
     start, end, delta = assemble_timerange(start, end, delta)
 
     # Further filters, all ANDed together in CNF style.
