@@ -1,3 +1,15 @@
+0.9.6
+-----
+
+Pull Requests
+
+- Drop python2
+  https://github.com/fedora-infra/datagrepper/pull/232
+  https://github.com/fedora-infra/datagrepper/pull/231
+- Add a configuration option to set a default query delta
+  https://github.com/fedora-infra/datagrepper/pull/230
+- Remove fedmenu
+  https://github.com/fedora-infra/datagrepper/pull/227
 
 0.9.5
 -----
