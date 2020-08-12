@@ -4,9 +4,9 @@ import arrow
 from datetime import (
     datetime,
     timedelta,
+    timezone,
 )
 import json
-import time
 import fedmsg
 
 
@@ -25,7 +25,7 @@ def json_return(data):
 
 def datetime_to_seconds(dt):
     """ Name this, just because its confusing. """
-    return time.mktime(dt.timetuple())
+    return datetime.timestamp(dt)
 
 
 def timedelta_to_seconds(td):
@@ -57,7 +57,7 @@ def assemble_timerange(start, end, delta):
                 start = float(start)
                 end = start + float(delta)
 
-        end = datetime.fromtimestamp(float(end))
+        end = datetime.fromtimestamp(float(end), tz=timezone.utc)
 
         if start is None:
             delta = timedelta(seconds=float(delta))
@@ -71,13 +71,13 @@ def assemble_timerange(start, end, delta):
         if end is None:
             end = float(now)
 
-        end = datetime.fromtimestamp(float(end))
+        end = datetime.fromtimestamp(float(end), tz=timezone.utc)
 
         if start is None:
             delta = timedelta(seconds=600.0)
             start = datetime_to_seconds(end - delta)
 
-        start = datetime.fromtimestamp(float(start))
+        start = datetime.fromtimestamp(float(start), tz=timezone.utc)
         delta = end - start
 
         # Convert back to seconds for datanommer.models
