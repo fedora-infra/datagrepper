@@ -1,3 +1,11 @@
+0.9.7
+-----
+
+Pull Requests
+
+- Fix bug introduced with the default query delta
+  https://github.com/fedora-infra/datagrepper/pull/233
+
 0.9.6
 -----
 
