@@ -62,6 +62,42 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(kws['end'], expected_end)
 
     @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
+    @patch.dict(datagrepper.app.app.config, {'DEFAULT_QUERY_DELTA': 180})
+    def test_raw_default_query_delta(self, grep):
+        resp = self.client.get('/raw')
+        self.assertEqual(resp.status_code, 200)
+        kws = grep.call_args[1]
+        # Verify the default query delta was applied
+        self.assertEqual((kws['end'] - kws['start']).total_seconds(), 180.0)
+
+    @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
+    @patch.dict(datagrepper.app.app.config, {'DEFAULT_QUERY_DELTA': 180})
+    def test_raw_default_query_delta_with_start(self, grep):
+        resp = self.client.get('/raw?start=1564503781')
+        self.assertEqual(resp.status_code, 200)
+        kws = grep.call_args[1]
+        # Verify the default query delta was not applied
+        self.assertNotEqual((kws['end'] - kws['start']).total_seconds(), 180.0)
+
+    @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
+    @patch.dict(datagrepper.app.app.config, {'DEFAULT_QUERY_DELTA': 180})
+    def test_raw_default_query_delta_with_end(self, grep):
+        resp = self.client.get('/raw?delta=7200')
+        self.assertEqual(resp.status_code, 200)
+        kws = grep.call_args[1]
+        # Verify the default query delta was not applied
+        self.assertEqual((kws['end'] - kws['start']).total_seconds(), 7200.0)
+
+    @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
+    @patch.dict(datagrepper.app.app.config, {'DEFAULT_QUERY_DELTA': 180})
+    def test_raw_default_query_delta_with_delta(self, grep):
+        resp = self.client.get('/raw?end=1564503781')
+        self.assertEqual(resp.status_code, 200)
+        kws = grep.call_args[1]
+        # Verify the default query delta was not applied
+        self.assertNotEqual((kws['end'] - kws['start']).total_seconds(), 180.0)
+
+    @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
     def test_raw_contains_without_delta(self, grep):
         """ https://github.com/fedora-infra/datagrepper/issues/206 """
         resp = self.client.get('/raw?category=wat&contains=foo')

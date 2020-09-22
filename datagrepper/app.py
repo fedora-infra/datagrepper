@@ -271,7 +271,9 @@ def raw():
     start = flask.request.args.get('start', None)
     end = flask.request.args.get('end', None)
     default_delta = app.config['DEFAULT_QUERY_DELTA']
-    delta = flask.request.args.get('delta', default_delta)
+    delta = flask.request.args.get('delta')
+    if not (start or end or delta):
+        delta = default_delta
     start, end, delta = assemble_timerange(start, end, delta)
 
     # Further filters, all ANDed together in CNF style.
