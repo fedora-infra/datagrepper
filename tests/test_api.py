@@ -81,7 +81,7 @@ class TestAPI(unittest.TestCase):
 
     @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
     @patch.dict(datagrepper.app.app.config, {'DEFAULT_QUERY_DELTA': 180})
-    def test_raw_default_query_delta_with_end(self, grep):
+    def test_raw_default_query_delta_with_delta(self, grep):
         resp = self.client.get('/raw?delta=7200')
         self.assertEqual(resp.status_code, 200)
         kws = grep.call_args[1]
@@ -90,7 +90,7 @@ class TestAPI(unittest.TestCase):
 
     @patch('datagrepper.app.dm.Message.grep', return_value=(0, 0, []))
     @patch.dict(datagrepper.app.app.config, {'DEFAULT_QUERY_DELTA': 180})
-    def test_raw_default_query_delta_with_delta(self, grep):
+    def test_raw_default_query_delta_with_end(self, grep):
         resp = self.client.get('/raw?end=1564503781')
         self.assertEqual(resp.status_code, 200)
         kws = grep.call_args[1]
