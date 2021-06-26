@@ -10,13 +10,32 @@ to install it on Fedora::
    sudo dnf install httpie
 
 
+Timestamp arguments
+-------------------
+
+HTTP GET arguments ``start`` and ``end`` can be either POSIX timestamps or
+date/time strings.
+
+Default value for ``end`` is the current time unless both ``start`` and
+``delta`` are set.
+
+
 Requesting all messages in the last 2 days
-------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 datagrepper takes time arguments in `seconds`. So, we need to convert two days
 to 172,800 seconds first. Then, we can use HTTPie_ to get the JSON payload::
 
    http get {{URL}}raw delta==172800
+
+
+Requesting all messages in fixed time range
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To get messages in fixed absolute time range, we can use a date/time string,
+for example the common ISO 8601 format::
+
+   http get {{URL}}raw end==2021-06-25T06:11:40+00:00 start==2021-06-25T06:11:39+00:00
 
 
 Paging results

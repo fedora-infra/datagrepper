@@ -4,7 +4,7 @@
 import json
 import os
 import unittest
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest.mock import MagicMock, patch
 
 
@@ -105,6 +105,22 @@ class TestAPI(unittest.TestCase):
         kws = grep.call_args[1]
         # Verify the default query delta was not applied
         self.assertNotEqual((kws["end"] - kws["start"]).total_seconds(), 180.0)
+
+    @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
+    def test_raw_default_query_with_start_and_end_native(self, grep):
+        resp = self.client.get(
+            "/raw?start=2012-01-02T03:04:05%2B00:00&end=2012-01-02T04:04:05%2B00:00"
+        )
+        self.assertEqual(resp.status_code, 200)
+        kws = grep.call_args[1]
+        self.assertEqual(
+            kws["start"].astimezone(timezone.utc),
+            datetime(2012, 1, 2, 3, 4, 5, tzinfo=timezone.utc),
+        )
+        self.assertEqual(
+            kws["end"].astimezone(timezone.utc),
+            datetime(2012, 1, 2, 4, 4, 5, tzinfo=timezone.utc),
+        )
 
     @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
     def test_raw_contains_without_delta(self, grep):

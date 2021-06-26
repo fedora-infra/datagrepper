@@ -14,7 +14,7 @@ class TestTimerange(unittest.TestCase):
         self.addCleanup(patcher.stop)
         mock_dt = patcher.start()
         # https://docs.python.org/3/library/unittest.mock-examples.html#mock-patching-methods
-        mock_dt.utcnow.return_value = self.now
+        mock_dt.now.return_value = self.now
         mock_dt.fromtimestamp.side_effect = (
             lambda *args, **kw: datetime.datetime.fromtimestamp(*args, **kw)
         )
@@ -82,3 +82,11 @@ class TestTimerange(unittest.TestCase):
         assert 1325375200.0 == start
         assert 1325375400.0 == end
         assert 200 == delta
+
+    def test_none_start_end_parse(self):
+        end = "2012-01-01T01:00:00+00:00"
+        start = "2012-01-01T00:00:00+00:00"
+        start, end, delta = assemble_timerange(start, end, None)
+        assert 1325376000.0 == start
+        assert 1325376000.0 + 3600 == end
+        assert 3600 == delta

@@ -1,9 +1,14 @@
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 
 import arrow
 import fedmsg
 import flask
+from dateutil import tz
+from dateutil.parser import parse
+
+
+DEFAULT_DELTA_SECONDS = 600.0
 
 
 # http://flask.pocoo.org/snippets/45/
@@ -36,49 +41,56 @@ def timedelta_to_seconds(td):
         return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) / 1e6
 
 
+def datetime_to_timestamp(datetime_str_or_timestamp):
+    try:
+        return float(datetime_str_or_timestamp)
+    except ValueError:
+        pass
+
+    time = parse(datetime_str_or_timestamp)
+    # Assume default timezone is UTC
+    if time.tzinfo is None:
+        time = time.replace(tzinfo=tz.tzutc())
+    return time.timestamp()
+
+
+def now_seconds():
+    return datetime_to_seconds(datetime.now(tz.tzutc()))
+
+
 def assemble_timerange(start, end, delta):
     """Util to handle our complicated datetime logic."""
 
-    # Complicated combination of default start, end, delta arguments.
-    now = datetime_to_seconds(datetime.utcnow())
+    # Normalize arguments
+    if start is not None:
+        start = datetime_to_timestamp(start)
+    if end is not None:
+        end = datetime_to_timestamp(end)
+    if delta is not None:
+        delta = float(delta)
 
-    if not delta and not start and not end:
+    # Figure out values for unset arguments.
+    valid_args = (start is not None, end is not None, delta is not None)
+    if valid_args == (False, False, False):
         pass
-    elif delta:
-        if end is None:
-            if start is None:
-                end = float(now)
-            else:
-                start = float(start)
-                end = start + float(delta)
-
-        end = datetime.fromtimestamp(float(end), tz=timezone.utc)
-
-        if start is None:
-            delta = timedelta(seconds=float(delta))
-            then = datetime_to_seconds(end - delta)
-            start = float(then)
-
-        # Convert back to seconds for datanommer.models
-        end = datetime_to_seconds(end)
+    elif valid_args == (False, False, True):
+        end = now_seconds()
+        start = end - delta
+    elif valid_args == (False, True, False):
+        delta = DEFAULT_DELTA_SECONDS
+        start = end - delta
+    elif valid_args == (False, True, True):
+        start = end - delta
+    elif valid_args == (True, False, False):
+        end = now_seconds()
         delta = end - start
-    else:
-        if end is None:
-            end = float(now)
-
-        end = datetime.fromtimestamp(float(end), tz=timezone.utc)
-
-        if start is None:
-            delta = timedelta(seconds=600.0)
-            start = datetime_to_seconds(end - delta)
-
-        start = datetime.fromtimestamp(float(start), tz=timezone.utc)
+    elif valid_args == (True, False, True):
+        end = start + delta
+    elif valid_args == (True, True, False):
         delta = end - start
-
-        # Convert back to seconds for datanommer.models
-        start = datetime_to_seconds(start)
-        end = datetime_to_seconds(end)
-        delta = timedelta_to_seconds(delta)
+    elif valid_args == (True, True, True):
+        # Override delta
+        delta = end - start
 
     return start, end, delta
 
