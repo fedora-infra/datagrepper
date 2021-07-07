@@ -1,6 +1,2 @@
 pytest
 freezegun
-black
-isort
-flake8
-bandit
