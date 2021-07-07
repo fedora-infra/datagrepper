@@ -28,6 +28,6 @@ repos:
     rev: 1.7.0
     hooks:
       - id: bandit
-        args: ["-ll"]
+        args: ["-ll", "-x", "tests"]
         # All files in one go to get a single report
         require_serial: true
