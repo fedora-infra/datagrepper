@@ -1,16 +1,15 @@
-import unittest
 import datetime
-
+import unittest
 
 from freezegun import freeze_time
 
 from datagrepper.util import assemble_timerange
 
+
 utc = datetime.timezone.utc
 
 
 class TestTimerange(unittest.TestCase):
-
     @freeze_time(datetime.datetime.fromtimestamp(1325376000, tz=utc))
     def test_none_none_none(self):
         start, end, delta = assemble_timerange(None, None, None)

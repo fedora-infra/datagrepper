@@ -1,48 +1,43 @@
-import flask
+import json
+from datetime import datetime, timedelta, timezone
 
 import arrow
-from datetime import (
-    datetime,
-    timedelta,
-    timezone,
-)
-import json
 import fedmsg
+import flask
 
 
 # http://flask.pocoo.org/snippets/45/
 # accept header returns json type content only
 # However, if the accept header is */*, then return json.
 def request_wants_html():
-    best = flask.request.accept_mimetypes \
-        .best_match(['application/json', 'text/html', 'text/plain'])
-    return best == 'text/html'
+    best = flask.request.accept_mimetypes.best_match(
+        ["application/json", "text/html", "text/plain"]
+    )
+    return best == "text/html"
 
 
 def json_return(data):
-    return flask.Response(json.dumps(data), mimetype='application/json')
+    return flask.Response(json.dumps(data), mimetype="application/json")
 
 
 def datetime_to_seconds(dt):
-    """ Name this, just because its confusing. """
+    """Name this, just because its confusing."""
     return datetime.timestamp(dt)
 
 
 def timedelta_to_seconds(td):
-    """ Python 2.7 has a handy total_seconds method.
+    """Python 2.7 has a handy total_seconds method.
     If we're on 2.6 though, we have to roll our own.
     """
 
-    if hasattr(td, 'total_seconds'):
+    if hasattr(td, "total_seconds"):
         return td.total_seconds()
     else:
-        return (
-            (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) /
-            1e6)
+        return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) / 1e6
 
 
 def assemble_timerange(start, end, delta):
-    """ Util to handle our complicated datetime logic. """
+    """Util to handle our complicated datetime logic."""
 
     # Complicated combination of default start, end, delta arguments.
     now = datetime_to_seconds(datetime.utcnow())
@@ -89,8 +84,8 @@ def assemble_timerange(start, end, delta):
 
 
 def message_card(msg, size):
-    """ Util to generate icon, title, subtitle, link
-     and secondary_icon using fedmsg.meta modules.
+    """Util to generate icon, title, subtitle, link
+    and secondary_icon using fedmsg.meta modules.
     """
     # using fedmsg.meta modules
     config = fedmsg.config.load_config([], None)
@@ -98,59 +93,67 @@ def message_card(msg, size):
 
     msgDict = {}
 
-    if (size in ['extra-large']):
+    if size in ["extra-large"]:
         pass
 
-    if (size in ['extra-large', 'large']):
+    if size in ["extra-large", "large"]:
         # generate secondary icon associated with message
-        secondary_icon = fedmsg.meta.msg2secondary_icon(
-            msg, legacy=False, **config)
-        msgDict['secondary_icon'] = secondary_icon
+        secondary_icon = fedmsg.meta.msg2secondary_icon(msg, legacy=False, **config)
+        msgDict["secondary_icon"] = secondary_icon
 
-    if (size in ['extra-large', 'large', 'medium']):
+    if size in ["extra-large", "large", "medium"]:
         icon = fedmsg.meta.msg2icon(msg, legacy=False, **config)
-        msgDict['icon'] = icon
+        msgDict["icon"] = icon
         # generate subtitle associated with message
         subtitle = fedmsg.meta.msg2subtitle(msg, legacy=False, **config)
-        msgDict['subtitle'] = subtitle
+        msgDict["subtitle"] = subtitle
 
-    if (size in ['extra-large', 'large', 'medium', 'small']):
+    if size in ["extra-large", "large", "medium", "small"]:
         # generate URL associated with message
         link = fedmsg.meta.msg2link(msg, legacy=False, **config)
-        msgDict['link'] = link
+        msgDict["link"] = link
         # generate title associated with message
         title = fedmsg.meta.msg2title(msg, legacy=False, **config)
-        msgDict['title'] = title
-        msgDict['topic_link'] = msg['topic']
+        msgDict["title"] = title
+        msgDict["topic_link"] = msg["topic"]
 
     # convert the timestamp in datetime object
-    msgDict['date'] = arrow.get(msg['timestamp'])
+    msgDict["date"] = arrow.get(msg["timestamp"])
 
     return msgDict
 
 
 def meta_argument(msg, meta):
-    """ Util to accept meta arguments for /raw and /id endpoint
-        so that JSON include human-readable strings"""
+    """Util to accept meta arguments for /raw and /id endpoint
+    so that JSON include human-readable strings"""
 
-    meta_expected = set(['title', 'subtitle', 'icon', 'secondary_icon',
-                         'link', 'usernames', 'packages', 'objects', 'date'])
+    meta_expected = set(
+        [
+            "title",
+            "subtitle",
+            "icon",
+            "secondary_icon",
+            "link",
+            "usernames",
+            "packages",
+            "objects",
+            "date",
+        ]
+    )
     if len(set(meta).intersection(meta_expected)) != len(set(meta)):
-        raise ValueError("meta must be in %s"
-                         % ','.join(list(meta_expected)))
+        raise ValueError("meta must be in %s" % ",".join(list(meta_expected)))
 
     metas = {}
     config = fedmsg.config.load_config([], None)
     for metadata in meta:
         # This one is exceptional
-        if metadata == 'date':
-            metas[metadata] = arrow.get(msg['timestamp']).humanize()
+        if metadata == "date":
+            metas[metadata] = arrow.get(msg["timestamp"]).humanize()
             continue
 
         # All the other metas use fedmsg.meta.msg2*
-        cmd = 'msg2%s' % metadata
-        metas[metadata] = getattr(
-            fedmsg.meta, cmd)(msg, **config)
+        cmd = "msg2%s" % metadata
+        metas[metadata] = getattr(fedmsg.meta, cmd)(msg, **config)
 
         # We have to do this because 'set' is not
         # JSON-serializable.  In the next version of fedmsg, this
@@ -159,6 +162,6 @@ def meta_argument(msg, meta):
         if isinstance(metas[metadata], set):
             metas[metadata] = list(metas[metadata])
 
-    msg['meta'] = metas
+    msg["meta"] = metas
 
     return msg
