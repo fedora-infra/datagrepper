@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import json
 import os
 import unittest
-from mock import MagicMock, patch
+from unittest.mock import MagicMock, patch
 with patch.dict(os.environ, DATAGREPPER_CONFIG='/dev/null'):
     import datagrepper.app
 

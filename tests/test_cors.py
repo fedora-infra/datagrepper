@@ -4,7 +4,7 @@
 import os
 import re
 import unittest
-from mock import patch
+from unittest.mock import patch
 with patch.dict(os.environ, DATAGREPPER_CONFIG='/dev/null'):
     import datagrepper.app
 
