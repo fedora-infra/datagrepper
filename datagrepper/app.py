@@ -61,7 +61,7 @@ fedmsg.meta.make_processors(**fedmsg_config)
 # Initialize a datanommer session.
 dm.init(fedmsg_config["datanommer.sqlalchemy.url"])
 
-import datagrepper.widgets
+import datagrepper.widgets  # noqa: E402,F401
 
 
 @app.context_processor
@@ -76,7 +76,10 @@ def inject_variable():
         "message_bus_link": "http://fedmsg.com",
         "message_bus_shortname": "fedmsg",
         "message_bus_longname": "fedmsg bus",
-        "theme_css_url": "https://apps.fedoraproject.org/global/fedora-bootstrap-1.0/fedora-bootstrap.min.css",
+        "theme_css_url": (
+            "https://apps.fedoraproject.org/global/fedora-bootstrap-1.0/"
+            "fedora-bootstrap.min.css"
+        ),
         "datagrepper_logo": "static/datagrepper.png",
     }
     for key, default in style.items():
@@ -141,8 +144,10 @@ def add_cors(response):
 
 @app.teardown_appcontext
 def remove_session(exc):
-    """Remove the session, which rolls back the transaction in progress. This is safe because Datagrepper
-    never makes modifications to the database."""
+    """Remove the session, which rolls back the transaction in progress.
+
+    This is safe because Datagrepper never makes modifications to the database.
+    """
     dm.session.remove()
 
 
@@ -674,7 +679,7 @@ def make_charts(chart_type):
         if human_readable:
             labels = [arrow.get(i).humanize() for i in dates]
         else:
-            labels = [unicode(arrow.get(i).date()) for i in dates]
+            labels = [str(arrow.get(i).date()) for i in dates]
 
         for factor in factors:
             for i, name in enumerate(factor_names):

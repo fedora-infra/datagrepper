@@ -6,13 +6,6 @@ Setup script
 from setuptools import setup
 
 
-try:
-    import logging
-    import multiprocessing
-except ImportError:
-    pass
-
-
 def strip_comments(lines):
     for line in lines:
         line = line.strip()
@@ -23,7 +16,7 @@ def strip_comments(lines):
         if not line:
             continue
 
-        if not "#" in line:
+        if "#" not in line:
             yield line
         else:
             yield line[: line.index("#")]
