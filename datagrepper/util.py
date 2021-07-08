@@ -22,7 +22,7 @@ def json_return(data):
 
 def datetime_to_seconds(dt):
     """Name this, just because its confusing."""
-    return datetime.timestamp(dt)
+    return dt.timestamp()
 
 
 def timedelta_to_seconds(td):
