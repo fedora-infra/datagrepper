@@ -8,7 +8,6 @@ utc = datetime.timezone.utc
 
 
 class TestTimerange(unittest.TestCase):
-
     def setUp(self):
         self.now = datetime.datetime.fromtimestamp(1325376000, tz=utc)
         patcher = unittest.mock.patch("datagrepper.util.datetime")

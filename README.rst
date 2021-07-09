@@ -104,7 +104,7 @@ postgres (by default, it looks for a sqlite database).  Edit
 As your normal old user self, run the development server::
 
     $ workon datagrepper
-    $ python runserver.py
+    $ python devel/runserver.py
 
 In a browser, visit http://localhost:5000 to see the docs.
 

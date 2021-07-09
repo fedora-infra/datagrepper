@@ -697,7 +697,7 @@ def make_charts(chart_type):
                     not_packages=not_packages,
                     not_categories=not_categories,
                     not_topics=not_topics,
-                    **kwargs
+                    **kwargs,
                 )
                 values.append(count)
             tag = factor and " & ".join(factor) or "events"
