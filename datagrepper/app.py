@@ -423,7 +423,7 @@ def raw():
 
     if callback:
         mimetype = "application/javascript"
-        body = "%s(%s);" % (callback, body)
+        body = f"{callback}({body});"
 
     # return HTML content else json
     if not callback and request_wants_html():
@@ -549,7 +549,7 @@ def msg_id():
 
             if callback:
                 mimetype = "application/javascript"
-                body = "%s(%s);" % (callback, body)
+                body = f"{callback}({body});"
 
             return flask.Response(
                 response=body,
@@ -613,7 +613,7 @@ def make_charts(chart_type):
         "cubic",
     ]
     if interpolation not in interpolation_types:
-        flask.abort(404, "%s not in %r" % (interpolation, interpolation_types))
+        flask.abort(404, f"{interpolation} not in {interpolation_types!r}")
 
     chart_types = {
         "line": "Line",
@@ -630,11 +630,11 @@ def make_charts(chart_type):
         "gauge": "Gauge",
     }
     if chart_type not in chart_types:
-        flask.abort(404, "%s not in %r" % (chart_type, chart_types))
+        flask.abort(404, f"{chart_type} not in {chart_types!r}")
 
     style = flask.request.args.get("style", "default")
     if style not in pygal.style.styles:
-        flask.abort(404, "%s not in %r" % (style, pygal.style.styles))
+        flask.abort(404, f"{style} not in {pygal.style.styles!r}")
     style = pygal.style.styles[style]
 
     chart = getattr(pygal, chart_types[chart_type])(

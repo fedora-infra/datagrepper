@@ -23,7 +23,7 @@ def strip_comments(lines):
 
 
 def get_requires(filename="requirements.txt"):
-    with open(filename, "r") as f:
+    with open(filename) as f:
         return list(strip_comments(f.readlines()))
 
 

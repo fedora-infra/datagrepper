@@ -134,7 +134,7 @@ def widget_js():
 
     envelope = inner_payload
     for script in reversed(scripts):
-        envelope = """$.getScript("%s", function(){%s});""" % (
+        envelope = """$.getScript("{}", function(){{{}}});""".format(
             prefix + script,
             envelope,
         )

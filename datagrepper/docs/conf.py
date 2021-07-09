@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # datagrepper documentation build configuration file, created by
 # sphinx-quickstart on Tue Nov  7 16:18:46 2017.

@@ -112,7 +112,7 @@ class TestAPI(unittest.TestCase):
         resp = self.client.get("/raw?category=wat&contains=foo")
         self.assertEqual(resp.status_code, 400)
         target = b"When using contains, specify a start at most eight months"
-        assert target in resp.data, "%r not in %r" % (target, resp.data)
+        assert target in resp.data, f"{target!r} not in {resp.data!r}"
 
     @patch("datagrepper.app.dm.Message.query", autospec=True)
     def test_id(self, query):

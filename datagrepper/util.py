@@ -127,19 +127,17 @@ def meta_argument(msg, meta):
     """Util to accept meta arguments for /raw and /id endpoint
     so that JSON include human-readable strings"""
 
-    meta_expected = set(
-        [
-            "title",
-            "subtitle",
-            "icon",
-            "secondary_icon",
-            "link",
-            "usernames",
-            "packages",
-            "objects",
-            "date",
-        ]
-    )
+    meta_expected = {
+        "title",
+        "subtitle",
+        "icon",
+        "secondary_icon",
+        "link",
+        "usernames",
+        "packages",
+        "objects",
+        "date",
+    }
     if len(set(meta).intersection(meta_expected)) != len(set(meta)):
         raise ValueError("meta must be in %s" % ",".join(list(meta_expected)))
 
