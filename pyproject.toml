@@ -37,6 +37,7 @@ flake8 = "^3.9.2"
 pytest = "^6.2.4"
 liccheck = "^0.6.0"
 Sphinx = "^4.0.3"
+pytest-cov = "^2.12.1"
 
 
 [build-system]
@@ -86,4 +87,21 @@ authorized_licenses = [
   "CC0 (copyright waived)",
   "Public Domain",
   "Public Domain <http://unlicense.org>",
+]
+
+[tool.pytest.ini_options]
+addopts = "-v --cov --cov-report term-missing --cov-report html --cov-report xml"
+
+[tool.coverage.run]
+branch = true
+source = ["datagrepper"]
+
+[tool.coverage.paths]
+source = ["datagrepper"]
+
+[tool.coverage.report]
+fail_under = 63
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
 ]
