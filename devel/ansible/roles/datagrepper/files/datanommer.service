@@ -1,0 +1,12 @@
+[Unit]
+Description=datanommer
+
+[Service]
+User=vagrant
+Restart=on-failure
+RestartSec=5s
+WorkingDirectory=/home/vagrant/datanommer
+ExecStart=/bin/sh -c 'source /srv/venv/bin/activate && poetry run fedora-messaging consume --callback datanommer.consumer:Nommer'
+
+[Install]
+WantedBy=multi-user.target

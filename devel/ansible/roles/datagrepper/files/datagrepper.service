@@ -1,0 +1,10 @@
+[Unit]
+Description=datagrepper
+
+[Service]
+User=vagrant
+WorkingDirectory=/home/vagrant/datagrepper
+ExecStart=/bin/sh -c 'source /srv/venv/bin/activate && poetry run python devel/runserver.py --host "0.0.0.0" --port 5000'
+
+[Install]
+WantedBy=multi-user.target

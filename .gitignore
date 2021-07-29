@@ -32,3 +32,6 @@ pip-selfcheck.json
 .coverage
 htmlcov
 coverage.xml
+
+# Vagrant
+.vagrant/
