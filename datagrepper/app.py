@@ -59,7 +59,7 @@ fedmsg_config = fedmsg.config.load_config()
 fedmsg.meta.make_processors(**fedmsg_config)
 
 # Initialize a datanommer session.
-dm.init(fedmsg_config["datanommer.sqlalchemy.url"])
+dm.init(app.config.get("DATANOMMER_SQLALCHEMY_URL"))
 
 import datagrepper.widgets  # noqa: E402,F401
 
