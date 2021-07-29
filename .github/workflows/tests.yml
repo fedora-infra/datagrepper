@@ -85,7 +85,7 @@ jobs:
         uses: fedora-python/tox-github-action@master
         with:
           tox_env: ${{ matrix.tox_env }}
-          dnf_install: krb5-devel
+          dnf_install: krb5-devel libpq-devel
 
       # - name: Upload coverage to Codecov
       #   uses: codecov/codecov-action@v1

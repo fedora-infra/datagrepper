@@ -18,8 +18,8 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.6.2"
-"datanommer.models" = "^0.6.0"
+python = "^3.7"
+"datanommer.models" = {version = "1.0.0-alpha.1", allow-prereleases = true}
 fedmsg = "^1.1.2"
 fedmsg-meta-fedora-infrastructure = "^0.31.0"
 arrow = "^1.1.1"
@@ -29,6 +29,8 @@ flask = "^1.1"
 pygal = "^2.4.0"
 Pygments = "^2.9.0"
 python-dateutil = "^2.8.2"
+psycopg2 = "^2.9.1"
+cffi = "^1.14.6"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.13.0"
@@ -88,6 +90,7 @@ authorized_licenses = [
   "CC0 (copyright waived)",
   "Public Domain",
   "Public Domain <http://unlicense.org>",
+  "Zope Public",
 ]
 
 [tool.pytest.ini_options]
