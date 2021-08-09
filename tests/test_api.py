@@ -2,14 +2,11 @@
 # Copyright 2018 Mike Bonnet <mikeb@redhat.com>
 
 import json
-import os
 import unittest
 from datetime import datetime, timedelta, timezone
 from unittest.mock import MagicMock, patch
 
-
-with patch.dict(os.environ, DATAGREPPER_CONFIG="/dev/null"):
-    import datagrepper.app
+import datagrepper.app
 
 
 class TestAPI(unittest.TestCase):
@@ -103,8 +100,7 @@ class TestAPI(unittest.TestCase):
         resp = self.client.get("/raw?end=1564503781")
         self.assertEqual(resp.status_code, 200)
         kws = grep.call_args[1]
-        # Verify the default query delta was not applied
-        self.assertNotEqual((kws["end"] - kws["start"]).total_seconds(), 180.0)
+        self.assertEqual((kws["end"] - kws["start"]).total_seconds(), 180.0)
 
     @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
     def test_raw_default_query_with_start_and_end_native(self, grep):

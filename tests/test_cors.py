@@ -1,14 +1,11 @@
 # SPDX-License-Identifier: GPL-2.0+
 # Copyright 2018 Mike Bonnet <mikeb@redhat.com>
 
-import os
 import re
 import unittest
 from unittest.mock import patch
 
-
-with patch.dict(os.environ, DATAGREPPER_CONFIG="/dev/null"):
-    import datagrepper.app
+import datagrepper.app
 
 
 class TestCORS(unittest.TestCase):
