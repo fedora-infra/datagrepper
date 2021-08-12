@@ -1,3 +1,55 @@
+[tool.towncrier]
+package = "datagrepper"
+filename = "docs/release_notes.rst"
+directory = "news/"
+version = "0.9.7"
+title_format = "v{version}"
+issue_format = "{issue}"
+template = "news/_template.rst.j2"
+underlines = "=^-"
+wrap = true
+all_bullets = true
+
+  [[tool.towncrier.type]]
+  directory = "bic"
+  name = "Backwards Incompatible Changes"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "dependency"
+  name = "Dependency Changes"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "feature"
+  name = "Features"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "bug"
+  name = "Bug Fixes"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "dev"
+  name = "Development Improvements"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "docs"
+  name = "Documentation Improvements"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "other"
+  name = "Other Changes"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "author"
+  name = "Contributors"
+  showcontent = true
+
 [tool.poetry]
 name = "datagrepper"
 version = "0.9.7"
@@ -99,6 +151,8 @@ addopts = "-v --cov --cov-report term-missing --cov-report html --cov-report xml
 [tool.coverage.run]
 branch = true
 source = ["datagrepper"]
+omit = ['datagrepper/__init__.py']
+
 
 [tool.coverage.paths]
 source = ["datagrepper"]
