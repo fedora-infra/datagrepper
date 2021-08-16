@@ -232,8 +232,8 @@ def count_all_messages():
     db.
     """
 
-    if app.config.get("DATAGREPPER_APPROXIMATE_COUNT", True):
-        query = "SELECT reltuples FROM pg_class WHERE relname = 'messages';"
+    if app.config.get("DATAGREPPER_APPROXIMATE_COUNT"):
+        query = "SELECT * FROM approximate_row_count('messages');"
         total = dm.session.execute(query).first()[0]
     else:
         total = dm.Message.grep(defer=True)[0]
