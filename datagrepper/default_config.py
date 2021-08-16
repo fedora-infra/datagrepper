@@ -5,3 +5,4 @@ CORS_HEADERS = [".*"]
 CORS_MAX_AGE = "600"
 DEFAULT_QUERY_DELTA = None
 DATANOMMER_SQLALCHEMY_URL = "postgresql://datanommer:datanommer@localhost/messages"
+DATAGREPPER_APPROXIMATE_COUNT = True
