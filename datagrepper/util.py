@@ -8,9 +8,6 @@ from dateutil import tz
 from dateutil.parser import parse
 
 
-DEFAULT_DELTA_SECONDS = 600.0
-
-
 # http://flask.pocoo.org/snippets/45/
 # accept header returns json type content only
 # However, if the accept header is */*, then return json.
@@ -69,16 +66,24 @@ def assemble_timerange(start, end, delta):
     if delta is not None:
         delta = float(delta)
 
+    default_delta = float(flask.current_app.config["DEFAULT_QUERY_DELTA"])
+
     # Figure out values for unset arguments.
     valid_args = (start is not None, end is not None, delta is not None)
     if valid_args == (False, False, False):
-        pass
+        if default_delta >= 1:
+            end = now_seconds()
+            start = end - default_delta
+            delta = default_delta
     elif valid_args == (False, False, True):
         end = now_seconds()
         start = end - delta
     elif valid_args == (False, True, False):
-        delta = DEFAULT_DELTA_SECONDS
-        start = end - delta
+        if default_delta >= 1:
+            start = end - default_delta
+            delta = default_delta
+        else:
+            start = 0
     elif valid_args == (False, True, True):
         start = end - delta
     elif valid_args == (True, False, False):

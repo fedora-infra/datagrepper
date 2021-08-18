@@ -50,7 +50,8 @@ from datagrepper.util import (
 
 app = flask.Flask(__name__)
 app.config.from_object("datagrepper.default_config")
-app.config.from_envvar("DATAGREPPER_CONFIG")
+if "DATAGREPPER_CONFIG" in os.environ:
+    app.config.from_envvar("DATAGREPPER_CONFIG")
 app.config["CORS_DOMAINS"] = list(map(re.compile, app.config.get("CORS_DOMAINS", [])))
 app.config["CORS_HEADERS"] = list(map(re.compile, app.config.get("CORS_HEADERS", [])))
 
@@ -231,8 +232,8 @@ def count_all_messages():
     db.
     """
 
-    if app.config.get("DATAGREPPER_APPROXIMATE_COUNT", True):
-        query = "SELECT reltuples FROM pg_class WHERE relname = 'messages';"
+    if app.config.get("DATAGREPPER_APPROXIMATE_COUNT"):
+        query = "SELECT * FROM approximate_row_count('messages');"
         total = dm.session.execute(query).first()[0]
     else:
         total = dm.Message.grep(defer=True)[0]
@@ -279,11 +280,9 @@ def raw():
     # Perform our complicated datetime logic
     start = flask.request.args.get("start", None)
     end = flask.request.args.get("end", None)
-    default_delta = app.config["DEFAULT_QUERY_DELTA"]
     delta = flask.request.args.get("delta")
-    if not (start or end or delta):
-        delta = default_delta
-    start, end, delta = assemble_timerange(start, end, delta)
+    with app.app_context():
+        start, end, delta = assemble_timerange(start, end, delta)
 
     # Further filters, all ANDed together in CNF style.
     users = flask.request.args.getlist("user")
@@ -575,7 +574,8 @@ def make_charts(chart_type):
     start = flask.request.args.get("start", None)
     end = flask.request.args.get("end", None)
     delta = flask.request.args.get("delta", None)
-    start, end, delta = assemble_timerange(start, end, delta)
+    with app.app_context():
+        start, end, delta = assemble_timerange(start, end, delta)
 
     # Further filters, all ANDed together in CNF style.
     users = flask.request.args.getlist("user")
