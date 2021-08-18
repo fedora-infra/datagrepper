@@ -36,6 +36,8 @@ import pygal
 import pygments
 import pygments.formatters
 import pygments.lexers
+from flask import Flask
+from flask_healthz import HealthError, healthz
 from moksha.common.lib.converters import asbool
 from pkg_resources import get_distribution
 from werkzeug.exceptions import BadRequest
@@ -48,7 +50,7 @@ from datagrepper.util import (
 )
 
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 app.config.from_object("datagrepper.default_config")
 if "DATAGREPPER_CONFIG" in os.environ:
     app.config.from_envvar("DATAGREPPER_CONFIG")
@@ -61,6 +63,9 @@ fedmsg.meta.make_processors(**fedmsg_config)
 
 # Initialize a datanommer session.
 dm.init(app.config.get("DATANOMMER_SQLALCHEMY_URL"))
+
+# Register views
+app.register_blueprint(healthz, url_prefix="/healthz")
 
 import datagrepper.widgets  # noqa: E402,F401
 
@@ -776,3 +781,14 @@ def internal_error(error):
         status=500,
         mimetype="application/json",
     )
+
+
+def liveness():
+    pass
+
+
+def readiness():
+    try:
+        dm.session.execute("SELECT 1")
+    except Exception:
+        raise HealthError("Can't connect to the database")
