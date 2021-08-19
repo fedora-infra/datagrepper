@@ -135,7 +135,11 @@ def message_card(msg, size):
         msgDict["topic_link"] = msg["topic"]
 
     # convert the timestamp in datetime object
-    msgDict["date"] = arrow.get(msg["timestamp"])
+    # we can lose the try except as soon as we remove the fedmsg code from datagrepper
+    try:
+        msgDict["date"] = arrow.get(msg["timestamp"])
+    except KeyError:
+        msgDict["date"] = arrow.get(msg["headers"]["sent-at"])
 
     return msgDict
 
