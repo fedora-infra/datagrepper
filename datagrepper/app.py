@@ -272,8 +272,8 @@ def post_raw():
 
 
 # Instant requests
-@app.route("/raw/")
-@app.route("/raw")
+@app.route("/raw", strict_slashes=False)
+@app.route("/v2/search", strict_slashes=False)
 def raw():
     """Main API entry point."""
 
@@ -475,14 +475,15 @@ def raw():
 
 
 @app.route("/id", methods=["POST"])
+@app.route("/v2/id", methods=["POST"])
 def post_id():
     flask.abort(405)
 
 
 # Instant requests
 # Get a message by msg_id
-@app.route("/id/")
-@app.route("/id")
+@app.route("/id", strict_slashes=False)
+@app.route("/v2/id", strict_slashes=False)
 def msg_id():
     if "id" not in flask.request.args:
         flask.abort(400)
@@ -513,7 +514,11 @@ def msg_id():
 
     if msg:
         # converts message from sqlalchemy objects to json-like dicts
-        msg = msg.__json__()
+        # we can drop this if statement once we remove fedmsg
+        if "v2" in flask.request.url_rule.rule:
+            msg = msg.as_fedora_message_dict()
+        else:
+            msg = msg.__json__()
         if meta:
             msg = meta_argument(msg, meta)
 
