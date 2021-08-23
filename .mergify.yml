@@ -1,5 +1,6 @@
 pull_request_rules:
-- actions:
+- name: Automatic merge on approval
+  actions:
     merge:
       method: merge
       rebase_fallback: null
@@ -13,4 +14,20 @@ pull_request_rules:
   - check-success=Unit tests (py37)
   - check-success=Unit tests (py38)
   - check-success=Unit tests (py39)
-  name: default
+
+- name: Automatic merge Dependabot PRs
+  actions:
+    merge:
+      method: rebase
+      rebase_fallback: null
+      strict: true
+  conditions:
+  - label!=no-mergify
+  - author=dependabot[bot]
+  - approved-reviews-by=github-actions[bot]
+  - check-success=Checks
+  - check-success=Licenses
+  - check-success=Documentation
+  - check-success=Unit tests (py37)
+  - check-success=Unit tests (py38)
+  - check-success=Unit tests (py39)
