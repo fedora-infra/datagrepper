@@ -281,8 +281,7 @@ def raw():
     start = flask.request.args.get("start", None)
     end = flask.request.args.get("end", None)
     delta = flask.request.args.get("delta")
-    with app.app_context():
-        start, end, delta = assemble_timerange(start, end, delta)
+    start, end, delta = assemble_timerange(start, end, delta)
 
     # Further filters, all ANDed together in CNF style.
     users = flask.request.args.getlist("user")
@@ -579,8 +578,7 @@ def make_charts(chart_type):
     start = flask.request.args.get("start", None)
     end = flask.request.args.get("end", None)
     delta = flask.request.args.get("delta", None)
-    with app.app_context():
-        start, end, delta = assemble_timerange(start, end, delta)
+    start, end, delta = assemble_timerange(start, end, delta)
 
     # Further filters, all ANDed together in CNF style.
     users = flask.request.args.getlist("user")
