@@ -2,8 +2,10 @@ import datetime
 import unittest
 from unittest.mock import patch
 
+from dateutil import tz
+
 import datagrepper.app
-from datagrepper.util import assemble_timerange
+from datagrepper.util import assemble_timerange, datetime_to_seconds
 
 
 utc = datetime.timezone.utc
@@ -115,3 +117,9 @@ class TestTimerange(unittest.TestCase):
         assert 1325376000.0 == start
         assert 1325376000.0 + 3600 == end
         assert 3600 == delta
+
+    @patch.dict(datagrepper.app.app.config, {"DEFAULT_QUERY_DELTA": 0})
+    def test_timedelta_to_seconds(self):
+        start = datetime.datetime.now(tz.tzutc())
+        time = datetime_to_seconds(start)
+        assert time == 1325376000.0

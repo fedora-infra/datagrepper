@@ -15,6 +15,27 @@ class TestAPI(unittest.TestCase):
         self.client = datagrepper.app.app.test_client()
 
     @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
+    def test_reference(self, grep):
+        resp = self.client.get("/reference")
+        self.assertEqual(resp.status_code, 200)
+        response = resp.get_data()
+        self.assertIn(b"General API notes", response)
+
+    @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
+    def test_charts(self, grep):
+        resp = self.client.get("/charts")
+        self.assertEqual(resp.status_code, 200)
+        response = resp.get_data()
+        self.assertIn(b"Charts and Graphs", response)
+
+    @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
+    def test_widget(self, grep):
+        resp = self.client.get("/widget")
+        self.assertEqual(resp.status_code, 200)
+        response = resp.get_data()
+        self.assertIn(b"Embeddable Widget", response)
+
+    @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
     def test_raw_defaults(self, grep):
         resp = self.client.get("/raw")
         self.assertEqual(resp.status_code, 200)
@@ -37,6 +58,14 @@ class TestAPI(unittest.TestCase):
             "not_topics",
         ]:
             self.assertEqual(kws[arg], [])
+
+    @patch("datagrepper.app.count_all_messages", autospec=True, return_value=42)
+    @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
+    def test_index(self, grep, count_all_messages):
+        resp = self.client.get("/")
+        self.assertEqual(resp.status_code, 200)
+        response = resp.get_data()
+        self.assertIn(b"Datagrepper's documentation", response)
 
     @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
     def test_raw_default_result(self, grep):
@@ -102,6 +131,22 @@ class TestAPI(unittest.TestCase):
         kws = grep.call_args[1]
         self.assertEqual((kws["end"] - kws["start"]).total_seconds(), 180.0)
 
+    @patch("datagrepper.app.dm.Message.grep", side_effect=Exception)
+    def test_raw_exception(self, grep):
+        resp = self.client.get("/raw")
+        self.assertEqual(resp.status_code, 500)
+        response = resp.get_data()
+        self.assertNotIn(b'"tb": ["Traceback', response)
+
+    @patch("datagrepper.app.dm.Message.grep", side_effect=Exception)
+    @patch.dict(datagrepper.app.app.config, {"DEBUG": True})
+    def test_raw_exception_debug_true(self, grep):
+        resp = self.client.get("/raw")
+        self.assertEqual(resp.status_code, 500)
+        response = resp.get_data()
+        self.assertIn(b'"tb": ["Traceback', response)
+        self.assertIn(b"Exception", response)
+
     @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
     def test_raw_default_query_with_start_and_end_native(self, grep):
         resp = self.client.get(
@@ -124,6 +169,42 @@ class TestAPI(unittest.TestCase):
         resp = self.client.get("/raw?category=wat&contains=foo")
         self.assertEqual(resp.status_code, 400)
         target = b"When using contains, specify a start at most eight months"
+        assert target in resp.data, f"{target!r} not in {resp.data!r}"
+
+    @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
+    def test_raw_exceptions_contains_and_not_categories_topics(self, grep):
+        timestamp = datetime.utcnow()
+        resp = self.client.get(f"/raw?contains=hello&start={timestamp}")
+        self.assertEqual(resp.status_code, 400)
+        target = b"When using contains, specify either a topic or a category as well"
+        assert target in resp.data, f"{target!r} not in {resp.data!r}"
+
+    @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
+    def test_raw_exceptions_page_less_than_zero(self, grep):
+        resp = self.client.get("/raw?page=0")
+        self.assertEqual(resp.status_code, 400)
+        target = b"page must be &gt; 0"
+        assert target in resp.data, f"{target!r} not in {resp.data!r}"
+
+    @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
+    def test_raw_exceptions_rows_per_page_over_100(self, grep):
+        resp = self.client.get("/raw?rows_per_page=101")
+        self.assertEqual(resp.status_code, 400)
+        target = b"rows_per_page must be &lt;= 100"
+        assert target in resp.data, f"{target!r} not in {resp.data!r}"
+
+    @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
+    def test_raw_exceptions_order_not_in_list(self, grep):
+        resp = self.client.get("/raw?order=notinlist")
+        self.assertEqual(resp.status_code, 400)
+        target = b"order must be either &#x27;desc&#x27; or &#x27;asc&#x27;"
+        assert target in resp.data, f"{target!r} not in {resp.data!r}"
+
+    @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
+    def test_raw_exceptions_possible_sizes_not_in_list(self, grep):
+        resp = self.client.get("/raw?size=suchastring")
+        self.assertEqual(resp.status_code, 400)
+        target = b"size must be in one of these:"
         assert target in resp.data, f"{target!r} not in {resp.data!r}"
 
     @patch("datagrepper.app.dm.Message.query", autospec=True)
@@ -170,3 +251,18 @@ class TestAPI(unittest.TestCase):
         resp = self.client.get("/healthz/ready")
         self.assertEqual(resp.status_code, 503)
         self.assertEqual(resp.data, b"Can't connect to the database\n")
+
+    def test_widget_js(self):
+        resp = self.client.get("/widget.js")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.mimetype, "application/javascript")
+        response = resp.get_data()
+        self.assertIn(b"$('script#datagrepper-widget')", response)
+        self.assertIn(b"datagrepper-widget", response)
+
+    def test_widget_css(self):
+        resp = self.client.get("/widget.js?css=true")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.mimetype, "application/javascript")
+        response = resp.get_data()
+        self.assertIn(b"/static/css/bootstrap.css", response)
