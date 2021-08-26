@@ -136,7 +136,7 @@ def widget_js():
         envelope = """$.getScript("{}", function(){{{}}});""".format(
             prefix + script,
             envelope,
-        )
+        )  # TODO test this
 
     body = js_helpers % dict(base=prefix)
     body += "\nrun_with_jquery(function() {%s});" % envelope

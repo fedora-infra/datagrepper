@@ -621,7 +621,7 @@ def messagecount():
 
 
 @app.errorhandler(404)
-def not_found(error):
+def not_found(error):  # TODO test this
     return flask.Response(
         response=json.dumps({"error": "not_found"}),
         status=404,
@@ -630,7 +630,7 @@ def not_found(error):
 
 
 @app.errorhandler(500)
-def internal_error(error):
+def internal_error(error):  # TODO test this
     return flask.Response(
         response=json.dumps(
             {
