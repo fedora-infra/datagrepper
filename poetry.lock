@@ -1512,7 +1512,7 @@ deploy = ["gunicorn"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "7ff99b75f1f3be6d0b449da2763f293ea8fe51823ede23c34fe901b572ec7b4e"
+content-hash = "5baf0280a808864118ae75d94915094d91b69fc110548a8660aff9244e16790c"
 
 [metadata.files]
 alabaster = [
