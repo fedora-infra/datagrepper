@@ -1,0 +1,16 @@
+Welcome to the Datagrepper and Datanommer development environment!
+Here are some helpful commands:
+
+datanommer-consumer-start:  Start the Datanommer service.
+datanommer-consumer-logs:   View the Datanommer's log.
+datanommer-consumer-restart:Restart the Datanommer service.
+datanommer-consumer-stop:   Stop the Datanommer service.
+
+datagrepper-start:          Start the Datagrepper service.
+datagrepper-logs:           View the Datagreppe's log.
+datagrepper-restart:        Restart the Datagrepper service.
+datagrepper-stop:           Stop the Datagrepper service.
+
+Local Datagrepper url is available at http://datagrepper.test:5000/
+
+Happy hacking!

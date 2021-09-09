@@ -23,6 +23,12 @@
     owner: vagrant
     group: vagrant
 
+- name: Install the motd
+  copy:
+      src: motd
+      dest: /etc/motd
+      mode: 0644
+
 - name: Create a directory for the virtualenv
   file:
     name: /srv/venv
