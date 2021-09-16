@@ -58,7 +58,7 @@ authors = [
   "Fedora Infrastructure <admin@fedoraproject.org>"
 ]
 license = "GPL-2.0-or-later"
-readme = "README.rst"
+readme = "README.md"
 repository = "https://github.com/fedora-infra/datagrepper"
 homepage = "https://github.com/fedora-infra/datagrepper"
 
