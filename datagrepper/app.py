@@ -35,11 +35,11 @@ import pygments.formatters
 import pygments.lexers
 from flask import Flask
 from flask_healthz import HealthError, healthz
-from moksha.common.lib.converters import asbool
 from pkg_resources import get_distribution
 from werkzeug.exceptions import BadRequest
 
 from datagrepper.util import (
+    as_bool,
     assemble_timerange,
     DateAwareJSONEncoder,
     message_card,
@@ -553,12 +553,12 @@ def make_charts(chart_type):
     end = end or datetime.utcnow()
     start = start or end - timedelta(days=365)
 
-    human_readable = flask.request.args.get("human_readable", True, asbool)
-    logarithmic = flask.request.args.get("logarithmic", False, asbool)
-    show_x_labels = flask.request.args.get("show_x_labels", True, asbool)
-    show_y_labels = flask.request.args.get("show_y_labels", True, asbool)
-    show_dots = flask.request.args.get("show_dots", True, asbool)
-    fill = flask.request.args.get("fill", False, asbool)
+    human_readable = flask.request.args.get("human_readable", True, as_bool)
+    logarithmic = flask.request.args.get("logarithmic", False, as_bool)
+    show_x_labels = flask.request.args.get("show_x_labels", True, as_bool)
+    show_y_labels = flask.request.args.get("show_y_labels", True, as_bool)
+    show_dots = flask.request.args.get("show_dots", True, as_bool)
+    fill = flask.request.args.get("fill", False, as_bool)
 
     title = flask.request.args.get("title", "fedmsg events")
     width = flask.request.args.get("width", 800, int)
