@@ -14,7 +14,7 @@ class TestTimerange(unittest.TestCase):
 
     def setUp(self):
         self.now = datetime.datetime.fromtimestamp(1325376000, tz=utc)
-        patcher = unittest.mock.patch("datagrepper.util.datetime")
+        patcher = unittest.mock.patch("datagrepper.util.datetime.datetime")
         self.addCleanup(patcher.stop)
         mock_dt = patcher.start()
         # https://docs.python.org/3/library/unittest.mock-examples.html#mock-patching-methods

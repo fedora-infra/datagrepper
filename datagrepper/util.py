@@ -1,5 +1,6 @@
+import datetime
 import json
-from datetime import datetime
+import time
 
 import arrow
 import flask
@@ -52,7 +53,7 @@ def datetime_to_timestamp(datetime_str_or_timestamp):
 
 
 def now_seconds():
-    return datetime_to_seconds(datetime.now(tz.tzutc()))
+    return datetime_to_seconds(datetime.datetime.now(tz.tzutc()))
 
 
 def assemble_timerange(start, end, delta):
@@ -98,6 +99,17 @@ def assemble_timerange(start, end, delta):
         delta = end - start
 
     return start, end, delta
+
+
+class DateAwareJSONEncoder(json.encoder.JSONEncoder):
+    """Encoder with support for datetime objects"""
+
+    def default(self, obj):
+        if isinstance(obj, (datetime.datetime, datetime.date)):
+            # Convert to a UNIX timestamp. I would prefer isoformat but let's not
+            # break compatibility.
+            return time.mktime(obj.timetuple())
+        return super().default(obj)
 
 
 def get_fm_message(message_dict):
