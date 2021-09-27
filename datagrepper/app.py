@@ -26,9 +26,6 @@ import arrow
 import datanommer.models as dm
 import docutils
 import docutils.examples
-import fedmsg
-import fedmsg.config
-import fedmsg.meta
 import flask
 import jinja2
 import markupsafe
@@ -58,10 +55,6 @@ if "DATAGREPPER_CONFIG" in os.environ:
 app.config["CORS_DOMAINS"] = list(map(re.compile, app.config.get("CORS_DOMAINS", [])))
 app.config["CORS_HEADERS"] = list(map(re.compile, app.config.get("CORS_HEADERS", [])))
 
-# Read in the datanommer DB URL from /etc/fedmsg.d/ (or a local fedmsg.d/)
-fedmsg_config = fedmsg.config.load_config()
-fedmsg.meta.make_processors(**fedmsg_config)
-
 # Initialize a datanommer session.
 dm.init(app.config.get("DATANOMMER_SQLALCHEMY_URL"))
 
@@ -78,27 +71,6 @@ def inject_variable():
         "models_version": get_distribution("datanommer.models").version,
         "grepper_version": get_distribution("datagrepper").version,
     }
-
-    style = {
-        "message_bus_link": "http://fedmsg.com",
-        "message_bus_shortname": "fedmsg",
-        "message_bus_longname": "fedmsg bus",
-        "theme_css_url": (
-            "https://apps.fedoraproject.org/global/fedora-bootstrap-1.0/"
-            "fedora-bootstrap.min.css"
-        ),
-        "datagrepper_logo": "static/datagrepper.png",
-    }
-    for key, default in style.items():
-        extras[key] = fedmsg_config.get(key, default)
-
-    if "websocket_address" in fedmsg_config:
-        extras["websocket_address"] = fedmsg_config["websocket_address"]
-
-    # Only allow websockets connections to fedoraproject.org, for instance
-    if "content_security_policy" in fedmsg_config:
-        extras["content_security_policy"] = fedmsg_config["content_security_policy"]
-
     return extras
 
 
