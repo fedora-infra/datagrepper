@@ -112,6 +112,18 @@ class DateAwareJSONEncoder(json.encoder.JSONEncoder):
         return super().default(obj)
 
 
+def as_bool(value):
+    if isinstance(value, str):
+        value = value.strip().lower()
+        if value in ["true", "yes", "on", "y", "t", "1"]:
+            return True
+        elif value in ["false", "no", "off", "n", "f", "0"]:
+            return False
+        else:
+            raise ValueError(f"value is not true or false: {value}")
+    return bool(value)
+
+
 def get_fm_message(message_dict):
     """Build a ``fedora_messaging.message.Message`` instance from the message dictionary"""
     MessageClass = get_fm_class(message_dict["headers"]["fedora_messaging_schema"])
