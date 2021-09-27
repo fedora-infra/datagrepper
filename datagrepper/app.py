@@ -386,7 +386,7 @@ def raw():
         messages = [msg.as_dict() for msg in messages]
         if meta:
             for message in messages:
-                message = meta_argument(message, meta)
+                message["meta"] = meta_argument(message, meta)
 
         output = dict(
             raw_messages=messages,
@@ -432,12 +432,7 @@ def raw():
         final_message_list = []
 
         for msg in raw_message_list:
-            # message_card module will handle size
-            message = message_card(msg, size)
-            # add msg_id to the message dictionary
-            if msg["msg_id"] is not None:
-                message["msg_id"] = msg["msg_id"]
-            final_message_list.append(message)
+            final_message_list.append(message_card(msg))
 
         # removes boilerlate codes if chrome value is false
         if chrome == "true":
@@ -504,13 +499,9 @@ def msg_id():
 
     if msg:
         # converts message from sqlalchemy objects to json-like dicts
-        # we can drop this if statement once we remove fedmsg
-        if "v2" in flask.request.url_rule.rule:
-            msg = msg.as_fedora_message_dict()
-        else:
-            msg = msg.as_dict()
+        msg = msg.as_dict()
         if meta:
-            msg = meta_argument(msg, meta)
+            msg["meta"] = meta_argument(msg, meta)
 
         if not callback and request_wants_html():
             # convert string into python dictionary
@@ -522,7 +513,7 @@ def msg_id():
                     style="emacs",
                 ),
             ).strip()
-            message_dict = message_card(msg, size)
+            message_dict = message_card(msg)
 
             if is_raw == "true":
                 message_dict["is_raw"] = "true"
