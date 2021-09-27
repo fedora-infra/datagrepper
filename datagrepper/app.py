@@ -44,6 +44,7 @@ from werkzeug.exceptions import BadRequest
 
 from datagrepper.util import (
     assemble_timerange,
+    DateAwareJSONEncoder,
     message_card,
     meta_argument,
     request_wants_html,
@@ -410,7 +411,7 @@ def raw():
 
         status = 500
 
-    body = fedmsg.encoding.dumps(output)
+    body = json.dumps(output, cls=DateAwareJSONEncoder)
 
     mimetype = flask.request.headers.get("Accept")
 
@@ -506,7 +507,7 @@ def msg_id():
         if not callback and request_wants_html():
             # convert string into python dictionary
             msg_string = pygments.highlight(
-                fedmsg.encoding.pretty_dumps(msg),
+                json.dumps(msg, indent=2, sort_keys=True, cls=DateAwareJSONEncoder),
                 pygments.lexers.JavascriptLexer(),
                 pygments.formatters.HtmlFormatter(
                     noclasses=True,
@@ -530,7 +531,7 @@ def msg_id():
                 heading="Message by ID",
             )
         else:
-            body = fedmsg.encoding.dumps(msg)
+            body = json.dumps(msg)
 
             if callback:
                 mimetype = "application/javascript"
@@ -739,7 +740,7 @@ def messagecount():
 @app.errorhandler(404)
 def not_found(error):
     return flask.Response(
-        response=fedmsg.encoding.dumps({"error": "not_found"}),
+        response=json.dumps({"error": "not_found"}),
         status=404,
         mimetype="application/json",
     )
@@ -748,7 +749,7 @@ def not_found(error):
 @app.errorhandler(500)
 def internal_error(error):
     return flask.Response(
-        response=fedmsg.encoding.dumps(
+        response=json.dumps(
             {
                 "error": "internal_error",
                 "detail": str(error),
