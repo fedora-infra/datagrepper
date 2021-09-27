@@ -74,8 +74,7 @@ var data = {
 // Check to see if the user has asked us to filter the firehose.
 var datagrepper_attrs = [
     'user', 'package', 'category', 'topic',
-    'order', 'rows_per_page', 'page', 'size',
-    'grouped'];
+    'order', 'rows_per_page', 'page', 'size'];
 $.each(datagrepper_attrs, function(i, attr) {
     var value = $('script#datagrepper-widget').attr("data-" + attr);
     if (value != undefined) {
