@@ -129,7 +129,7 @@ class TestAPI(unittest.TestCase):
     @patch("datagrepper.app.dm.Message.query", autospec=True)
     def test_id(self, query):
         msg = query.filter_by.return_value.first.return_value
-        msg.__json__ = MagicMock(return_value={"key": "value"})
+        msg.as_dict = MagicMock(return_value={"key": "value"})
         resp = self.client.get("/id?id=one")
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(query.filter_by.call_args, ((), {"msg_id": "one"}))
