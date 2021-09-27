@@ -195,13 +195,6 @@ The following query returns all messages from the past two days where
       user==pingou
 
 
-Topics list
------------
-
-If you don't know what topics are available for you to query, check the `list
-of topics`_ in the documentation.
-
-
 Get help
 --------
 
@@ -210,7 +203,5 @@ everything is awesome, we welcome high-fives and karma cookies.
 
 
 .. _`HTTPie`: https://github.com/jkbr/httpie#httpie-a-cli-curl-like-tool-for-humans
-.. _`list of topics`: http://fedora-fedmsg.readthedocs.io/en/latest/topics.html
 .. _`Conjunctive Normal Form`: https://wikipedia.org/wiki/Conjunctive_normal_form
 .. _`freenode`: https://fedoraproject.org/wiki/How_to_use_IRC
-
