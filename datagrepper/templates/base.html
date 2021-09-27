@@ -7,17 +7,17 @@
     <meta name="description" content="History of the fedmsg bus">
     <meta name="author" content="Ralph Bean">
 
-    {% if content_security_policy is defined %}
-    <meta http-equiv="Content-Security-Policy" content="{{ content_security_policy }}">
+    {% if config.CONTENT_SECURITY_POLICY %}
+    <meta http-equiv="Content-Security-Policy" content="{{ config.CONTENT_SECURITY_POLICY }}">
     {% endif %}
 
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
-    <link rel="stylesheet" href="static/css/fedora-bootstrap-fonts.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fedora-bootstrap-fonts.css') }}">
 
     <title>Datagrepper</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="{{theme_css_url}}" rel="stylesheet">
+    <link href="{{config.THEME_CSS_URL}}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/raw.css') }}" rel="stylesheet">
     <style type="text/css">
       div {
@@ -30,7 +30,7 @@
 
     <div class="masthead">
       <div class="container">
-        <img src="{{datagrepper_logo}}" height=40px />
+        <img src="{{ url_for('static', filename='datagrepper.png') }}" height=40px />
       </div>
     </div>
 
@@ -53,7 +53,7 @@
             {% if heading %}
             <h1>{{heading}}</h1>
             {% else %}
-            <h1>{{message_bus_shortname}} <small>messages</small></h1>
+            <h1>{{config.BUS_INFO.shortname}} <small>messages</small></h1>
             {% endif %}
             <p>See <a href="{{ url_for('index') }}">the documentation</a> for information on how to construct queries.</p>
           </div>
@@ -96,7 +96,7 @@
     <div class="footer p-t p-b text-center">
       <div class="container">
         <p class="text-muted credit">
-          Datagrepper is Powered by <a href="{{message_bus_docs}}">{{message_bus_shortname}}</a>. The
+          Datagrepper is Powered by <a href="{{config.BUS_INFO.docs}}">{{config.BUS_INFO.shortname}}</a>. The
           <a href="https://github.com/fedora-infra/datagrepper">source</a>
           and
           <a href="https://github.com/fedora-infra/datagrepper/issues">issue tracker</a>
@@ -112,11 +112,11 @@
     <script src="{{ url_for('static', filename='jquery-2.1.0.min.js') }}"></script>
     {% if autoscroll %}
     <script src="{{ url_for('static', filename='autoscroll.js') }}"></script>
-    {% if websocket_address is defined %}
+    {% if config.WEBSOCKET_URL %}
     <script src="{{ url_for('static', filename='live.js') }}"></script>
     <script>
       $(document).ready(function() {
-          setup_websocket("{{websocket_address}}");
+          setup_websocket("{{config.WEBSOCKET_URL}}");
       });
     </script>
     {% endif %}
