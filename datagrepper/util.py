@@ -2,10 +2,10 @@ import json
 from datetime import datetime
 
 import arrow
-import fedmsg
 import flask
 from dateutil import tz
 from dateutil.parser import parse
+from fedora_messaging.message import get_class as get_fm_class
 
 
 # http://flask.pocoo.org/snippets/45/
@@ -100,48 +100,27 @@ def assemble_timerange(start, end, delta):
     return start, end, delta
 
 
-def message_card(msg, size):
-    """Util to generate icon, title, subtitle, link
-    and secondary_icon using fedmsg.meta modules.
-    """
-    # using fedmsg.meta modules
-    config = fedmsg.config.load_config([], None)
-    fedmsg.meta.make_processors(**config)
+def get_fm_message(message_dict):
+    """Build a ``fedora_messaging.message.Message`` instance from the message dictionary"""
+    MessageClass = get_fm_class(message_dict["headers"]["fedora_messaging_schema"])
+    message = MessageClass(
+        body=message_dict["msg"],
+        topic=message_dict["topic"],
+        headers=message_dict["headers"],
+        severity=message_dict["headers"].get("fedora_messaging_severity"),
+    )
+    message.id = message_dict["msg_id"]
+    return message
 
-    msgDict = {}
 
-    if size in ["extra-large"]:
-        pass
-
-    if size in ["extra-large", "large"]:
-        # generate secondary icon associated with message
-        secondary_icon = fedmsg.meta.msg2secondary_icon(msg, legacy=False, **config)
-        msgDict["secondary_icon"] = secondary_icon
-
-    if size in ["extra-large", "large", "medium"]:
-        icon = fedmsg.meta.msg2icon(msg, legacy=False, **config)
-        msgDict["icon"] = icon
-        # generate subtitle associated with message
-        subtitle = fedmsg.meta.msg2subtitle(msg, legacy=False, **config)
-        msgDict["subtitle"] = subtitle
-
-    if size in ["extra-large", "large", "medium", "small"]:
-        # generate URL associated with message
-        link = fedmsg.meta.msg2link(msg, legacy=False, **config)
-        msgDict["link"] = link
-        # generate title associated with message
-        title = fedmsg.meta.msg2title(msg, legacy=False, **config)
-        msgDict["title"] = title
-        msgDict["topic_link"] = msg["topic"]
-
-    # convert the timestamp in datetime object
-    # we can lose the try except as soon as we remove the fedmsg code from datagrepper
-    try:
-        msgDict["date"] = arrow.get(msg["timestamp"])
-    except KeyError:
-        msgDict["date"] = arrow.get(msg["headers"]["sent-at"])
-
-    return msgDict
+def message_card(msg):
+    """Generate a dict with the message's display information"""
+    card = meta_argument(msg, ("date", "url", "summary", "app_icon", "agent_avatar"))
+    card["timestamp"] = arrow.get(msg["timestamp"])
+    # import some keys unchanged
+    for key in ("topic", "msg_id"):
+        card[key] = msg[key]
+    return card
 
 
 def meta_argument(msg, meta):
@@ -149,38 +128,38 @@ def meta_argument(msg, meta):
     so that JSON include human-readable strings"""
 
     meta_expected = {
-        "title",
-        "subtitle",
-        "icon",
-        "secondary_icon",
-        "link",
+        "summary",
+        "text",
+        "url",
+        "app_icon",
+        "agent_avatar",
         "usernames",
         "packages",
-        "objects",
+        "containers",
+        "modules",
+        "flatpaks",
         "date",
     }
     if len(set(meta).intersection(meta_expected)) != len(set(meta)):
         raise ValueError("meta must be in %s" % ",".join(list(meta_expected)))
 
+    fm_msg = get_fm_message(msg)
+
     metas = {}
-    config = fedmsg.config.load_config([], None)
     for metadata in meta:
         # This one is exceptional
         if metadata == "date":
             metas[metadata] = arrow.get(msg["timestamp"]).humanize()
             continue
+        # This one is exceptional too ;-)
+        if metadata == "text":
+            metas[metadata] = str(fm_msg)
+            continue
+        # All the other metas use the schema properties
+        metas[metadata] = getattr(fm_msg, metadata)
 
-        # All the other metas use fedmsg.meta.msg2*
-        cmd = "msg2%s" % metadata
-        metas[metadata] = getattr(fedmsg.meta, cmd)(msg, **config)
-
-        # We have to do this because 'set' is not
-        # JSON-serializable.  In the next version of fedmsg, this
-        # will be handled automatically and we can just remove this
-        # statement https://github.com/fedora-infra/fedmsg/pull/139
+        # We have to do this because 'set' is not JSON-serializable
         if isinstance(metas[metadata], set):
             metas[metadata] = list(metas[metadata])
 
-    msg["meta"] = metas
-
-    return msg
+    return metas

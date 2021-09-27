@@ -213,8 +213,8 @@ Formatting arguments
 ``meta``
   Argument to specify what meta information to return with the raw
   message from fedmsg.
-  Options are: ``title``, ``subtitle``, ``icon``, ``secondary_icon``, ``link``,
-  ``usernames``, ``packages``, ``objects``, and ``date``.
+  Options are: ``summary``, ``text``, ``app_icon``, ``agent_avatar``, ``url``,
+  ``usernames``, ``packages``, ``containers``, ``modules``, ``flatpaks``, and ``date``.
 
   Default: None
 
