@@ -383,7 +383,7 @@ def raw():
         )
 
         # Convert our messages from sqlalchemy objects to json-like dicts
-        messages = [msg.__json__() for msg in messages]
+        messages = [msg.as_dict() for msg in messages]
         if meta:
             for message in messages:
                 message = meta_argument(message, meta)
@@ -508,7 +508,7 @@ def msg_id():
         if "v2" in flask.request.url_rule.rule:
             msg = msg.as_fedora_message_dict()
         else:
-            msg = msg.__json__()
+            msg = msg.as_dict()
         if meta:
             msg = meta_argument(msg, meta)
 
