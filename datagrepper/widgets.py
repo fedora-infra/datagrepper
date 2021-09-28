@@ -83,8 +83,8 @@ $.each(datagrepper_attrs, function(i, attr) {
 });
 
 $.ajax(
-    '%(base)s/raw/?meta=link&meta=icon' +
-    '&meta=secondary_icon&meta=subtitle&meta=date', {
+    '%(base)s/v2/search?meta=url&meta=app_icon' +
+    '&meta=agent_avatar&meta=summary&meta=date', {
         data: data,
         dataType: 'jsonp',
         success: datagrepper_success,
