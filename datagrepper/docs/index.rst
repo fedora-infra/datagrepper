@@ -125,9 +125,7 @@ set it to ``asc`` for ascending order (i.e. oldest to newest).
 Only Bodhi messages (OR wiki)
 -----------------------------
 
-There is a `list of topics`_ that come across Fedora's messaging bus
-(**fedmsg**). Specify a ``category`` to limit your message to one kind of
-topic::
+Specify a ``category`` to limit your message to one kind of topic::
 
    http get {{URL}}raw \
       delta==172800 \

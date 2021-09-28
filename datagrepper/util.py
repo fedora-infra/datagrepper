@@ -19,8 +19,22 @@ def request_wants_html():
     return best == "text/html"
 
 
-def json_return(data):
-    return flask.Response(json.dumps(data), mimetype="application/json")
+def json_return(data, status=200, callback=None):
+    output = json.dumps(data, cls=DateAwareJSONEncoder)
+    mimetype = flask.request.headers.get("Accept")
+    # Our default - http://da.gd/vIIV
+    if mimetype == "*/*":
+        mimetype = "application/json"
+
+    if callback:
+        mimetype = "application/javascript"
+        output = f"{callback}({output});"
+
+    return flask.Response(
+        response=output,
+        status=status,
+        mimetype=mimetype,
+    )
 
 
 def datetime_to_seconds(dt):
@@ -124,26 +138,41 @@ def as_bool(value):
     return bool(value)
 
 
-def get_fm_message(message_dict):
-    """Build a ``fedora_messaging.message.Message`` instance from the message dictionary"""
-    MessageClass = get_fm_class(message_dict["headers"]["fedora_messaging_schema"])
-    message = MessageClass(
-        body=message_dict["msg"],
-        topic=message_dict["topic"],
-        headers=message_dict["headers"],
-        severity=message_dict["headers"].get("fedora_messaging_severity"),
+def get_message_dict(msg, meta):
+    # we can drop this if statement once we remove fedmsg
+    if flask.request.url_rule.rule.startswith("/v2/"):
+        msg_dict = msg.as_fedora_message_dict()
+    else:
+        msg_dict = msg.as_dict()
+    if meta:
+        msg_dict["meta"] = meta_argument(msg, meta)
+    return msg_dict
+
+
+def get_fm_message(message):
+    """Build a ``fedora_messaging.message.Message`` instance from the DB message instance"""
+    headers = message.headers
+    if "sent-at" not in headers:
+        headers["sent-at"] = message.timestamp.isoformat()
+
+    MessageClass = get_fm_class(headers.get("fedora_messaging_schema"))
+    fm_message = MessageClass(
+        body=message.msg,
+        topic=message.topic,
+        headers=headers,
+        severity=headers.get("fedora_messaging_severity"),
     )
-    message.id = message_dict["msg_id"]
-    return message
+    fm_message.id = message.msg_id
+    return fm_message
 
 
 def message_card(msg):
     """Generate a dict with the message's display information"""
     card = meta_argument(msg, ("date", "url", "summary", "app_icon", "agent_avatar"))
-    card["timestamp"] = arrow.get(msg["timestamp"])
+    card["timestamp"] = arrow.get(msg.timestamp)
     # import some keys unchanged
     for key in ("topic", "msg_id"):
-        card[key] = msg[key]
+        card[key] = getattr(msg, key)
     return card
 
 
@@ -173,7 +202,7 @@ def meta_argument(msg, meta):
     for metadata in meta:
         # This one is exceptional
         if metadata == "date":
-            metas[metadata] = arrow.get(msg["timestamp"]).humanize()
+            metas[metadata] = arrow.get(msg.timestamp).humanize()
             continue
         # This one is exceptional too ;-)
         if metadata == "text":
