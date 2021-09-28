@@ -11,16 +11,9 @@
     <meta http-equiv="Content-Security-Policy" content="{{ config.CONTENT_SECURITY_POLICY }}">
     {% endif %}
 
-    <!-- Le styles -->
+    <!-- Styles -->
     <link href="{{config.THEME_CSS_URL}}" rel="stylesheet">
-    <style type="text/css">
-      .odometer {
-        font-size: 70px;
-      }
-      .odometer-value {
-        line-height: 110px !important;
-      }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -71,7 +64,9 @@
         kinds of historical data from the <a href="{{config.BUS_INFO.docs}}">
         {{config.BUS_INFO.longname}}</a>: events by username, by package, by message
         source, by topic&hellip; you name it.</p>
-        <span id="odometer" class="odometer centered visible-sm visible-md visible-lg">{{total}}</span>
+        <div class="text-center">
+          <span id="odometer" class="odometer">{{ total }}</span>
+        </div>
       </div>
 
       {% if config.WEBSOCKET_URL %}
@@ -85,6 +80,7 @@
           {
             if ("WebSocket" in window)
             {
+                var element = document.getElementById("odometer");
                 // Let us open a web socket
                 var ws = new WebSocket("{{ config.WEBSOCKET_URL }}");
                 ws.onopen = function(e)
@@ -95,7 +91,7 @@
                 ws.onmessage = function (evt)
                 {
                     count = count + 1;
-                    odometer.innerHTML = count;
+                    element.innerHTML = count;
                 };
                 ws.onclose = function(e){ws=null;};
                 ws.onerror = function(e){ws=null;};
