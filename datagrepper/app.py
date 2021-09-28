@@ -42,8 +42,9 @@ from datagrepper.util import (
     as_bool,
     assemble_timerange,
     DateAwareJSONEncoder,
+    get_message_dict,
+    json_return,
     message_card,
-    meta_argument,
     request_wants_html,
 )
 
@@ -219,6 +220,9 @@ def count_all_messages():
     return int(total)
 
 
+POSSIBLE_SIZES = ["small", "medium", "large", "extra-large"]
+
+
 @app.route("/")
 def index():
     total = count_all_messages()
@@ -244,14 +248,8 @@ def widget():
     return flask.render_template("index.html", docs=load_docs(flask.request))
 
 
-@app.route("/raw", methods=["POST"])
-def post_raw():
-    flask.abort(405)
-
-
-# Instant requests
-@app.route("/raw", strict_slashes=False)
-@app.route("/v2/search", strict_slashes=False)
+@app.route("/raw", methods=["GET"], strict_slashes=False)
+@app.route("/v2/search", methods=["GET"], strict_slashes=False)
 def raw():
     """Main API entry point."""
 
@@ -267,6 +265,16 @@ def raw():
     categories = flask.request.args.getlist("category")
     topics = flask.request.args.getlist("topic")
     contains = flask.request.args.getlist("contains")
+    # Validate the "contains" argument
+    _contains_limit = datetime.utcnow() - timedelta(weeks=4 * 8)
+    if contains and datetime.fromtimestamp(start or 0) < _contains_limit:
+        raise BadRequest(
+            "When using contains, specify a start at most eight months into the past"
+        )
+    if contains and not (categories or topics):
+        raise BadRequest(
+            "When using contains, specify either a topic or a category as well"
+        )
 
     # Still more filters.. negations of the previous ones.
     not_users = flask.request.args.getlist("not_user")
@@ -276,12 +284,23 @@ def raw():
 
     # Paging arguments
     page = int(flask.request.args.get("page", 1))
+    if page < 1:
+        raise BadRequest("page must be > 0")
     rows_per_page = int(flask.request.args.get("rows_per_page", 25))
+    if rows_per_page > 100:
+        raise BadRequest("rows_per_page must be <= 100")
     order = flask.request.args.get("order", "desc")
+    if order not in ["desc", "asc"]:
+        raise BadRequest("order must be either 'desc' or 'asc'")
     # adding size as paging arguments
     size = flask.request.args.get("size", "large")
+    if size not in POSSIBLE_SIZES:
+        raise BadRequest(f"size must be in one of these: {POSSIBLE_SIZES!r}")
     # adding chrome as paging arguments
-    chrome = flask.request.args.get("chrome", "true")
+    try:
+        chrome = flask.request.args.get("chrome", "true", as_bool)
+    except ValueError:
+        raise BadRequest("chrome should be either 'true' or 'false'")
 
     # Response formatting arguments
     callback = flask.request.args.get("callback", None)
@@ -306,35 +325,7 @@ def raw():
         meta=meta,
     )
 
-    if page < 1:
-        raise ValueError("page must be > 0")
-
-    if rows_per_page > 100:
-        raise ValueError("rows_per_page must be <= 100")
-
-    if order not in ["desc", "asc"]:
-        raise ValueError("order must be either 'desc' or 'asc'")
-
-    # check size value
-    possible_sizes = ["small", "medium", "large", "extra-large"]
-    if size not in possible_sizes:
-        raise ValueError("size must be in one of these %r" % possible_sizes)
-
-    # checks chrome value
-    if chrome not in ["true", "false"]:
-        raise ValueError("chrome should be either 'true' or 'false'")
-
-    if contains and datetime.fromtimestamp(start or 0) < (
-        datetime.utcnow() - timedelta(weeks=4 * 8)
-    ):
-        raise BadRequest(
-            "When using contains, specify a start at most " "eight months into the past"
-        )
-
-    if contains and not (categories or topics):
-        raise BadRequest(
-            "When using contains, specify either a topic or" " a category as well"
-        )
+    is_html = request_wants_html() and not callback
 
     try:
         # This fancy classmethod does all of our search for us.
@@ -354,178 +345,99 @@ def raw():
             not_categories=not_categories,
             not_topics=not_topics,
         )
+    except Exception as e:
+        traceback.print_exc()
 
-        # Convert our messages from sqlalchemy objects to json-like dicts
-        messages = [msg.as_dict() for msg in messages]
-        if meta:
-            for message in messages:
-                message["meta"] = meta_argument(message, meta)
-
+        # TODO: return HTML when is_html is True
         output = dict(
-            raw_messages=messages,
+            error=str(e),
+            arguments=arguments,
+        )
+        # :D
+        if app.config.get("DEBUG", False):
+            output["tb"] = traceback.format_exc().split("\n")
+        return json_return(output, 500, callback)
+
+    # return HTML content else json
+    if is_html:
+        # removes boilerlate codes if chrome value is false
+        template = "base.html" if chrome else "raw.html"
+        return flask.render_template(
+            template,
+            size=size,
+            response=[message_card(msg) for msg in messages],
+            arguments=arguments,
+            autoscroll=chrome,
+        )
+
+    else:
+        output = dict(
+            raw_messages=[get_message_dict(msg, meta) for msg in messages],
             total=total,
             pages=pages,
             count=len(messages),
             arguments=arguments,
         )
-        status = 200
-    except Exception as e:
-        traceback.print_exc()
-
-        output = dict(
-            error=str(e),
-            arguments=arguments,
-        )
-
-        # :D
-        if app.config.get("DEBUG", False):
-            output["tb"] = traceback.format_exc().split("\n")
-
-        status = 500
-
-    body = json.dumps(output, cls=DateAwareJSONEncoder)
-
-    mimetype = flask.request.headers.get("Accept")
-
-    # Our default - http://da.gd/vIIV
-    if mimetype == "*/*":
-        mimetype = "application/json"
-
-    if callback:
-        mimetype = "application/javascript"
-        body = f"{callback}({body});"
-
-    # return HTML content else json
-    if not callback and request_wants_html():
-        # convert string into python dictionary
-        obj = json.loads(body)
-        # extract the messages
-        raw_message_list = obj.get("raw_messages", [])
-
-        final_message_list = []
-
-        for msg in raw_message_list:
-            final_message_list.append(message_card(msg))
-
-        # removes boilerlate codes if chrome value is false
-        if chrome == "true":
-            return flask.render_template(
-                "base.html",
-                size=size,
-                response=final_message_list,
-                arguments=arguments,
-                autoscroll=True,
-            )
-        else:
-            return flask.render_template(
-                "raw.html",
-                size=size,
-                response=final_message_list,
-                arguments=arguments,
-            )
-
-    else:
-        return flask.Response(
-            response=body,
-            status=status,
-            mimetype=mimetype,
-        )
+        return json_return(output, 200, callback)
 
 
-@app.route("/id", methods=["POST"])
-@app.route("/v2/id", methods=["POST"])
-def post_id():
-    flask.abort(405)
-
-
-# Instant requests
 # Get a message by msg_id
-@app.route("/id", strict_slashes=False)
-@app.route("/v2/id", strict_slashes=False)
+@app.route("/id", methods=["GET"], strict_slashes=False)
+@app.route("/v2/id", methods=["GET"], strict_slashes=False)
 def msg_id():
     if "id" not in flask.request.args:
         flask.abort(400)
     msg = dm.Message.query.filter_by(msg_id=flask.request.args["id"]).first()
-    mimetype = flask.request.headers.get("Accept")
+    if not msg:
+        flask.abort(404)
 
     # get paging argument for size and chrome
     size = flask.request.args.get("size", "large")
-    chrome = flask.request.args.get("chrome", "true")
+    if size not in POSSIBLE_SIZES:
+        raise ValueError(f"size must be in one of these: {POSSIBLE_SIZES!r}")
+    try:
+        chrome = flask.request.args.get("chrome", "true", as_bool)
+    except ValueError:
+        raise ValueError("chrome should be either 'true' or 'false'")
     # get paging argument for is_raw
     # is_raw checks if card comes from /raw url
-    is_raw = flask.request.args.get("is_raw", "false")
+    try:
+        is_raw = flask.request.args.get("is_raw", "false", as_bool)
+    except ValueError:
+        raise ValueError("is_raw should be either 'true' or 'false'")
 
     callback = flask.request.args.get("callback", None)
     meta = flask.request.args.getlist("meta")
 
-    sizes = ["small", "medium", "large", "extra-large"]
-    # check size value
-    if size not in sizes:
-        raise ValueError("size must be in one of these '%s'" % "', '".join(sizes))
+    # converts message from sqlalchemy objects to json-like dicts
+    msg_dict = get_message_dict(msg, meta)
 
-    # checks chrome value
-    if chrome not in ["true", "false"]:
-        raise ValueError("chrome should be either 'true' or 'false'")
-    # checks is_raw value
-    if is_raw not in ["true", "false"]:
-        raise ValueError("is_raw should be either 'true' or 'false'")
+    is_html = request_wants_html() and not callback
+    if is_html:
+        # convert string into python dictionary
+        msg_string = pygments.highlight(
+            json.dumps(msg_dict, indent=2, sort_keys=True, cls=DateAwareJSONEncoder),
+            pygments.lexers.JavascriptLexer(),
+            pygments.formatters.HtmlFormatter(
+                noclasses=True,
+                style="emacs",
+            ),
+        ).strip()
 
-    if msg:
-        # converts message from sqlalchemy objects to json-like dicts
-        msg = msg.as_dict()
-        if meta:
-            msg["meta"] = meta_argument(msg, meta)
-
-        if not callback and request_wants_html():
-            # convert string into python dictionary
-            msg_string = pygments.highlight(
-                json.dumps(msg, indent=2, sort_keys=True, cls=DateAwareJSONEncoder),
-                pygments.lexers.JavascriptLexer(),
-                pygments.formatters.HtmlFormatter(
-                    noclasses=True,
-                    style="emacs",
-                ),
-            ).strip()
-            message_dict = message_card(msg)
-
-            if is_raw == "true":
-                message_dict["is_raw"] = "true"
-
-            template = "base.html"
-            if chrome != "true":
-                template = "raw.html"
-
-            return flask.render_template(
-                template,
-                size=size,
-                response=[message_dict],
-                msg_string=msg_string,
-                heading="Message by ID",
-            )
-        else:
-            body = json.dumps(msg)
-
-            if callback:
-                mimetype = "application/javascript"
-                body = f"{callback}({body});"
-
-            return flask.Response(
-                response=body,
-                status=200,
-                mimetype=mimetype,
-            )
+        template = "base.html" if chrome else "raw.html"
+        return flask.render_template(
+            template,
+            size=size,
+            response=[message_card(msg)],
+            msg_string=msg_string,
+            heading="Message by ID",
+            is_raw=is_raw,
+        )
     else:
-        flask.abort(404)
+        return json_return(msg_dict, callback=callback)
 
 
-@app.route("/charts/<chart_type>", methods=["POST"])
-def post_charts(chart_type):
-    flask.abort(405)
-
-
-# Instant requests
-@app.route("/charts/<chart_type>/")
-@app.route("/charts/<chart_type>")
+@app.route("/charts/<chart_type>", methods=["GET"])
 def make_charts(chart_type):
     """Return SVGs graphing db content."""
 

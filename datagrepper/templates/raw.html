@@ -23,7 +23,7 @@
           <a href="{{url_for('msg_id')}}?id={{msg_card['msg_id']}}&is_raw=true&size=extra-large">
             <span class="details-history">JSON</span>
           </a>
-        {% if 'is_raw' in msg_card %}
+        {% if is_raw %}
             <a href="#" onclick="history.go(-1)">Go Back</a>
         {% endif %}
         </td>
