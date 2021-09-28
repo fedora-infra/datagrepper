@@ -177,7 +177,7 @@ def message_card(msg):
 
 
 def meta_argument(msg, meta):
-    """Util to accept meta arguments for /raw and /id endpoint
+    """Return meta argument values for search and id endpoints
     so that JSON include human-readable strings"""
 
     meta_expected = {

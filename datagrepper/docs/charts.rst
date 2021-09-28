@@ -27,7 +27,7 @@ Options
 
 There are **lots** of options.
 
-First, you can specify all the same options that you would to 'raw' queries.
+First, you can specify all the same options that you would to "search" queries.
 The the documentation on the main page for more information about those.  You
 can filter by ``user``, ``package``, ``category``, and ``topic`` (as well as
 ``not_user``, ``not_package``, etc..).

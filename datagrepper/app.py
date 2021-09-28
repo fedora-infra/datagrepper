@@ -400,7 +400,7 @@ def msg_id():
     except ValueError:
         raise ValueError("chrome should be either 'true' or 'false'")
     # get paging argument for is_raw
-    # is_raw checks if card comes from /raw url
+    # is_raw checks if card comes from the search endpoint
     try:
         is_raw = flask.request.args.get("is_raw", "false", as_bool)
     except ValueError:
