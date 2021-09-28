@@ -42,17 +42,6 @@ def datetime_to_seconds(dt):
     return dt.timestamp()
 
 
-def timedelta_to_seconds(td):
-    """Python 2.7 has a handy total_seconds method.
-    If we're on 2.6 though, we have to roll our own.
-    """
-
-    if hasattr(td, "total_seconds"):
-        return td.total_seconds()
-    else:
-        return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) / 1e6
-
-
 def datetime_to_timestamp(datetime_str_or_timestamp):
     try:
         return float(datetime_str_or_timestamp)
