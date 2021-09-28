@@ -412,8 +412,7 @@ def msg_id():
     # converts message from sqlalchemy objects to json-like dicts
     msg_dict = get_message_dict(msg, meta)
 
-    is_html = request_wants_html() and not callback
-    if is_html:
+    if request_wants_html() and not callback:
         # convert string into python dictionary
         msg_string = pygments.highlight(
             json.dumps(msg_dict, indent=2, sort_keys=True, cls=DateAwareJSONEncoder),
