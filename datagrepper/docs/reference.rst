@@ -11,10 +11,10 @@ is made in "text/html" then it will return the html content otherwise it will re
 explicitly requested, in which case datagrepper returns the appropriate ``application/javascript``).
 
 
-/raw
-----
+/v2/search
+----------
 
-The ``/raw`` endpoint returns lists of messages.
+The ``/v2/search`` endpoint returns lists of messages.
 
 Response format
 ===============
@@ -33,13 +33,13 @@ Sample response:
       "pages": 42,
       "raw_messages": [
         {
-          "certificate": "...",
-          "i": 1,
-          "msg": {
+          "body": {
             ...
           },
-          "signature": "...",
-          "timestamp": 1361414385.0,
+          "headers": {
+            ...
+          },
+          "id": "...",
           "topic": "org.fedoraproject.prod.sample"
         },
         ...
@@ -213,16 +213,10 @@ Formatting arguments
 ``meta``
   Argument to specify what meta information to return with the raw
   message from fedmsg.
-  Options are: ``title``, ``subtitle``, ``icon``, ``secondary_icon``, ``link``,
-  ``usernames``, ``packages``, ``objects``, and ``date``.
+  Options are: ``summary``, ``text``, ``app_icon``, ``agent_avatar``, ``url``,
+  ``usernames``, ``packages``, ``containers``, ``modules``, ``flatpaks``, and ``date``.
 
   Default: None
-
-``grouped``
-  Argument to specify if the server should attempt to group together similar
-  messages.  Must be one of either "true" or "false".
-
-  Default: false
 
 ``chrome``
   "chrome" decides whether the messages should be displayed with html boiler-plate
@@ -241,8 +235,8 @@ Formatting arguments
 
   Default: large
 
-/id
----
+/v2/id
+------
 
 Returns the message by the particular message-id given by the user.
 
@@ -250,11 +244,7 @@ Formatting arguments
 ====================
 
 ``chrome``
-  Same as that of /raw
+  Same as that of /v2/search
 
 ``size``
-  Same as that of /raw
-
-``is_raw``
-  Checks whether the card is coming from /raw url or not. Must be one of either "true" or "false".
-  If card is from /raw url then it will be "true" otherwise "false".
+  Same as that of /v2/search

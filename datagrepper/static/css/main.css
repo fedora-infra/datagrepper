@@ -1,0 +1,14 @@
+.odometer {
+  font-size: 70px;
+}
+.odometer-value {
+  line-height: 110px !important;
+}
+
+div {
+  white-space: normal;
+}
+
+.marketing {
+  margin-top: 3em;
+}

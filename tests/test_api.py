@@ -129,7 +129,7 @@ class TestAPI(unittest.TestCase):
     @patch("datagrepper.app.dm.Message.query", autospec=True)
     def test_id(self, query):
         msg = query.filter_by.return_value.first.return_value
-        msg.__json__ = MagicMock(return_value={"key": "value"})
+        msg.as_dict = MagicMock(return_value={"key": "value"})
         resp = self.client.get("/id?id=one")
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(query.filter_by.call_args, ((), {"msg_id": "one"}))
@@ -147,5 +147,26 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.mimetype, "image/svg+xml")
         self.assertIn(
-            b'<svg xmlns:xlink="http://www.w3.org/1999/xlink', resp.get_data()
+            b'<svg xmlns:xlink="http://www.w3.org/1999/xlink"',
+            resp.get_data(),
         )
+
+    def test_healthz_liveness(self):
+        """Test the /healthz/live check endpoint"""
+        resp = self.client.get("/healthz/live")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data, b"OK\n")
+
+    @patch("datagrepper.app.dm.session.execute")
+    def test_healthz_readiness_ok(self, execute):
+        """Test the /healthz/ready check endpoint"""
+        resp = self.client.get("/healthz/ready")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data, b"OK\n")
+
+    @patch("datagrepper.app.dm.session.execute", side_effect=Exception)
+    def test_healthz_readiness_not_ok(self, execute):
+        """Test the /healthz/ready check endpoint when not ready"""
+        resp = self.client.get("/healthz/ready")
+        self.assertEqual(resp.status_code, 503)
+        self.assertEqual(resp.data, b"Can't connect to the database\n")

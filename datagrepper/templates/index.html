@@ -7,20 +7,13 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    {% if content_security_policy is defined %}
-    <meta http-equiv="Content-Security-Policy" content="{{ content_security_policy }}">
+    {% if config.CONTENT_SECURITY_POLICY %}
+    <meta http-equiv="Content-Security-Policy" content="{{ config.CONTENT_SECURITY_POLICY }}">
     {% endif %}
 
-    <!-- Le styles -->
-    <link href="{{theme_css_url}}" rel="stylesheet">
-    <style type="text/css">
-      .odometer {
-        font-size: 70px;
-      }
-      .odometer-value {
-        line-height: 110px !important;
-      }
-    </style>
+    <!-- Styles -->
+    <link href="{{config.THEME_CSS_URL}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -34,17 +27,19 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-57-precomposed.png">
     -->
-    <link rel="shortcut icon" href="static/favicon.png">
-    <link rel="stylesheet" href="static/css/fedora-bootstrap-fonts.css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fedora-bootstrap-fonts.css') }}">
     <!-- Odometr includes -->
-    <link rel="stylesheet" href="static/css/odometer.css" />
-    <script src="static/odometer.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/odometer.css') }}">
+    <script src="{{ url_for('static', filename='odometer.js') }}"></script>
   </head>
 
   <body>
 
                 <div class="masthead">
-                  <div class="container-narrow"><img src="{{datagrepper_logo}}" height="40px"></div>
+                  <div class="container-narrow">
+                    <img src="{{ url_for('static', filename='datagrepper.png') }}" height=40px />
+                  </div>
                 </div>
                 <nav class="navbar navbar-light navbar-underline p-t-0 p-b-0">
                 <div class="container-narrow">
@@ -64,15 +59,17 @@
 
       {% if request.endpoint == 'index' %}
       <div class="page-header">
-        <h1>JSON {{message_bus_shortname}} API</h1>
+        <h1>JSON {{config.BUS_INFO.shortname}} API</h1>
         <p class="lead">Using HTTP GET requests, you can query for all
-        kinds of historical data from the <a href="{{message_bus_docs}}">
-        {{message_bus_longname}}</a>: events by username, by package, by message
+        kinds of historical data from the <a href="{{config.BUS_INFO.docs}}">
+        {{config.BUS_INFO.longname}}</a>: events by username, by package, by message
         source, by topic&hellip; you name it.</p>
-        <span id="odometer" class="odometer centered visible-sm visible-md visible-lg">{{total}}</span>
+        <div class="text-center">
+          <span id="odometer" class="odometer">{{ total }}</span>
+        </div>
       </div>
 
-      {% if websocket_address is defined %}
+      {% if config.WEBSOCKET_URL %}
       <script>
           var count = {{total}};
           $(document).ready(function() {
@@ -83,8 +80,9 @@
           {
             if ("WebSocket" in window)
             {
+                var element = document.getElementById("odometer");
                 // Let us open a web socket
-                var ws = new WebSocket("{{ websocket_address }}");
+                var ws = new WebSocket("{{ config.WEBSOCKET_URL }}");
                 ws.onopen = function(e)
                 {
                     // Web Socket is connected, send data using send()
@@ -93,7 +91,7 @@
                 ws.onmessage = function (evt)
                 {
                     count = count + 1;
-                    odometer.innerHTML = count;
+                    element.innerHTML = count;
                 };
                 ws.onclose = function(e){ws=null;};
                 ws.onerror = function(e){ws=null;};
@@ -113,7 +111,7 @@
     <div class="footer p-t p-b text-center">
         <div class="container-narrow">
             <p class="text-muted credit">
-            Datagrepper is Powered by <a href="{{message_bus_docs}}">{{message_bus_shortname}}</a>. The
+            Datagrepper is Powered by <a href="{{config.BUS_INFO.docs}}">{{config.BUS_INFO.shortname}}</a>. The
             <a href="https://github.com/fedora-infra/datagrepper">source</a>
             and
             <a href="https://github.com/fedora-infra/datagrepper/issues">issue tracker</a>
@@ -126,6 +124,6 @@
         </div>
     </div>
 
-    <script src="static/jquery-2.1.0.min.js"></script>
+    <script src="{{ url_for('static', filename='jquery-2.1.0.min.js') }}"></script>
 </body></html>
 {# vim: set ts=2 sw=2 sta et syn=htmldjango: #}
