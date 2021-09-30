@@ -2,7 +2,7 @@ pull_request_rules:
 - name: Automatic merge on approval
   actions:
     merge:
-      method: merge
+      method: rebase
       rebase_fallback: null
       strict: true
   conditions:
