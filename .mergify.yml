@@ -1,33 +1,48 @@
+queue_rules:
+  - name: default
+    conditions:
+      # Conditions to get out of the queue (= merged)
+      - check-success=Checks
+      - check-success=Licenses
+      - check-success=Documentation
+      - check-success=Unit tests (py37)
+      - check-success=Unit tests (py38)
+      - check-success=Unit tests (py39)
+
 pull_request_rules:
 - name: Automatic merge on approval
   actions:
-    merge:
+    queue:
+      name: default
       method: rebase
-      rebase_fallback: null
-      strict: true
+      rebase_fallback: none
   conditions:
-  - label!=no-mergify
-  - approved-reviews-by=@fedora-infra/data-team
-  - check-success=Checks
-  - check-success=Licenses
-  - check-success=Documentation
-  - check-success=Unit tests (py37)
-  - check-success=Unit tests (py38)
-  - check-success=Unit tests (py39)
+    - label!=no-mergify
+    - -draft
+    - approved-reviews-by=@fedora-infra/data-team
+    - "#changes-requested-reviews-by=0"
+    - check-success=Checks
+    - check-success=Licenses
+    - check-success=Documentation
+    - check-success=Unit tests (py37)
+    - check-success=Unit tests (py38)
+    - check-success=Unit tests (py39)
 
 - name: Automatic merge Dependabot PRs
   actions:
-    merge:
+    queue:
+      name: default
       method: rebase
-      rebase_fallback: null
-      strict: true
+      rebase_fallback: none
   conditions:
-  - label!=no-mergify
-  - author=dependabot[bot]
-  - approved-reviews-by=github-actions[bot]
-  - check-success=Checks
-  - check-success=Licenses
-  - check-success=Documentation
-  - check-success=Unit tests (py37)
-  - check-success=Unit tests (py38)
-  - check-success=Unit tests (py39)
+    - label!=no-mergify
+    - -draft
+    - author=dependabot[bot]
+    - approved-reviews-by=github-actions[bot]
+    - "#changes-requested-reviews-by=0"
+    - check-success=Checks
+    - check-success=Licenses
+    - check-success=Documentation
+    - check-success=Unit tests (py37)
+    - check-success=Unit tests (py38)
+    - check-success=Unit tests (py39)
