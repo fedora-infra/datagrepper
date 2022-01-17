@@ -1,8 +1,8 @@
 .. |crarr| unicode:: U+021B5 .. DOWNWARDS ARROW WITH CORNER LEFTWARDS
 
-========================
+===========================
 Datagrepper's documentation
-========================
+===========================
 
 Datagrepper is a web application and JSON API to retrieve historical messages sent via Fedora Messaging.
 Datanommer is a seperate project and service that consumes messages from the Fedora Messaging queue
