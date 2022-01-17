@@ -141,6 +141,8 @@ def get_message_dict(msg, meta):
 def get_fm_message(message):
     """Build a ``fedora_messaging.message.Message`` instance from the DB message instance"""
     headers = message.headers
+    if not headers:
+        headers = {}
     if "sent-at" not in headers:
         headers["sent-at"] = message.timestamp.isoformat()
 
