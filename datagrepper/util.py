@@ -185,7 +185,11 @@ def meta_argument(msg, meta):
         "date",
     }
     if len(set(meta).intersection(meta_expected)) != len(set(meta)):
-        raise ValueError("meta must be in %s" % ",".join(list(meta_expected)))
+        raise ValueError(
+            "meta must be in {}. Got {}".format(
+                ",".join(list(meta_expected)), list(meta)
+            )
+        )
 
     fm_msg = get_fm_message(msg)
 
