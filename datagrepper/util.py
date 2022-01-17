@@ -188,10 +188,16 @@ def meta_argument(msg, meta):
         "flatpaks",
         "date",
     }
-    if len(set(meta).intersection(meta_expected)) != len(set(meta)):
+    meta_legacy = {
+        "subtitle": "summary",
+        "link": "url",
+        "icon": "app_icon",
+    }
+    meta_allowed = meta_expected | set(meta_legacy.keys())
+    if len(set(meta).intersection(meta_allowed)) != len(set(meta)):
         raise ValueError(
             "meta must be in {}. Got {}".format(
-                ",".join(list(meta_expected)), list(meta)
+                ",".join(list(meta_allowed)), list(meta)
             )
         )
 
@@ -206,6 +212,13 @@ def meta_argument(msg, meta):
         # This one is exceptional too ;-)
         if metadata == "text":
             metas[metadata] = str(fm_msg)
+            continue
+        # Handle legacy (fedmsg) meta
+        if metadata in meta_legacy:
+            metas[metadata] = getattr(fm_msg, meta_legacy[metadata])
+            metas.setdefault("WARNING", []).append(
+                f"Meta {metadata} is deprecated and has been replaced by {meta_legacy[metadata]}"
+            )
             continue
         # All the other metas use the schema properties
         try:
