@@ -20,7 +20,11 @@ def request_wants_html():
 
 
 def json_return(data, status=200, callback=None):
-    output = json.dumps(data, cls=DateAwareJSONEncoder)
+    try:
+        output = json.dumps(data, cls=DateAwareJSONEncoder)
+    except TypeError:
+        flask.current_app.logger.exception(f"Could not encode to JSON: {data!r}")
+        raise
     mimetype = flask.request.headers.get("Accept")
     # Our default - http://da.gd/vIIV
     if mimetype == "*/*":
@@ -204,7 +208,13 @@ def meta_argument(msg, meta):
             metas[metadata] = str(fm_msg)
             continue
         # All the other metas use the schema properties
-        metas[metadata] = getattr(fm_msg, metadata)
+        try:
+            metas[metadata] = getattr(fm_msg, metadata)
+        except Exception:
+            flask.current_app.logger.exception(
+                f"Could not get metadata {metadata} for message {msg.id}"
+            )
+            continue
 
         # We have to do this because 'set' is not JSON-serializable
         if isinstance(metas[metadata], set):
