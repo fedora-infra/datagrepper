@@ -70,7 +70,7 @@ include = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
-"datanommer.models" = {version = "1.0.0-alpha.2", allow-prereleases = true}
+"datanommer.models" = {version = "1.0.0-alpha.3", allow-prereleases = true}
 arrow = "^1.1.1"
 docutils = "^0.17.1"
 flask = "^1.1"

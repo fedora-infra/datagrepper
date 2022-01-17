@@ -287,7 +287,7 @@ test = ["pytest (>=6.2.0)", "pytest-cov", "pytest-subtests", "pytest-xdist", "pr
 
 [[package]]
 name = "datanommer.models"
-version = "1.0.0a2"
+version = "1.0.0a3"
 description = "SQLAlchemy models for datanommer"
 category = "main"
 optional = false
@@ -298,6 +298,9 @@ alembic = ">=1.6.5,<2.0.0"
 fedora-messaging = ">=2.1.0,<3.0.0"
 psycopg2 = ">=2.9.1,<3.0.0"
 SQLAlchemy = ">=1.0.9,<1.4.23"
+
+[package.extras]
+schemas = ["anitya-schema", "fedora-messaging-the-new-hotness-schema", "bodhi-messages", "fedocal-messages", "fedora-planet-messages", "noggin-messages", "fedorainfra-ansible-messages", "nuancier-messages", "discourse2fedmsg-messages", "copr-messaging"]
 
 [[package]]
 name = "decorator"
@@ -380,7 +383,7 @@ fedora-messaging = "*"
 
 [[package]]
 name = "fedorainfra_ansible-messages"
-version = "0.0.1"
+version = "0.0.2"
 description = ""
 category = "main"
 optional = true
@@ -394,7 +397,7 @@ fedora_messaging = "*"
 type = "git"
 url = "https://github.com/fedora-infra/fedorainfra-ansible-messages.git"
 reference = "master"
-resolved_reference = "61cab9481b0b7129700450e4ba30c68984f1b5a6"
+resolved_reference = "56fc804ad97c87dce7cdd29eb6bde67a921cba0e"
 
 [[package]]
 name = "filelock"
@@ -1346,7 +1349,7 @@ schemas = ["anitya-schema", "fedora-messaging-the-new-hotness-schema", "bodhi-me
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "5951ec8da8c55c42bd2e9af49283f81835acc50171133a28b72903b671592e59"
+content-hash = "28246a00b2f0244fc15cb0ddea03e376537e0dc40ab65cdee094a9ea5ed51c42"
 
 [metadata.files]
 alabaster = [
@@ -1548,8 +1551,8 @@ cryptography = [
     {file = "cryptography-35.0.0.tar.gz", hash = "sha256:9933f28f70d0517686bd7de36166dda42094eac49415459d9bdf5e7df3e0086d"},
 ]
 "datanommer.models" = [
-    {file = "datanommer.models-1.0.0a2-py3-none-any.whl", hash = "sha256:6393e18a9df8d1efdbfe1061ac80bd00d14f687d280dade3be705be29f872871"},
-    {file = "datanommer.models-1.0.0a2.tar.gz", hash = "sha256:938ff9a6d14d3dcf3d58a190d25999aa4910245e667cfc35149f7d0e3e0ed76e"},
+    {file = "datanommer.models-1.0.0a3-py3-none-any.whl", hash = "sha256:f7a6e9809ab755326c49612d722854bdd799d59b6804f536e645e47a0e09d40d"},
+    {file = "datanommer.models-1.0.0a3.tar.gz", hash = "sha256:4efbc754e68c4c96d6dbb13437079704f3b08791efad720e998db8a43ca2b229"},
 ]
 decorator = [
     {file = "decorator-5.1.0-py3-none-any.whl", hash = "sha256:7b12e7c3c6ab203a29e157335e9122cb03de9ab7264b137594103fd4a683b374"},
