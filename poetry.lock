@@ -278,7 +278,7 @@ test = ["pytest (>=6.2.0)", "pytest-cov", "pytest-subtests", "pytest-xdist", "pr
 
 [[package]]
 name = "datanommer.models"
-version = "1.0.1"
+version = "1.0.2"
 description = "SQLAlchemy models for datanommer"
 category = "main"
 optional = false
@@ -1548,8 +1548,8 @@ cryptography = [
     {file = "cryptography-36.0.1.tar.gz", hash = "sha256:53e5c1dc3d7a953de055d77bef2ff607ceef7a2aac0353b5d630ab67f7423638"},
 ]
 "datanommer.models" = [
-    {file = "datanommer.models-1.0.1-py3-none-any.whl", hash = "sha256:f6272c7d275ee05a6bc1ca118ec22de778f5c1d000466e878e1f4724b0206ae9"},
-    {file = "datanommer.models-1.0.1.tar.gz", hash = "sha256:75e6619961126bf7787282cf4d6a4873d0456d22ac0800c05fccd1360d74c9f5"},
+    {file = "datanommer.models-1.0.2-py3-none-any.whl", hash = "sha256:9a98044f35e878ab27fbaf663d2e1f52eb2dc05e1c7a8302f9cf407351ebb58f"},
+    {file = "datanommer.models-1.0.2.tar.gz", hash = "sha256:c21d688378373eccc645ce177db643ba18291d582624ff87760b4b0f1c6574a4"},
 ]
 decorator = [
     {file = "decorator-5.1.1-py3-none-any.whl", hash = "sha256:b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186"},
