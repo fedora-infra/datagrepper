@@ -298,7 +298,7 @@ test = ["pytest (>=6.2.0)", "pytest-cov", "pytest-subtests", "pytest-xdist", "pr
 
 [[package]]
 name = "datanommer.models"
-version = "1.0.0"
+version = "1.0.1"
 description = "SQLAlchemy models for datanommer"
 category = "main"
 optional = false
@@ -1378,7 +1378,7 @@ schemas = ["anitya-schema", "fedora-messaging-the-new-hotness-schema", "bodhi-me
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "4cf968364d84cecdfa4e598e6d775b1884b908aecb19c4b046fe9ba430c2452f"
+content-hash = "9517eddaa030630c95764e74faec292d34ad81975ecb24d7a446dfb11b92a548"
 
 [metadata.files]
 alabaster = [
@@ -1583,8 +1583,8 @@ cryptography = [
     {file = "cryptography-35.0.0.tar.gz", hash = "sha256:9933f28f70d0517686bd7de36166dda42094eac49415459d9bdf5e7df3e0086d"},
 ]
 "datanommer.models" = [
-    {file = "datanommer.models-1.0.0-py3-none-any.whl", hash = "sha256:5c5d9bb54836f3b63d75130b6bce120eab63d13b634d724573133394869ae837"},
-    {file = "datanommer.models-1.0.0.tar.gz", hash = "sha256:e78f82e26db60a2d6c5e1577efb0e43bbc29c29751436190277264c0e30470bd"},
+    {file = "datanommer.models-1.0.1-py3-none-any.whl", hash = "sha256:f6272c7d275ee05a6bc1ca118ec22de778f5c1d000466e878e1f4724b0206ae9"},
+    {file = "datanommer.models-1.0.1.tar.gz", hash = "sha256:75e6619961126bf7787282cf4d6a4873d0456d22ac0800c05fccd1360d74c9f5"},
 ]
 decorator = [
     {file = "decorator-5.1.0-py3-none-any.whl", hash = "sha256:7b12e7c3c6ab203a29e157335e9122cb03de9ab7264b137594103fd4a683b374"},
