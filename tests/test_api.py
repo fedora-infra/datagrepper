@@ -197,7 +197,7 @@ class TestAPI(unittest.TestCase):
     def test_raw_exceptions_order_not_in_list(self, grep):
         resp = self.client.get("/raw?order=notinlist")
         self.assertEqual(resp.status_code, 400)
-        target = b"order must be either &#x27;desc&#x27; or &#x27;asc&#x27;"
+        target = b"order must be either 'desc' or 'asc'"
         assert target in resp.data, f"{target!r} not in {resp.data!r}"
 
     @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
