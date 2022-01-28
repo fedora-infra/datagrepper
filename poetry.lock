@@ -36,7 +36,7 @@ fedora_messaging = "*"
 
 [[package]]
 name = "arrow"
-version = "1.2.1"
+version = "1.2.2"
 description = "Better dates & times for Python"
 category = "main"
 optional = false
@@ -1357,8 +1357,8 @@ anitya-schema = [
     {file = "anitya_schema-2.0.0.tar.gz", hash = "sha256:1e9faafa00c0c59e5de60b96046176e4306b8dbd8199d704666f867de716d39f"},
 ]
 arrow = [
-    {file = "arrow-1.2.1-py3-none-any.whl", hash = "sha256:6b2914ef3997d1fd7b37a71ce9dd61a6e329d09e1c7b44f4d3099ca4a5c0933e"},
-    {file = "arrow-1.2.1.tar.gz", hash = "sha256:c2dde3c382d9f7e6922ce636bf0b318a7a853df40ecb383b29192e6c5cc82840"},
+    {file = "arrow-1.2.2-py3-none-any.whl", hash = "sha256:d622c46ca681b5b3e3574fcb60a04e5cc81b9625112d5fb2b44220c36c892177"},
+    {file = "arrow-1.2.2.tar.gz", hash = "sha256:05caf1fd3d9a11a1135b2b6f09887421153b94558e5ef4d090b567b47173ac2b"},
 ]
 atomicwrites = [
     {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},
