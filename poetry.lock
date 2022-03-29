@@ -477,7 +477,7 @@ idna = ">=2.5"
 
 [[package]]
 name = "identify"
-version = "2.4.11"
+version = "2.4.12"
 description = "File identification library for Python"
 category = "dev"
 optional = false
@@ -694,14 +694,14 @@ python-versions = "*"
 
 [[package]]
 name = "noggin-messages"
-version = "1.0.0"
+version = "1.0.1"
 description = "Fedora Messaging message schemas for Noggin."
 category = "main"
 optional = true
-python-versions = ">=3.6,<4.0"
+python-versions = ">=3.6.7,<4.0.0"
 
 [package.dependencies]
-fedora-messaging = ">=2.0.1,<3.0.0"
+fedora-messaging = ">=2.0.1"
 
 [[package]]
 name = "nuancier-messages"
@@ -1670,8 +1670,8 @@ hyperlink = [
     {file = "hyperlink-21.0.0.tar.gz", hash = "sha256:427af957daa58bc909471c6c40f74c5450fa123dd093fc53efd2e91d2705a56b"},
 ]
 identify = [
-    {file = "identify-2.4.11-py2.py3-none-any.whl", hash = "sha256:fd906823ed1db23c7a48f9b176a1d71cb8abede1e21ebe614bac7bdd688d9213"},
-    {file = "identify-2.4.11.tar.gz", hash = "sha256:2986942d3974c8f2e5019a190523b0b0e2a07cb8e89bf236727fb4b26f27f8fd"},
+    {file = "identify-2.4.12-py2.py3-none-any.whl", hash = "sha256:5f06b14366bd1facb88b00540a1de05b69b310cbc2654db3c7e07fa3a4339323"},
+    {file = "identify-2.4.12.tar.gz", hash = "sha256:3f3244a559290e7d3deb9e9adc7b33594c1bc85a9dd82e0f1be519bf12a1ec17"},
 ]
 idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
@@ -1811,8 +1811,8 @@ nodeenv = [
     {file = "nodeenv-1.6.0.tar.gz", hash = "sha256:3ef13ff90291ba2a4a7a4ff9a979b63ffdd00a464dbe04acf0ea6471517a4c2b"},
 ]
 noggin-messages = [
-    {file = "noggin-messages-1.0.0.tar.gz", hash = "sha256:50e533aad632f83854bcac46b1318e7dd176ca120a9d27588b4b9e9cb2a05fe1"},
-    {file = "noggin_messages-1.0.0-py3-none-any.whl", hash = "sha256:464276b0121a688667dec7344fda95b48c012ea6775de45681c58f1879ba83b8"},
+    {file = "noggin-messages-1.0.1.tar.gz", hash = "sha256:3a0131669639ed6c38b8656cb5cf7ce65bb2679d4eeffc5ed6f45b65e316d6bf"},
+    {file = "noggin_messages-1.0.1-py3-none-any.whl", hash = "sha256:623ec1045e6715638f7b520eb4ec42fc2e33457fe84710dad17d8613b1025a0a"},
 ]
 nuancier-messages = [
     {file = "nuancier-messages-1.0.0.tar.gz", hash = "sha256:0d1496674682c1af1a864bc16f89e79aca4b8e76f2267d565fb3e16304c131da"},
