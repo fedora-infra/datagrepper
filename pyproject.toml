@@ -31,14 +31,18 @@ cffi = "^1.14.6"
 gunicorn = {version = "^20.0", optional = true}
 SQLAlchemy = "<1.4.23"
 flask-healthz = "^0.0.1"
-anitya-schema = {version = "^2.0.0", optional = true}
-fedora-messaging-the-new-hotness-schema = {version = "^1.1.0", optional = true}
-bodhi-messages = {version = "^5.5", optional = true}
-fedocal-messages = {version = "^1.5.0", optional = true}
-fedora-planet-messages = {version = "^1.0.0", optional = true}
-noggin-messages = {version = "^1.0.0", optional = true}
+anitya-schema = {version = "*", optional = true}
+bodhi-messages = {version = "*", optional = true}
+copr-messaging = {version = "*", optional = true}
+discourse2fedmsg-messages = {version = "*", optional = true}
+fedocal-messages = {version = "*", optional = true}
 fedorainfra-ansible-messages = {version = "*", optional = true}
-nuancier-messages = {version = "^1.0.0", optional = true}
+fedora-messaging-the-new-hotness-schema = {version = "*", optional = true}
+fedora-planet-messages = {version = "*", optional = true}
+mdapi-messages = {version = "*", optional = true}
+noggin-messages = {version = "*", optional = true}
+nuancier-messages = {version = "*", optional = true}
+pagure-messages = {version = "*", optional = true}
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.13.0"
@@ -55,13 +59,18 @@ towncrier = "^21.3.0"
 deploy = ["gunicorn"]
 schemas = [
   "anitya-schema",
-  "fedora-messaging-the-new-hotness-schema",
   "bodhi-messages",
+  "copr-messaging",
+  "discourse2fedmsg-messages",
   "fedocal-messages",
-  "fedora-planet-messages",
-  "noggin-messages",
   "fedorainfra-ansible-messages",
+  "fedora-elections-messages",
+  "fedora-messaging-the-new-hotness-schema",
+  "fedora-planet-messages",
+  "mdapi-messages",
+  "noggin-messages",
   "nuancier-messages",
+  "pagure-messages",
 ]
 
 
