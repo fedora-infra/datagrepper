@@ -1,6 +1,7 @@
 """ Contains code for producing embeddable widgets """
 
 import flask
+
 from datagrepper.app import app
 
 
@@ -73,8 +74,7 @@ var data = {
 // Check to see if the user has asked us to filter the firehose.
 var datagrepper_attrs = [
     'user', 'package', 'category', 'topic',
-    'order', 'rows_per_page', 'page', 'size',
-    'grouped'];
+    'order', 'rows_per_page', 'page', 'size'];
 $.each(datagrepper_attrs, function(i, attr) {
     var value = $('script#datagrepper-widget').attr("data-" + attr);
     if (value != undefined) {
@@ -83,8 +83,8 @@ $.each(datagrepper_attrs, function(i, attr) {
 });
 
 $.ajax(
-    '%(base)s/raw/?meta=link&meta=icon' +
-    '&meta=secondary_icon&meta=subtitle&meta=date', {
+    '%(base)s/v2/search?meta=url&meta=app_icon' +
+    '&meta=agent_avatar&meta=summary&meta=date', {
         data: data,
         dataType: 'jsonp',
         success: datagrepper_success,
@@ -100,9 +100,9 @@ $('head').append('<link rel="stylesheet" href="%s" type="text/css"/>');
 """
 
 
-@app.route('/widget.js')
+@app.route("/widget.js")
 def widget_js():
-    """ This code is super ugly.
+    """This code is super ugly.
     But it produces a widget as a self-extracting script.
 
     """
@@ -112,12 +112,13 @@ def widget_js():
     raw_widget = '<div id="datagrepper-widget"></div>'
     scripts, calls, css = [], [work % dict(base=prefix)], []
 
-    if flask.request.args.get('css', '').lower() == 'true':
-        def static_url(filename):
-            return app.config['APP_PATH'] + "/static/" + filename
+    if flask.request.args.get("css", "").lower() == "true":
 
-        css.append(css_helper % static_url('css/bootstrap.css'))
-        css.append(css_helper % static_url('css/raw.css'))
+        def static_url(filename):
+            return app.config["APP_PATH"] + "/static/" + filename
+
+        css.append(css_helper % static_url("css/bootstrap.css"))
+        css.append(css_helper % static_url("css/raw.css"))
 
     # This, ridiculously, will find the place in the DOM of the script tag
     # responsible for running this javascript at the time of its execution.
@@ -127,13 +128,15 @@ def widget_js():
     calls.extend(css)
 
     # Just for debugging...
-    #calls.append("console.log('waaaaaat!');")
+    # calls.append("console.log('waaaaaat!');")
     inner_payload = ";\n".join(calls)
 
     envelope = inner_payload
     for script in reversed(scripts):
-        envelope = """$.getScript("%s", function(){%s});""" % (
-            prefix + script, envelope)
+        envelope = """$.getScript("{}", function(){{{}}});""".format(
+            prefix + script,
+            envelope,
+        )  # TODO test this
 
     body = js_helpers % dict(base=prefix)
     body += "\nrun_with_jquery(function() {%s});" % envelope
@@ -141,5 +144,5 @@ def widget_js():
     return flask.Response(
         response=body,
         status=200,
-        mimetype='application/javascript',
+        mimetype="application/javascript",
     )

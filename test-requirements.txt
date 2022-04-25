@@ -1,7 +1,0 @@
-freezegun
-nose
-mock
-
-# Sphinx 2.1 requires Python 3.5 and above
-sphinx < 2.1; python_version < '3.5'
-sphinx; python_version >= '3.5'

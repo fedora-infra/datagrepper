@@ -1,0 +1,63 @@
+queue_rules:
+  - name: default
+    conditions:
+      # Conditions to get out of the queue (= merged)
+      - check-success=Checks
+      - check-success=Licenses
+      - check-success=Documentation
+      - check-success=Unit tests (py37)
+      - check-success=Unit tests (py38)
+      - check-success=Unit tests (py39)
+
+pull_request_rules:
+- name: Merge on approval
+  actions:
+    queue:
+      name: default
+      method: rebase
+      rebase_fallback: none
+  conditions:
+    - label!=no-mergify
+    - -draft
+    - approved-reviews-by=@fedora-infra/data-team
+    - "#changes-requested-reviews-by=0"
+    - check-success=Checks
+    - check-success=Licenses
+    - check-success=Documentation
+    - check-success=Unit tests (py37)
+    - check-success=Unit tests (py38)
+    - check-success=Unit tests (py39)
+
+- name: Merge Dependabot PRs
+  actions:
+    queue:
+      name: default
+      method: rebase
+      rebase_fallback: none
+  conditions:
+    - label!=no-mergify
+    - -draft
+    - author=dependabot[bot]
+    - approved-reviews-by=github-actions[bot]
+    - "#changes-requested-reviews-by=0"
+    - check-success=Checks
+    - check-success=Licenses
+    - check-success=Documentation
+    - check-success=Unit tests (py37)
+    - check-success=Unit tests (py38)
+    - check-success=Unit tests (py39)
+
+# Pre-commit autoupdates. Don't expect the CI to have run for this one:
+# https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#triggering-new-workflows-using-a-personal-access-token
+# In the workflow, we do a pre-commit run before creating the PR.
+- name: Merge pre-commit autoupdates
+  actions:
+    merge:
+      method: rebase
+      rebase_fallback: none
+  conditions:
+    - label!=no-mergify
+    - -draft
+    - author=github-actions[bot]
+    - title=Auto-update pre-commit hooks
+    - "#changes-requested-reviews-by=0"

@@ -1,0 +1,101 @@
+---
+- name: Install RPM packages
+  dnf:
+    name:
+      - fedora-messaging
+      - gcc
+      - git
+      - poetry
+      - python3-devel
+      - python3-pip
+      - vim
+      - krb5-devel
+      - libpq-devel
+      - tox
+      - python-psycopg2
+    state: present
+
+- name: Install the .bashrc
+  copy:
+    src: .bashrc
+    dest: /home/vagrant/.bashrc
+    mode: 0644
+    owner: vagrant
+    group: vagrant
+
+- name: Install the motd
+  copy:
+    src: motd
+    dest: /etc/motd
+    mode: 0644
+
+- name: Create a directory for the virtualenv
+  file:
+    name: /srv/venv
+    state: directory
+    mode: 0755
+    owner: vagrant
+    group: vagrant
+
+- name: Create the virtualenv and install poetry
+  pip:
+    name: poetry
+    virtualenv: /srv/venv
+  become: yes
+  become_user: vagrant
+
+- name: Install datanommer with poetry
+  shell: /srv/venv/bin/poetry install
+  args:
+    chdir: /home/vagrant/datanommer/datanommer.{{item}}/
+  loop:
+    - models
+    - commands
+    - consumer
+  become: yes
+  become_user: vagrant
+
+- name: Install datagrepper with poetry
+  shell: /srv/venv/bin/poetry install --extras schemas
+  args:
+    chdir: /home/vagrant/datagrepper/
+  become: yes
+  become_user: vagrant
+
+- name: Use the stage fedora-messaging queue to consume
+  template:
+    src: fedora-messaging.toml.j2
+    dest: /etc/fedora-messaging/config.toml
+
+- name: Create datanommer db
+  shell: /srv/venv/bin/poetry run datanommer-create-db
+  args:
+    chdir: /home/vagrant/datanommer/
+  become: yes
+  become_user: vagrant
+
+- name: Install the systemd unit files for datagrepper
+  copy:
+    src: "datagrepper.service"
+    dest: /etc/systemd/system/datagrepper.service
+    mode: 0644
+
+- name: Start datagrepper service using systemd
+  systemd:
+    state: started
+    name: datagrepper
+    daemon_reload: yes
+    enabled: yes
+
+- name: Install the systemd unit files for datanommer consumer
+  copy:
+    src: "datanommer.service"
+    dest: /etc/systemd/system/datanommer.service
+    mode: 0644
+
+- name: Start datanommer service using systemd
+  systemd:
+    state: started
+    name: datanommer
+    daemon_reload: yes
+    enabled: yes

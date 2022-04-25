@@ -1,0 +1,2 @@
+APP_MODULE=datagrepper.app:app
+UPGRADE_PIP_TO_LATEST=true

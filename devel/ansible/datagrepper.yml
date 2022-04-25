@@ -1,0 +1,7 @@
+---
+- hosts: datagrepper
+  become: true
+  become_method: sudo
+  roles:
+    - postgresql
+    - datagrepper

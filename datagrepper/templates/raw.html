@@ -1,36 +1,36 @@
-{% for dict in response %}
+{% for msg_card in response %}
     <tr><td class="raw-icons">
-        {% if dict.get('link') %}
-          {% if dict.get('icon') %}
-          <a href="{{dict['link']}}"><img src="{{dict['icon']}}"></a>
+        {% if msg_card.get("url") %}
+          {% if msg_card.get("app_icon") and size in ("medium", "large", "extra-large") %}
+          <a href="{{msg_card['url']}}"><img src="{{msg_card['app_icon']}}"></a>
           {% else %}
-          <a href="{{dict['link']}}">Link</a>
+          <a href="{{msg_card['url']}}">Link</a>
           {% endif %}
         {% else %}
-          {% if dict.get('icon') %}
-          <img src="{{dict['icon']}}">
+          {% if msg_card.get("app_icon") and size in ("medium", "large", "extra-large") %}
+          <img src="{{msg_card['app_icon']}}">
           {% endif %}
         {% endif %}
-        {% if dict.get('secondary_icon') %}
-        <img src="{{dict['secondary_icon']}}"></a>
+        {% if msg_card.get("agent_avatar") and size in ("large", "extra-large") %}
+        <img src="{{msg_card['agent_avatar']}}">
         {% endif %}
       </td>
         <td class="raw-message">
-          <a href="{{url_for('raw')}}?topic={{dict['topic_link']}}"><b>{{dict['title']}}</b></a>
-          {{dict['subtitle']}}
-        {% if dict.get('msg_id') %}
-            <a href="{{url_for('msg_id')}}?id={{dict['msg_id']}}&is_raw=true&size=extra-large">
-                <span class="details-history">JSON</span></a>
-        {% endif %}
-        {% if 'is_raw' in dict %}
+          <a href="{{url_for('raw')}}?topic={{msg_card['topic']}}"><b>{{ msg_card['topic'] }}</b></a>
+          {% if size in ("medium", "large", "extra-large") %}
+          {{ msg_card["summary"] }}
+          {% endif %}
+          <a href="{{url_for('msg_id')}}?id={{msg_card['msg_id']}}&is_raw=true&size=extra-large">
+            <span class="details-history">JSON</span>
+          </a>
+        {% if is_raw %}
             <a href="#" onclick="history.go(-1)">Go Back</a>
         {% endif %}
         </td>
 
     <td class="datetime">
-        {{dict['date'].humanize()}}
-        {% if size in ('large', 'extra-large') %} - {{dict['date'].strftime('%Y-%m-%d %H:%M:%S')}} UTC
-        {% endif %}
+        {{ msg_card["date"] }}
+        {% if size in ('large', 'extra-large') %} - {{ msg_card["timestamp"].strftime('%Y-%m-%d %H:%M:%S') }} UTC{% endif %}
     </td>
           </tr>
 {% endfor %}
