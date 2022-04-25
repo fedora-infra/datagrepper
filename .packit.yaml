@@ -18,7 +18,7 @@ jobs:
     trigger: pull_request
     metadata:
       targets:
-        - fedora-35
-      branch: packit-test
+        - fedora-stable
+      branch: develop
       owner: LenkaSeg
       project: datagrepper
