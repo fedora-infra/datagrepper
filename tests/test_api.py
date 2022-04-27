@@ -197,7 +197,7 @@ class TestAPI(unittest.TestCase):
     def test_raw_exceptions_order_not_in_list(self, grep):
         resp = self.client.get("/raw?order=notinlist")
         self.assertEqual(resp.status_code, 400)
-        target = b"order must be either 'desc' or 'asc'"
+        target = b"order must be either &#x27;desc&#x27; or &#x27;asc&#x27;"
         assert target in resp.data, f"{target!r} not in {resp.data!r}"
 
     @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
@@ -236,21 +236,23 @@ class TestAPI(unittest.TestCase):
         """Test the /healthz/live check endpoint"""
         resp = self.client.get("/healthz/live")
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.data, b"OK\n")
+        self.assertEqual(resp.data, b'{"status": 200, "title": "OK"}')
 
     @patch("datagrepper.app.dm.session.execute")
     def test_healthz_readiness_ok(self, execute):
         """Test the /healthz/ready check endpoint"""
         resp = self.client.get("/healthz/ready")
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.data, b"OK\n")
+        self.assertEqual(resp.data, b'{"status": 200, "title": "OK"}')
 
     @patch("datagrepper.app.dm.session.execute", side_effect=Exception)
     def test_healthz_readiness_not_ok(self, execute):
         """Test the /healthz/ready check endpoint when not ready"""
         resp = self.client.get("/healthz/ready")
         self.assertEqual(resp.status_code, 503)
-        self.assertEqual(resp.data, b"Can't connect to the database\n")
+        self.assertEqual(
+            resp.data, b'{"status": 503, "title": "Can\'t connect to the database"}'
+        )
 
     def test_widget_js(self):
         resp = self.client.get("/widget.js")
