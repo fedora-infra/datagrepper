@@ -227,8 +227,16 @@ class TestAPI(unittest.TestCase):
         resp = self.client.get("/charts/line")
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.mimetype, "image/svg+xml")
+        svg_data = b'<svg xmlns="http://www.w3.org/2000/svg"\
+            xmlns:xlink="http://www.w3.org/1999/xlink"'
+        # This bloc is to get rid of the downstream patch.
+        # The output is different depending on lxml.
+        try:
+            import lxml  # noqa
+        except ImportError:
+            svg_data = b'<svg xmlns:xlink="http://www.w3.org/1999/xlink"'
         self.assertIn(
-            b'<svg xmlns:xlink="http://www.w3.org/1999/xlink"',
+            svg_data,
             resp.get_data(),
         )
 
