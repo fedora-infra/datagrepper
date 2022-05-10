@@ -70,7 +70,7 @@
 - name: Create datanommer db
   shell: /srv/venv/bin/poetry run datanommer-create-db
   args:
-    chdir: /home/vagrant/datanommer/
+    chdir: /home/vagrant/datanommer/datanommer.commands
   become: yes
   become_user: vagrant
 
