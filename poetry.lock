@@ -130,7 +130,7 @@ name = "bodhi"
 version = "5.7.5"
 description = "bodhi common package"
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [[package]]
