@@ -135,7 +135,7 @@ python-versions = "*"
 
 [[package]]
 name = "bodhi-messages"
-version = "5.5"
+version = "5.7.5"
 description = "JSON schema for messages sent by Bodhi"
 category = "main"
 optional = true
@@ -1466,7 +1466,7 @@ bodhi = [
     {file = "bodhi-5.5-py3-none-any.whl", hash = "sha256:51166207dd6028d9a6ff8d5e236a217a7f2991b7f6b176b1ad4d01369b8716d1"},
 ]
 bodhi-messages = [
-    {file = "bodhi_messages-5.5-py3-none-any.whl", hash = "sha256:2d8db6da54db23f094d3e583da1302b3e03203fa63147c9e002cb4a432404894"},
+    {file = "bodhi_messages-5.7.5-py3-none-any.whl", hash = "sha256:5a00fbc6547a8a0918e87885940bfb3d168894bcba6917e63208a3e01e08b23e"},
 ]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
