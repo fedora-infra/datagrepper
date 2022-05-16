@@ -127,10 +127,10 @@ python-versions = "*"
 
 [[package]]
 name = "bodhi"
-version = "5.5"
+version = "5.7.5"
 description = "bodhi common package"
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [[package]]
@@ -1463,7 +1463,7 @@ blinker = [
     {file = "blinker-1.4.tar.gz", hash = "sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"},
 ]
 bodhi = [
-    {file = "bodhi-5.5-py3-none-any.whl", hash = "sha256:51166207dd6028d9a6ff8d5e236a217a7f2991b7f6b176b1ad4d01369b8716d1"},
+    {file = "bodhi-5.7.5-py3-none-any.whl", hash = "sha256:cdd230df35854dc352ac07fbddd244dc358fd6b18884e1ab668237a4a020d94d"},
 ]
 bodhi-messages = [
     {file = "bodhi_messages-5.5-py3-none-any.whl", hash = "sha256:2d8db6da54db23f094d3e583da1302b3e03203fa63147c9e002cb4a432404894"},
