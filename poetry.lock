@@ -25,14 +25,14 @@ tz = ["python-dateutil"]
 
 [[package]]
 name = "anitya-schema"
-version = "2.0.0"
+version = "2.0.1"
 description = "JSON schema definitions for messages published by Anitya"
 category = "main"
 optional = true
 python-versions = "*"
 
 [package.dependencies]
-fedora_messaging = "*"
+fedora-messaging = ">=2.0.1,<4.0.0"
 
 [[package]]
 name = "arrow"
@@ -1412,7 +1412,8 @@ alembic = [
     {file = "alembic-1.7.7.tar.gz", hash = "sha256:4961248173ead7ce8a21efb3de378f13b8398e6630fab0eb258dc74a8af24c58"},
 ]
 anitya-schema = [
-    {file = "anitya_schema-2.0.0.tar.gz", hash = "sha256:1e9faafa00c0c59e5de60b96046176e4306b8dbd8199d704666f867de716d39f"},
+    {file = "anitya_schema-2.0.1-py2.py3-none-any.whl", hash = "sha256:322158f7dc759633a107f0563808cd3f486024b0eeaa4a254aae89e166092c0a"},
+    {file = "anitya_schema-2.0.1.tar.gz", hash = "sha256:a19521a40d4fbc1280f15be7cf338b3f84f3ecc798ae94361f622d75d8658887"},
 ]
 arrow = [
     {file = "arrow-1.2.2-py3-none-any.whl", hash = "sha256:d622c46ca681b5b3e3574fcb60a04e5cc81b9625112d5fb2b44220c36c892177"},
