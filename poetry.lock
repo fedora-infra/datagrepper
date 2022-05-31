@@ -386,14 +386,14 @@ Twisted = "*"
 
 [[package]]
 name = "fedora-messaging-the-new-hotness-schema"
-version = "1.1.1"
+version = "1.1.2"
 description = "JSON schema definitions for messages published by the-new-hotness"
 category = "main"
 optional = true
 python-versions = "*"
 
 [package.dependencies]
-fedora-messaging = "*"
+fedora-messaging = ">=2.0.1,<4.0.0"
 
 [[package]]
 name = "fedora-planet-messages"
@@ -1657,8 +1657,8 @@ fedora-messaging = [
     {file = "fedora_messaging-2.1.0.tar.gz", hash = "sha256:3a66252f08720202fbd5cf69d1df611b3b7bb37a802094131d605facc6d05f32"},
 ]
 fedora-messaging-the-new-hotness-schema = [
-    {file = "fedora_messaging_the_new_hotness_schema-1.1.1-py2.py3-none-any.whl", hash = "sha256:000c1f8b67215485000baa29d5cdbecf9ae9a6b674a2d12b800dd8d4ec4efe5e"},
-    {file = "fedora_messaging_the_new_hotness_schema-1.1.1.tar.gz", hash = "sha256:a5666cad6c255522fe96d8120db2920031f1d762075e1f401a3ef2bf931f8652"},
+    {file = "fedora_messaging_the_new_hotness_schema-1.1.2-py2.py3-none-any.whl", hash = "sha256:466273439bc2c78c6ef61a841d71951325de60a4d35381f1aa9d43ec685afc87"},
+    {file = "fedora_messaging_the_new_hotness_schema-1.1.2.tar.gz", hash = "sha256:1a54fd15640fb994575a847e03645b0b343f0bd60c379bca7093a946564e7c67"},
 ]
 fedora-planet-messages = [
     {file = "fedora-planet-messages-1.0.0.tar.gz", hash = "sha256:a505fdb6fe979efda7ff4eb83f645000dd3a1a27dcac00a1e980377a6c492b7c"},
