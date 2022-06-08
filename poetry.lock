@@ -301,7 +301,7 @@ test = ["pytest (>=6.2.0)", "pytest-benchmark", "pytest-cov", "pytest-subtests",
 
 [[package]]
 name = "datanommer.models"
-version = "1.0.2"
+version = "1.0.4"
 description = "SQLAlchemy models for datanommer"
 category = "main"
 optional = false
@@ -309,12 +309,12 @@ python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
 alembic = ">=1.6.5,<2.0.0"
-fedora-messaging = ">=2.1.0,<3.0.0"
+fedora-messaging = ">=2.1.0"
 psycopg2 = ">=2.9.1,<3.0.0"
-SQLAlchemy = ">=1.0.9,<1.4.23"
+SQLAlchemy = ">=1.3.24,<2.0.0"
 
 [package.extras]
-schemas = ["anitya-schema", "fedora-messaging-the-new-hotness-schema", "bodhi-messages", "fedocal-messages", "fedora-planet-messages", "noggin-messages", "fedorainfra-ansible-messages", "nuancier-messages", "discourse2fedmsg-messages", "copr-messaging"]
+schemas = ["anitya-schema", "bodhi-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedorainfra-ansible-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "mdapi-messages", "noggin-messages", "nuancier-messages", "pagure-messages"]
 
 [[package]]
 name = "decorator"
@@ -365,7 +365,7 @@ python-dateutil = "*"
 
 [[package]]
 name = "fedora-messaging"
-version = "2.1.0"
+version = "3.0.2"
 description = "A set of tools for using Fedora's messaging infrastructure"
 category = "main"
 optional = false
@@ -380,7 +380,6 @@ pika = ">=1.0.1"
 PyOpenSSL = "*"
 pytz = "*"
 service-identity = "*"
-six = "*"
 toml = "*"
 Twisted = "*"
 
@@ -1630,8 +1629,8 @@ cryptography = [
     {file = "cryptography-37.0.2.tar.gz", hash = "sha256:f224ad253cc9cea7568f49077007d2263efa57396a2f2f78114066fd54b5c68e"},
 ]
 "datanommer.models" = [
-    {file = "datanommer.models-1.0.2-py3-none-any.whl", hash = "sha256:9a98044f35e878ab27fbaf663d2e1f52eb2dc05e1c7a8302f9cf407351ebb58f"},
-    {file = "datanommer.models-1.0.2.tar.gz", hash = "sha256:c21d688378373eccc645ce177db643ba18291d582624ff87760b4b0f1c6574a4"},
+    {file = "datanommer.models-1.0.4-py3-none-any.whl", hash = "sha256:c711cef90011f98fcb42cf33638cb312a8233a86823198a405d878bfcd2a40a3"},
+    {file = "datanommer.models-1.0.4.tar.gz", hash = "sha256:5fe60556fc3563415b353c481610ae09c3dbd9f327314274cee4ceef4722aaa5"},
 ]
 decorator = [
     {file = "decorator-5.1.1-py3-none-any.whl", hash = "sha256:b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186"},
@@ -1653,8 +1652,8 @@ fedocal-messages = [
     {file = "fedocal-messages-1.5.0.tar.gz", hash = "sha256:965a90505ff31f5fa4b2d7e8eb36769322cda8dc8d9a15c3f2faba9f75911b31"},
 ]
 fedora-messaging = [
-    {file = "fedora_messaging-2.1.0-py2.py3-none-any.whl", hash = "sha256:9292d64fbd4ec5b0233fcea6a098ae97a4d985000653b775ddb223ef571d9889"},
-    {file = "fedora_messaging-2.1.0.tar.gz", hash = "sha256:3a66252f08720202fbd5cf69d1df611b3b7bb37a802094131d605facc6d05f32"},
+    {file = "fedora_messaging-3.0.2-py3-none-any.whl", hash = "sha256:782dc04ba25ebc694324b85d24b7061949402db7dc1ad8e69d55fb623135a184"},
+    {file = "fedora_messaging-3.0.2.tar.gz", hash = "sha256:94ea22c7e7bf78e988b9d2c4bed80d7b422122429f9dd65408a6b8a28dcf13f8"},
 ]
 fedora-messaging-the-new-hotness-schema = [
     {file = "fedora_messaging_the_new_hotness_schema-1.1.2-py2.py3-none-any.whl", hash = "sha256:466273439bc2c78c6ef61a841d71951325de60a4d35381f1aa9d43ec685afc87"},
