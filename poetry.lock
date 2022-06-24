@@ -244,7 +244,7 @@ python-versions = "*"
 
 [[package]]
 name = "copr-messaging"
-version = "0.5"
+version = "0.6"
 description = "A schema and tooling for Copr fedora-messaging"
 category = "main"
 optional = true
@@ -1570,7 +1570,7 @@ copr-common = [
     {file = "copr-common-0.14.tar.gz", hash = "sha256:dd3a8ed065efc6bcac538225c1cb541d8aeba818f5cc0f6b92a56aff492c2732"},
 ]
 copr-messaging = [
-    {file = "copr-messaging-0.5.tar.gz", hash = "sha256:24c07ef5893fb4c8b09e8c5e1a5cf195bbbba937e5e1370d7709766c706be846"},
+    {file = "copr-messaging-0.6.tar.gz", hash = "sha256:0ed9aeac11d5ac965bb2dda3ba661334d98ac4786b577d78f5f14c3c9478e790"},
 ]
 coverage = [
     {file = "coverage-6.4.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:f1d5aa2703e1dab4ae6cf416eb0095304f49d004c39e9db1d86f57924f43006b"},
