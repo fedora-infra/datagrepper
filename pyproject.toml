@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "datagrepper"
-version = "1.0.0"
+version = "1.0.1"
 description = "A webapp to query datanommer"
 authors = [
   "Fedora Infrastructure <admin@fedoraproject.org>"
