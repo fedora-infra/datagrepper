@@ -1,6 +1,6 @@
 # https://bugzilla.redhat.com/show_bug.cgi?id=955781
 %global pypi_name datagrepper
-%global pypi_version 1.0.0
+%global pypi_version 1.0.1
 
 Name:           %{pypi_name}
 Version:        %{pypi_version}
