@@ -14,7 +14,7 @@ repos:
         args: ["--check", "--diff"]
 
   - repo: https://github.com/pycqa/flake8
-    rev: 5.0.1
+    rev: 5.0.3
     hooks:
       - id: flake8
 
