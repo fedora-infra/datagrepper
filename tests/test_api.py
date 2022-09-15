@@ -198,7 +198,10 @@ class TestAPI(unittest.TestCase):
         resp = self.client.get("/raw?order=notinlist")
         self.assertEqual(resp.status_code, 400)
         target = b"order must be either &#x27;desc&#x27; or &#x27;asc&#x27;"
-        assert target in resp.data, f"{target!r} not in {resp.data!r}"
+        target2 = b"order must be either &#39;desc&#39; or &#39;asc&#39;"
+        assert (
+            target in resp.data or target2 in resp.data
+        ), f"{target!r} or {target2!r} not in {resp.data!r}"
 
     @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
     def test_raw_exceptions_possible_sizes_not_in_list(self, grep):
