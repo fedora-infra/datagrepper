@@ -231,10 +231,10 @@ python-versions = "*"
 
 [[package]]
 name = "copr-common"
-version = "0.15"
+version = "0.17"
 description = "Common python code used by Copr."
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [[package]]
@@ -1588,7 +1588,7 @@ constantly = [
     {file = "constantly-15.1.0.tar.gz", hash = "sha256:586372eb92059873e29eba4f9dec8381541b4d3834660707faf8ba59146dfc35"},
 ]
 copr-common = [
-    {file = "copr-common-0.15.tar.gz", hash = "sha256:cfee5e44fea799f5247fca850ee82a23f2ee461a6ed21e662333d76f2afe3aff"},
+    {file = "copr-common-0.17.tar.gz", hash = "sha256:06203371ce12f51365856321b769f306563dec5deeed24b07168542dad507480"},
 ]
 copr-messaging = [
     {file = "copr-messaging-0.6.tar.gz", hash = "sha256:0ed9aeac11d5ac965bb2dda3ba661334d98ac4786b577d78f5f14c3c9478e790"},
