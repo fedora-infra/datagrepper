@@ -390,13 +390,13 @@ files = [
 
 [[package]]
 name = "copr-common"
-version = "0.15"
+version = "0.18"
 description = "Common python code used by Copr."
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 files = [
-    {file = "copr-common-0.15.tar.gz", hash = "sha256:cfee5e44fea799f5247fca850ee82a23f2ee461a6ed21e662333d76f2afe3aff"},
+    {file = "copr-common-0.18.tar.gz", hash = "sha256:0ecfff93ab0e30c4bed9a7efce8098d77244fb8a8f2ed84a29632e38de323029"},
 ]
 
 [[package]]
