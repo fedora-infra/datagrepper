@@ -628,14 +628,14 @@ python-dateutil = "*"
 
 [[package]]
 name = "fedora-messaging"
-version = "3.0.2"
+version = "3.2.0"
 description = "A set of tools for using Fedora's messaging infrastructure"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "fedora_messaging-3.0.2-py3-none-any.whl", hash = "sha256:782dc04ba25ebc694324b85d24b7061949402db7dc1ad8e69d55fb623135a184"},
-    {file = "fedora_messaging-3.0.2.tar.gz", hash = "sha256:94ea22c7e7bf78e988b9d2c4bed80d7b422122429f9dd65408a6b8a28dcf13f8"},
+    {file = "fedora_messaging-3.2.0-py3-none-any.whl", hash = "sha256:57f3667933b08d78c525df36bd8bd43682804814768d91e35c9e89f0aaa86900"},
+    {file = "fedora_messaging-3.2.0.tar.gz", hash = "sha256:f77828c5b54726bdd02ceb3ec5b2d92540903a77d2f5fa2a2f843913cc863b2e"},
 ]
 
 [package.dependencies]
@@ -648,7 +648,7 @@ PyOpenSSL = "*"
 pytz = "*"
 service-identity = "*"
 setuptools = "*"
-toml = "*"
+tomli = {version = "*", markers = "python_version < \"3.11\""}
 Twisted = "*"
 
 [[package]]
@@ -2001,7 +2001,7 @@ sqlcipher = ["sqlcipher3-binary"]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 files = [
@@ -2013,7 +2013,7 @@ files = [
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
