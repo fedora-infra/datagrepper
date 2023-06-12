@@ -27,7 +27,7 @@ actions:
     get-current-version:
         - "poetry version -s"
     post-upstream-clone:
-        - "curl -sSL https://install.python-poetry.org | python3 -"
+        - "sh -c 'curl -sSL https://install.python-poetry.org | python3 -'"
 
 jobs:
   # upon upstream PRs, perform copr builds and test them
