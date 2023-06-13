@@ -2029,13 +2029,13 @@ files = [
 
 [[package]]
 name = "towncrier"
-version = "21.9.0"
+version = "22.12.0"
 description = "Building newsfiles for your project."
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "towncrier-21.9.0-py2.py3-none-any.whl", hash = "sha256:fc5a88a2a54988e3a8ed2b60d553599da8330f65722cc607c839614ed87e0f92"},
-    {file = "towncrier-21.9.0.tar.gz", hash = "sha256:9cb6f45c16e1a1eec9d0e7651165e7be60cd0ab81d13a5c96ca97a498ae87f48"},
+    {file = "towncrier-22.12.0-py3-none-any.whl", hash = "sha256:9767a899a4d6856950f3598acd9e8f08da2663c49fdcda5ea0f9e6ba2afc8eea"},
+    {file = "towncrier-22.12.0.tar.gz", hash = "sha256:9c49d7e75f646a9aea02ae904c0bc1639c8fd14a01292d2b123b8d307564034d"},
 ]
 
 [package.dependencies]
@@ -2044,10 +2044,10 @@ click-default-group = "*"
 incremental = "*"
 jinja2 = "*"
 setuptools = "*"
-tomli = {version = "*", markers = "python_version >= \"3.6\""}
+tomli = {version = "*", markers = "python_version < \"3.11\""}
 
 [package.extras]
-dev = ["packaging"]
+dev = ["furo", "packaging", "sphinx (>=5)", "twisted"]
 
 [[package]]
 name = "twisted"
@@ -2353,4 +2353,4 @@ schemas = ["anitya-schema", "bodhi-messages", "copr-messaging", "discourse2fedms
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "69999e07fafe4e80c0b7e8cd283f8249a7c4e77f4e4a9a9397472dd7094d82c8"
+content-hash = "07c09e20debb935a490140b1084acdbdddd553e95aa5dbc016175ea138442384"
