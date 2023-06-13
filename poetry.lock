@@ -2341,4 +2341,4 @@ schemas = ["anitya-schema", "bodhi-messages", "copr-messaging", "discourse2fedms
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "1cecba4efab68eecd12f0e05f986ac0cb132ff325a9e8be3de28180e1d6d0244"
+content-hash = "f2c9fd421efc4036b8324c92ea82d4fe65ff6684700d7b05e4201aab631f324f"
