@@ -1,15 +1,19 @@
 #!/bin/bash
 
-trap 'rm -f "$TMPFILE"' EXIT
+STRATEGY_URL=https://raw.githubusercontent.com/fedora-infra/shared/main/liccheck-strategy.ini
+
+trap 'rm -f "$TMPFILE $STRATEGY_TMPFILE"' EXIT
 
 set -e
 
 TMPFILE=$(mktemp -t requirements-XXXXXX.txt)
+STRATEGY_TMPFILE=$(mktemp -t licceck-strategy-XXXXXX.ini)
 
-# Note: we can't use poetry export because it isn't smart enough with conditional dependencies:
-# flake8 requires importlib_metadata on python < 3.8, so it's not installed, but it's exported
-# and liccheck crashes on packages listed in the req file but not installed.
-# poetry export --dev -f requirements.txt -o $TMPFILE
+curl -o $STRATEGY_TMPFILE $STRATEGY_URL
 
-pip freeze --exclude-editable --isolated > $TMPFILE
-liccheck -r $TMPFILE
+poetry export --with dev --without-hashes -f requirements.txt -o $TMPFILE
+
+# Use pip freeze instead of poetry when it fails
+# poetry run pip freeze --exclude-editable --isolated > $TMPFILE
+
+poetry run liccheck -r $TMPFILE -s $STRATEGY_TMPFILE

@@ -98,43 +98,6 @@ force_alphabetical_sort_within_sections = true
 [tool.black]
 target-version = ["py310"]
 
-[tool.liccheck]
-authorized_licenses = [
-  "bsd",
-  "new bsd",
-  "simplified bsd",
-  "apache",
-  "apache 2.0",
-  "apache software",
-  "Apache License 2.0",
-  "Apache License, Version 2.0",
-  "gnu lgpl",
-  "gpl v2",
-  "GNU General Public License v2 or later (GPLv2+)",
-  "GNU General Public License v3 (GPLv3)",
-  "GNU General Public License v3 or later (GPLv3+)",
-  "GNU Library or Lesser General Public License (LGPL)",
-  "GNU Lesser General Public License v2 or later (LGPLv2+)",
-  "GNU Lesser General Public License v3 or later (LGPLv3+)",
-  "GPLv3+",
-  "LGPLv2+",
-  "gpl v3",
-  "lgpl with exceptions or zpl",
-  "isc",
-  "isc license (iscl)",
-  "mit",
-  "python software foundation",
-  "zpl 2.1",
-  "mpl-2.0",
-  "MPL 2.0",
-  "Mozilla Public License 2.0 (MPL 2.0)",
-  "lgpl",
-  "CC0 (copyright waived)",
-  "Public Domain",
-  "Public Domain <http://unlicense.org>",
-  "Zope Public",
-]
-
 [tool.pytest.ini_options]
 addopts = "-v --cov --cov-report term-missing --cov-report html --cov-report xml"
 
