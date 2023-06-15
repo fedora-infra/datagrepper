@@ -27,7 +27,7 @@ exclude = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.10"
 "datanommer.models" = "^1.0.0"
 arrow = "^1.1.1"
 docutils = ">=0.16"
@@ -96,7 +96,7 @@ lines_after_imports = 2
 force_alphabetical_sort_within_sections = true
 
 [tool.black]
-target-version = ["py36"]
+target-version = ["py310"]
 
 [tool.liccheck]
 authorized_licenses = [

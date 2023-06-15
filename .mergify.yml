@@ -5,9 +5,8 @@ queue_rules:
       - check-success=Checks
       - check-success=Licenses
       - check-success=Documentation
-      - check-success=Unit tests (py37)
-      - check-success=Unit tests (py38)
-      - check-success=Unit tests (py39)
+      - check-success=Unit tests (py310)
+      - check-success=Unit tests (py311)
 
 pull_request_rules:
 - name: Merge on approval
@@ -23,6 +22,5 @@ pull_request_rules:
     - check-success=Checks
     - check-success=Licenses
     - check-success=Documentation
-    - check-success=Unit tests (py37)
-    - check-success=Unit tests (py38)
-    - check-success=Unit tests (py39)
+    - check-success=Unit tests (py310)
+    - check-success=Unit tests (py311)
