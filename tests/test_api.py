@@ -64,8 +64,8 @@ class TestAPI(unittest.TestCase):
     def test_index(self, grep, count_all_messages):
         resp = self.client.get("/")
         self.assertEqual(resp.status_code, 200)
-        response = resp.get_data()
-        self.assertIn(b"Datagrepper's documentation", response)
+        response = resp.get_data().decode(encoding="utf-8")
+        self.assertIn("Datagrepper’s documentation", response)
 
     @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
     def test_raw_default_result(self, grep):

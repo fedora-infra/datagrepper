@@ -20,6 +20,9 @@
 
 
 # -- General configuration ------------------------------------------------
+rst_epilog = """
+.. |URL| replace:: ``https://apps.fedoraproject.org/datagrepper/``
+"""
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
