@@ -13,13 +13,9 @@ jobs:
   checks:
     name: Checks
     runs-on: ubuntu-latest
+    container: fedorapython/fedora-python-tox:latest
     steps:
       - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.8
 
       - name: Install pre-commit
         run: pip install pre-commit
@@ -31,19 +27,13 @@ jobs:
   licenses:
     name: Licenses
     runs-on: ubuntu-latest
+    container: fedorapython/fedora-python-tox:latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.8
-
-      - name: Install krb5-devel for python-gssapi
-        run: sudo apt-get install krb5-config libkrb5-dev
-
-      - name: Install tox
-        run: pip install tox
+      - name: Install RPM dependencies
+        run: |
+          dnf install -y krb5-devel
 
       - name: Check licenses
         run: tox -e licenses
@@ -51,19 +41,13 @@ jobs:
   docs:
     name: Documentation
     runs-on: ubuntu-latest
+    container: fedorapython/fedora-python-tox:latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.8
-
-      - name: Install krb5-devel for python-gssapi
-        run: sudo apt-get install krb5-config libkrb5-dev
-
-      - name: Install tox
-        run: pip install tox
+      - name: Install RPM dependencies
+        run: |
+          dnf install -y krb5-devel
 
       - name: Build the docs
         run: tox -e docs
@@ -78,14 +62,16 @@ jobs:
   unit_tests:
     name: Unit tests
     runs-on: ubuntu-latest
+    container: fedorapython/fedora-python-tox:latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Run unit tests with Tox
-        uses: fedora-python/tox-github-action@main
-        with:
-          tox_env: ${{ matrix.tox_env }}
-          dnf_install: krb5-devel libpq-devel
+      - name: Install RPM dependencies
+        run: |
+          dnf install -y krb5-devel
+
+      - name: Build the docs
+        run: tox -e ${{ matrix.tox_env }}
 
       # - name: Upload coverage to Codecov
       #   uses: codecov/codecov-action@v1
