@@ -36,7 +36,7 @@ jobs:
 
       - name: Install RPM dependencies
         run: |
-          dnf install -y krb5-devel
+          dnf install -y krb5-devel libpq-devel
 
       - name: Check licenses
         run: tox -e licenses
@@ -50,7 +50,7 @@ jobs:
 
       - name: Install RPM dependencies
         run: |
-          dnf install -y krb5-devel
+          dnf install -y krb5-devel libpq-devel
 
       - name: Build the docs
         run: tox -e docs
@@ -71,7 +71,7 @@ jobs:
 
       - name: Install RPM dependencies
         run: |
-          dnf install -y krb5-devel
+          dnf install -y krb5-devel libpq-devel
 
       - name: Build the docs
         run: tox -e ${{ matrix.tox_env }}
