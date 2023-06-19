@@ -18,7 +18,10 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install pre-commit
-        run: pip install pre-commit
+        run: dnf install -y pre-commit git
+
+      - name: Mark the working directory as safe for Git
+        run: git config --global --add safe.directory $PWD
 
       - name: Run pre-commit checks
         run: pre-commit run --all-files
