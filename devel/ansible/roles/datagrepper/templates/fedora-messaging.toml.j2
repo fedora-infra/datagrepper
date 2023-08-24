@@ -30,6 +30,7 @@ routing_keys = ["#"]  # Set this to the specific topics you are interested in.
 
 [consumer_config]
 datanommer_sqlalchemy_url = "postgresql://datanommer:datanommer@localhost/messages"
+alembic_ini = "../datanommer.models/alembic.ini"
 
 [qos]
 prefetch_size = 0

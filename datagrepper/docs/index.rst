@@ -45,27 +45,33 @@ Requesting all messages in the last 2 days
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 datagrepper takes time arguments in `seconds`. So, we need to convert two days
-to 172,800 seconds first. Then, we can use HTTPie_ to get the JSON payload::
+to 172,800 seconds first. Then, we can use HTTPie_ to get the JSON payload
 
-   http get {{URL}}v2/search delta==172800
+.. parsed-literal::
+
+   http get \ |URL|\ v2/search delta==172800
 
 
 Requesting all messages in fixed time range
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To get messages in fixed absolute time range, we can use a date/time string,
-for example the common ISO 8601 format::
+for example the common ISO 8601 format
 
-   http get {{URL}}v2/search end==2021-06-25T06:11:40+00:00 start==2021-06-25T06:11:39+00:00
+.. parsed-literal::
+
+   http get \ |URL|\ v2/search end==2021-06-25T06:11:40+00:00 start==2021-06-25T06:11:39+00:00
 
 
 Paging results
 --------------
 
 The previous example is a large JSON response that's too big to read through.
-Limit the number of results to make it more digestable::
+Limit the number of results to make it more digestable
 
-   http get {{URL}}v2/search delta==172800 rows_per_page==1
+.. parsed-literal::
+
+   http get \ |URL|\ v2/search delta==172800 rows_per_page==1
 
 .. code-block:: javascript
 
@@ -104,12 +110,14 @@ Notice a few things.
 #. **Pagination**: ``rows_per_page`` shows the rows per page, its sibling value
    ``page`` is pointer to "page" of data you are on
 
-Use this command to get to the next page::
+Use this command to get to the next page
 
-   http get {{URL}}v2/search \
-      delta==172800 \
-      rows_per_page==1 \
-      page==2
+.. parsed-literal::
+
+   http get \ |URL|\ v2/search \
+   delta==172800 \
+   rows_per_page==1 \
+   page==2
 
 .. code-block:: javascript
 
@@ -146,55 +154,66 @@ set it to ``asc`` for ascending order (i.e. oldest to newest).
 Only Bodhi messages (OR wiki)
 -----------------------------
 
-Specify a ``category`` to limit your message to one kind of topic::
+Specify a ``category`` to limit your message to one kind of topic
 
-   http get {{URL}}v2/search \
-      delta==172800 \
-      category==bodhi
+.. parsed-literal::
+
+   http get \ |URL|\ v2/search \
+   delta==172800 \
+   category==bodhi
 
 Here, ``category`` is singular but comes back in the ``arguments`` dict as
 *categories* (plural)! You can specify multiple categories and messages that
-match *either* category will return. They are ``OR``'d together::
+match *either* category will return. They are ``OR``'d together
 
-   http get {{URL}}v2/search \
-      delta==172800 \
-      category==bodhi \
-      category==wiki
+.. parsed-literal::
+
+   http get \ |URL|\ v2/search \
+   delta==172800 \
+   category==bodhi \
+   category==wiki
 
 Messages for specific users and packages
 ----------------------------------------
 
-Search for events relating to multiple users with this query::
+Search for events relating to multiple users with this query
 
-   http get {{URL}}v2/search \
-      delta==172800 \
-      user==toshio \
-      user==pingou
+.. parsed-literal::
 
-Same for packages::
+   http get \ |URL|\ v2/search \
+   delta==172800 \
+   user==toshio \
+   user==pingou
 
-   http get {{URL}}v2/search \
-      delta==172800 \
-      package==nethack
+Same for packages
 
+.. parsed-literal::
+
+   http get \ |URL|\ v2/search \
+   delta==172800 \
+   package==nethack
 
 Excluding data
 --------------
 
 For each positive filter, there is a corresponding *negative filter*. If you
-want to query all messages **except for Koji messages**, use this query::
+want to query all messages **except for Koji messages**, use this query
 
-   http get {{URL}}v2/search \
-      delta==172800 \
-      not_category==buildsys
+.. parsed-literal::
+
+   http get \ |URL|\ v2/search \
+   delta==172800 \
+   not_category==buildsys
 
 Positive and negative filters are combinable. This query returns all messages
-except for user ``toshio``'s *Ask Fedora* activity::
+except for user ``toshio``'s *Ask Fedora* activity
 
-   http get {{URL}}v2/search \
-      delta==172800 \
-      user==toshio \
-      not_category==askbot
+.. parsed-literal::
+
+   http get \ |URL|\ v2/search \
+   delta==172800 \
+   user==toshio \
+   not_category==askbot
 
 
 Putting it all together (CNF)
@@ -204,14 +223,16 @@ Multiple ``category``, ``user``, and ``package`` filters are merged together in
 a way that looks like `Conjunctive Normal Form`_ (CNF).
 
 The following query returns all messages from the past two days where
-*(category==bodhi OR category==wiki) AND (user==toshio OR user==pingou)*::
+*(category==bodhi OR category==wiki) AND (user==toshio OR user==pingou)*
 
-   http get {{URL}}v2/search \
-      delta==172800 \
-      category==bodhi \
-      category==wiki \
-      user==toshio \
-      user==pingou
+.. parsed-literal::
+
+   http get \ |URL|\ v2/search \
+   delta==172800 \
+   category==bodhi \
+   category==wiki \
+   user==toshio \
+   user==pingou
 
 
 Get help

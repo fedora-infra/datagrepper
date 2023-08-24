@@ -24,18 +24,17 @@ from datetime import datetime, timedelta
 
 import arrow
 import datanommer.models as dm
-import docutils
-import docutils.examples
 import flask
-import jinja2
 import markupsafe
 import pygal
 import pygments
 import pygments.formatters
 import pygments.lexers
+from bs4 import BeautifulSoup as bs4
 from flask import Flask
 from flask_healthz import HealthError, healthz
 from pkg_resources import get_distribution
+from sphinx.cmd.build import main as sphinx_main
 from werkzeug.exceptions import BadRequest
 
 from datagrepper.util import (
@@ -131,74 +130,28 @@ def remove_session(exc):
     dm.session.remove()
 
 
-def modify_rst(rst):
-    """Downgrade some of our rst directives if docutils is too old."""
-
-    try:
-        # The rst features we need were introduced in this version
-        minimum = [0, 9]
-        version = map(int, docutils.__version__.split("."))
-
-        # If we're at or later than that version, no need to downgrade
-        if version >= minimum:
-            return rst
-    except Exception:
-        # If there was some error parsing or comparing versions, run the
-        # substitutions just to be safe.
-        pass
-
-    # Otherwise, make code-blocks into just literal blocks.
-    substitutions = {
-        ".. code-block:: javascript": "::",
-    }
-    for old, new in substitutions.items():
-        rst = rst.replace(old, new)
-
-    return rst
-
-
-def modify_html(html):
-    """Perform style substitutions where docutils doesn't do what we want."""
-
-    substitutions = {
-        '<tt class="docutils literal">': "<code>",
-        "</tt>": "</code>",
-    }
-    for old, new in substitutions.items():
-        html = html.replace(old, new)
-
-    return html
-
-
 def preload_docs(endpoint):
     """Utility to load an RST file and turn it into fancy HTML."""
 
     here = os.path.dirname(os.path.abspath(__file__))
     default = os.path.join(here, "docs")
     directory = app.config.get("DATAGREPPER_DOC_PATH", default)
-    fname = os.path.join(directory, endpoint + ".rst")
+    htmldocs = os.path.join(directory, "_build/html/")
+    args = ["-b", "html", "-c", default, default, htmldocs]
+    sphinx_main(args)
+    fname = os.path.join(htmldocs, endpoint + ".html")
     with codecs.open(fname, "r", "utf-8") as f:
-        rst = f.read()
+        api_docs = f.read()
 
-    rst = modify_rst(rst)
-
-    api_docs = docutils.examples.html_body(rst)
-
-    api_docs = modify_html(api_docs)
+    soup = bs4(api_docs, "html.parser")
+    api_docs = soup.find("body").decode_contents()
 
     api_docs = markupsafe.Markup(api_docs)
     return api_docs
 
 
-htmldocs = dict.fromkeys(["index", "reference", "widget", "charts"])
-for key in htmldocs:
-    htmldocs[key] = preload_docs(key)
-
-
 def load_docs(request):
-    URL = app.config.get("DATAGREPPER_BASE_URL", request.url_root)
-    docs = htmldocs[request.endpoint]
-    docs = jinja2.Template(docs).render(URL=URL)
+    docs = preload_docs(request.endpoint)
     return markupsafe.Markup(docs)
 
 
@@ -245,6 +198,11 @@ def charts():
 @app.route("/widget/")
 @app.route("/widget")
 def widget():
+    return flask.render_template("index.html", docs=load_docs(flask.request))
+
+
+@app.route("/contributing.html")
+def contributing():
     return flask.render_template("index.html", docs=load_docs(flask.request))
 
 
