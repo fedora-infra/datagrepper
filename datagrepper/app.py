@@ -190,14 +190,14 @@ def preload_docs(endpoint):
     return api_docs
 
 
-htmldocs = dict.fromkeys(["index", "reference", "widget", "charts"])
+htmldocs = dict.fromkeys(["index", "reference", "widget", "charts", "contributing"])
 for key in htmldocs:
     htmldocs[key] = preload_docs(key)
 
 
-def load_docs(request):
-    URL = app.config.get("DATAGREPPER_BASE_URL", request.url_root)
-    docs = htmldocs[request.endpoint]
+def load_docs(page):
+    URL = app.config.get("DATAGREPPER_BASE_URL", flask.request.url_root)
+    docs = htmldocs[page]
     docs = jinja2.Template(docs).render(URL=URL)
     return markupsafe.Markup(docs)
 
@@ -226,26 +226,8 @@ POSSIBLE_SIZES = ["small", "medium", "large", "extra-large"]
 @app.route("/")
 def index():
     total = count_all_messages()
-    docs = load_docs(flask.request)
+    docs = load_docs("index")
     return flask.render_template("index.html", docs=docs, total=total)
-
-
-@app.route("/reference/")
-@app.route("/reference")
-def reference():
-    return flask.render_template("index.html", docs=load_docs(flask.request))
-
-
-@app.route("/charts/")
-@app.route("/charts")
-def charts():
-    return flask.render_template("index.html", docs=load_docs(flask.request))
-
-
-@app.route("/widget/")
-@app.route("/widget")
-def widget():
-    return flask.render_template("index.html", docs=load_docs(flask.request))
 
 
 @app.route("/raw", methods=["GET"], strict_slashes=False)
@@ -618,6 +600,13 @@ def messagecount():
     total["messagecount"] = count_all_messages()
     total = flask.jsonify(total)
     return total
+
+
+@app.route("/<page>/")
+def doc(page):
+    if page not in htmldocs:
+        flask.abort(404)
+    return flask.render_template("index.html", docs=load_docs(page))
 
 
 @app.errorhandler(404)

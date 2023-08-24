@@ -10,16 +10,6 @@ and puts them in a database. These messages is what datagrepper queries.
 
 Datagrepper is curently running in production at https://apps.fedoraproject.org/datagrepper/
 
-Table of Contents
------------------
-
-.. Contributor Guide
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contributor Guide
-
-   contributing
 
 Pre-requisites
 --------------

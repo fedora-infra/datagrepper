@@ -46,9 +46,9 @@
                         <ul class="nav navbar-nav nav-justified nav-underline">
                             <li{% if request.endpoint == 'index' %} class="active nav-item"{% else %} class="nav-item" {% endif %}><a class="nav-link" href="{{ url_for('index') }}">Getting&nbsp;started</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ url_for('raw') }}?rows_per_page=1&delta=127800">Feed</a></li>
-                            <!-- <li{% if request.endpoint == 'charts' %} class="active"{% endif %}><a href="{{ url_for('charts') }}">Charts</a></li> -->
-                            <li{% if request.endpoint == 'reference' %} class="active nav-item" {% else %} class="nav-item" {% endif %}><a class="nav-link" href="{{ url_for('reference') }}">Reference</a></li>
-                            <li{% if request.endpoint == 'widget' %} class="active nav-item" {% else %} class="nav-item" {% endif %}><a class="nav-link" href="{{ url_for('widget') }}">Embedding</a></li>
+                            <!-- <li{% if request.endpoint == 'charts' %} class="active"{% endif %}><a href="{{ url_for('doc', page='charts') }}">Charts</a></li> -->
+                            <li{% if request.endpoint == 'reference' %} class="active nav-item" {% else %} class="nav-item" {% endif %}><a class="nav-link" href="{{ url_for('doc', page='reference') }}">Reference</a></li>
+                            <li{% if request.endpoint == 'widget' %} class="active nav-item" {% else %} class="nav-item" {% endif %}><a class="nav-link" href="{{ url_for('doc', page='widget') }}">Embedding</a></li>
                             <li class="nav-item"><a class="nav-link" href="https://github.com/fedora-infra/datagrepper">Source</a></li>
                             <li class="nav-item"><a class="nav-link" href="https://github.com/fedora-infra/datagrepper/issues">Issues</a></li>
                         </ul>

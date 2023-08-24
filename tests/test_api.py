@@ -16,21 +16,21 @@ class TestAPI(unittest.TestCase):
 
     @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
     def test_reference(self, grep):
-        resp = self.client.get("/reference")
+        resp = self.client.get("/reference/")
         self.assertEqual(resp.status_code, 200)
         response = resp.get_data()
         self.assertIn(b"General API notes", response)
 
     @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
     def test_charts(self, grep):
-        resp = self.client.get("/charts")
+        resp = self.client.get("/charts/")
         self.assertEqual(resp.status_code, 200)
         response = resp.get_data()
         self.assertIn(b"Charts and Graphs", response)
 
     @patch("datagrepper.app.dm.Message.grep", return_value=(0, 0, []))
     def test_widget(self, grep):
-        resp = self.client.get("/widget")
+        resp = self.client.get("/widget/")
         self.assertEqual(resp.status_code, 200)
         response = resp.get_data()
         self.assertIn(b"Embeddable Widget", response)
