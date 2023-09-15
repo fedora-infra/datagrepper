@@ -10,6 +10,10 @@ and puts them in a database. These messages is what datagrepper queries.
 
 Datagrepper is curently running in production at https://apps.fedoraproject.org/datagrepper/
 
+The list of possible topics can be found in `Fedora Messaging's documentation`_.
+
+.. _Fedora Messaging's documentation: https://fedora-messaging.readthedocs.io/en/stable/user-guide/schemas.html
+
 
 Pre-requisites
 --------------
