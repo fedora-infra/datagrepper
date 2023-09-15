@@ -7,8 +7,8 @@ Vagrant.configure(2) do |config|
   config.hostmanager.manage_guest = true
 
   config.vm.define "datagrepper" do |datagrepper|
-    datagrepper.vm.box_url = "https://download.fedoraproject.org/pub/fedora/linux/releases/34/Cloud/x86_64/images/Fedora-Cloud-Base-Vagrant-34-1.2.x86_64.vagrant-libvirt.box"
-    datagrepper.vm.box = "f34-cloud-libvirt"
+    datagrepper.vm.box_url = "https://download.fedoraproject.org/pub/fedora/linux/releases/38/Cloud/x86_64/images/Fedora-Cloud-Base-Vagrant-38-1.6.x86_64.vagrant-libvirt.box"
+    datagrepper.vm.box = "f38-cloud-libvirt"
     datagrepper.vm.hostname = "datagrepper.test"
 
     datagrepper.vm.synced_folder '.', '/vagrant', disabled: true
