@@ -1,0 +1,57 @@
+---
+- name: Install RPM packages
+  dnf:
+    name:
+      - fedora-messaging
+      - gcc
+      - git
+      - poetry
+      - python3-devel
+      - python3-pip
+      - vim
+      - krb5-devel
+      - libpq-devel
+      - tox
+      - python-psycopg2
+    state: present
+
+- name: Install datanommer with poetry
+  shell: /srv/venv/bin/poetry install
+  args:
+    chdir: /home/vagrant/datanommer/datanommer.{{item}}/
+  loop:
+    - models
+    - commands
+    - consumer
+  become: yes
+  become_user: vagrant
+
+- name: Install Datanommer's config file
+  copy:
+    src: fedora-messaging.toml
+    dest: /etc/fedora-messaging/datanommer.toml
+
+- name: Install Datanommer's alembic config file
+  copy:
+    src: alembic.ini
+    dest: /etc/datanommer.alembic.ini
+
+- name: Create datanommer db
+  shell: /srv/venv/bin/poetry run datanommer-create-db -c /etc/fedora-messaging/datanommer.toml
+  args:
+    chdir: /home/vagrant/datanommer/datanommer.commands
+  become: yes
+  become_user: vagrant
+
+- name: Install the systemd unit files for datanommer consumer
+  copy:
+    src: "datanommer.service"
+    dest: /etc/systemd/system/datanommer.service
+    mode: 0644
+
+- name: Start datanommer service using systemd
+  systemd:
+    state: started
+    name: datanommer
+    daemon_reload: yes
+    enabled: yes

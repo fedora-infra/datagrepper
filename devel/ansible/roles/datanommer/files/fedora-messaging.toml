@@ -1,0 +1,69 @@
+# A sample fedora-messaging configuration for datanommer. This file is in the TOML format.
+
+amqp_url = "amqps://datanommer:@rabbitmq.fedoraproject.org/%2Fpublic_pubsub"
+callback = "datanommer.consumer:Nommer"
+passive_declares = true
+
+[tls]
+ca_cert = "/etc/fedora-messaging/cacert.pem"
+keyfile = "/etc/fedora-messaging/fedora-key.pem"
+certfile = "/etc/fedora-messaging/fedora-cert.pem"
+
+[client_properties]
+app = "datanommer"
+app_url = "https://github.com/fedora-infra/datanommer"
+
+[queues.datanommer]
+durable = false
+auto_delete = true
+exclusive = true
+arguments = {}
+
+[[bindings]]
+queue = "datanommer"
+exchange = "amq.topic"
+routing_keys = ["#"]
+
+[consumer_config]
+datanommer_sqlalchemy_url = 'postgresql://datanommer:datanommer@localhost/messages'
+alembic_ini = "/etc/datanommer.alembic.ini"
+
+[log_config]
+version = 1
+disable_existing_loggers = true
+
+[log_config.formatters.simple]
+format = "[%(levelname)s %(name)s] %(message)s"
+
+[log_config.handlers.console]
+class = "logging.StreamHandler"
+formatter = "simple"
+stream = "ext://sys.stdout"
+
+[log_config.loggers.fedora_messaging]
+level = "INFO"
+propagate = false
+handlers = ["console"]
+
+# Twisted is the asynchronous framework that manages the TCP/TLS connection, as well
+# as the consumer event loop. When debugging you may want to lower this log level.
+[log_config.loggers.twisted]
+level = "INFO"
+propagate = false
+handlers = ["console"]
+
+# Pika is the underlying AMQP client library. When debugging you may want to
+# lower this log level.
+[log_config.loggers.pika]
+level = "WARNING"
+propagate = false
+handlers = ["console"]
+
+[log_config.loggers.datanommer]
+level = "INFO"
+propagate = false
+handlers = ["console"]
+
+[log_config.root]
+level = "ERROR"
+handlers = ["console"]
