@@ -4,4 +4,6 @@
   become_method: sudo
   roles:
     - postgresql
+    - venv
+    - datanommer
     - datagrepper

@@ -1,0 +1,24 @@
+---
+- name: Install RPM packages
+  dnf:
+    name:
+      - poetry
+      - python3-devel
+      - python3-pip
+      - python-psycopg2
+    state: present
+
+- name: Create a directory for the virtualenv
+  file:
+    name: /srv/venv
+    state: directory
+    mode: 0755
+    owner: vagrant
+    group: vagrant
+
+- name: Create the virtualenv and install poetry
+  pip:
+    name: poetry
+    virtualenv: /srv/venv
+  become: yes
+  become_user: vagrant

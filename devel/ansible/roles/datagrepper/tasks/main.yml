@@ -29,32 +29,6 @@
     dest: /etc/motd
     mode: 0644
 
-- name: Create a directory for the virtualenv
-  file:
-    name: /srv/venv
-    state: directory
-    mode: 0755
-    owner: vagrant
-    group: vagrant
-
-- name: Create the virtualenv and install poetry
-  pip:
-    name: poetry
-    virtualenv: /srv/venv
-  become: yes
-  become_user: vagrant
-
-- name: Install datanommer with poetry
-  shell: /srv/venv/bin/poetry install
-  args:
-    chdir: /home/vagrant/datanommer/datanommer.{{item}}/
-  loop:
-    - models
-    - commands
-    - consumer
-  become: yes
-  become_user: vagrant
-
 - name: Install datagrepper with poetry
   shell: /srv/venv/bin/poetry install --extras schemas
   args:
@@ -67,13 +41,6 @@
     src: fedora-messaging.toml.j2
     dest: /etc/fedora-messaging/config.toml
 
-- name: Create datanommer db
-  shell: /srv/venv/bin/poetry run datanommer-create-db
-  args:
-    chdir: /home/vagrant/datanommer/datanommer.commands
-  become: yes
-  become_user: vagrant
-
 - name: Install the systemd unit files for datagrepper
   copy:
     src: "datagrepper.service"
@@ -84,18 +51,5 @@
   systemd:
     state: started
     name: datagrepper
-    daemon_reload: yes
-    enabled: yes
-
-- name: Install the systemd unit files for datanommer consumer
-  copy:
-    src: "datanommer.service"
-    dest: /etc/systemd/system/datanommer.service
-    mode: 0644
-
-- name: Start datanommer service using systemd
-  systemd:
-    state: started
-    name: datanommer
     daemon_reload: yes
     enabled: yes

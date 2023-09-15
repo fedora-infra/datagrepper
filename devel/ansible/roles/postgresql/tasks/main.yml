@@ -5,6 +5,8 @@
       - python3-psycopg2
       - postgresql-server
       - timescaledb
+      # Required to setup the user
+      - acl
     state: present
 
 - name: Setup the postgresql DB
@@ -36,7 +38,6 @@
     enabled: yes
     state: started
 
-
 - block:
     - name: Create the user
       postgresql_user:
@@ -55,7 +56,6 @@
   become: yes
   become_user: postgres
   become_method: sudo
-
 
 - name: Make connection easier
   copy:
