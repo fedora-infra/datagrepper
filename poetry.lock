@@ -792,17 +792,17 @@ dotenv = ["python-dotenv"]
 
 [[package]]
 name = "flask-healthz"
-version = "0.0.3"
+version = "1.0.0"
 description = "A simple module to allow you to easily add health endpoints to your Flask application"
 optional = false
-python-versions = ">=3.6.1,<4.0.0"
+python-versions = ">=3.7.0,<4.0.0"
 files = [
-    {file = "flask-healthz-0.0.3.tar.gz", hash = "sha256:d854208b7bde3ef847d069b10f3f8143f61720b3ee5eb10f63d727ff68c90e7f"},
-    {file = "flask_healthz-0.0.3-py3-none-any.whl", hash = "sha256:e01bf4c1d0e0b2538a444ddf63915c7338a4adabe725186cec6553d3f45d1c33"},
+    {file = "flask_healthz-1.0.0-py3-none-any.whl", hash = "sha256:3e7bd32fa872c12b3bcf39ee2bdbb8bff95ea7a70e5e86a603949ac898ccae2e"},
+    {file = "flask_healthz-1.0.0.tar.gz", hash = "sha256:7c41abf13bd96b562b58846e24a5c59718810ba79706a2204c21764e8255fe70"},
 ]
 
 [package.dependencies]
-flask = "<3.0"
+flask = "<3.0.1"
 
 [[package]]
 name = "greenlet"
@@ -2365,4 +2365,4 @@ schemas = ["anitya-schema", "bodhi-messages", "copr-messaging", "discourse2fedms
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7a9606a906250418ddae505121127666adeb550bd0a086322b20f885cc895652"
+content-hash = "83d2f11586c7b20fd55b921bf493fd63376fad8bc9c4436b882b65c5404f8fb4"
