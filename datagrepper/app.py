@@ -69,7 +69,7 @@ import datagrepper.widgets  # noqa: E402,F401
 def inject_variable():
     """Inject some global variables into all templates"""
     extras = {
-        "models_version": get_distribution("datanommer.models").version,
+        "models_version": get_distribution("datanommer-models").version,
         "grepper_version": get_distribution("datagrepper").version,
     }
     return extras
