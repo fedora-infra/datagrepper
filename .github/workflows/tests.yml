@@ -17,14 +17,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install pre-commit
-        run: dnf install -y pre-commit git
+      - name: Install dependencies
+        run: |
+          dnf install -y git
+          pip install poetry>=1.2
 
       - name: Mark the working directory as safe for Git
         run: git config --global --add safe.directory $PWD
 
+      - name: Install the project
+        run: poetry install
+
       - name: Run pre-commit checks
-        run: pre-commit run --all-files
+        run: poetry run pre-commit run --all-files
 
 
   licenses:
