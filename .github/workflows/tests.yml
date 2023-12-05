@@ -19,7 +19,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          dnf install -y git
+          dnf install -y git krb5-devel libpq-devel
           pip install poetry>=1.2
 
       - name: Mark the working directory as safe for Git
@@ -39,9 +39,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install RPM dependencies
+      - name: Install dependencies
         run: |
           dnf install -y krb5-devel libpq-devel
+          pip install poetry>=1.2
 
       - name: Check licenses
         run: tox -e licenses
@@ -53,9 +54,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install RPM dependencies
+      - name: Install dependencies
         run: |
           dnf install -y krb5-devel libpq-devel
+          pip install poetry>=1.2
 
       - name: Build the docs
         run: tox -e docs
@@ -74,9 +76,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install RPM dependencies
+      - name: Install dependencies
         run: |
           dnf install -y krb5-devel libpq-devel
+          pip install poetry>=1.2
 
       - name: Build the docs
         run: tox -e ${{ matrix.tox_env }}
