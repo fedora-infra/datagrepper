@@ -59,13 +59,13 @@ fedora-messaging-git-hook-messages = {version = "*", optional = true}
 fedora-messaging-the-new-hotness-schema = {version = "*", optional = true}
 fedora-planet-messages = {version = "*", optional = true}
 fmn-messages = {version = "*", optional = true}
-kerneltest-messages = {version = "^1.0.0", optional = true}
-koji-fedoramessaging-messages = {version = "^1.2.2", optional = true}
+kerneltest-messages = {version = "*", optional = true}
+koji-fedoramessaging-messages = {version = "*", optional = true}
 koschei-messages = {version = "*", optional = true}
 maubot-fedora-messages = {version = "*", optional = true}
+mdapi-messages = {version = "*", optional = true}
 mediawiki-messages = {version = "*", optional = true}
 meetbot-messages = {version = "*", optional = true}
-mdapi-messages = {version = "*", optional = true}
 noggin-messages = {version = "*", optional = true}
 nuancier-messages = {version = "*", optional = true}
 pagure-messages = {version = "*", optional = true}

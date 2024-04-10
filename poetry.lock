@@ -2768,4 +2768,4 @@ schemas = ["anitya-schema", "bodhi-messages", "bugzilla2fedmsg-schema", "ci-mess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "22caf3cb1dfa5edbeb5b689483c43148eb62e044f87030ba91385eb1512967f7"
+content-hash = "311fab7b9554f7872fddd9ea35aac4ed21ee6d14ef5ec6383f6d6743c39cb1f1"
