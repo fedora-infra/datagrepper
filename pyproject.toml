@@ -28,7 +28,8 @@ exclude = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-"datanommer-models" = "^1.0.0"
+#"datanommer-models" = "^1.0.0"
+datanommer-models = { git = "https://github.com/fedora-infra/datanommer.git", branch = "stable", subdirectory = "datanommer.models" }
 arrow = "^1.1.1"
 docutils = ">=0.16"
 flask = ">=2.0.1"
