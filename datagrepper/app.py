@@ -246,6 +246,7 @@ def raw():
     packages = flask.request.args.getlist("package")
     categories = flask.request.args.getlist("category")
     topics = flask.request.args.getlist("topic")
+    agents = flask.request.args.getlist("agent")
     contains = flask.request.args.getlist("contains")
     # Validate the "contains" argument
     _contains_limit = datetime.utcnow() - timedelta(weeks=4 * 8)
@@ -263,6 +264,7 @@ def raw():
     not_packages = flask.request.args.getlist("not_package")
     not_categories = flask.request.args.getlist("not_category")
     not_topics = flask.request.args.getlist("not_topic")
+    not_agents = flask.request.args.getlist("not_agent")
 
     # Paging arguments
     page = int(flask.request.args.get("page", 1))
@@ -296,11 +298,13 @@ def raw():
         packages=packages,
         categories=categories,
         topics=topics,
+        agents=agents,
         contains=contains,
         not_users=not_users,
         not_packages=not_packages,
         not_categories=not_categories,
         not_topics=not_topics,
+        not_agents=not_agents,
         page=page,
         rows_per_page=rows_per_page,
         order=order,
@@ -321,11 +325,13 @@ def raw():
             packages=packages,
             categories=categories,
             topics=topics,
+            agents=agents,
             contains=contains,
             not_users=not_users,
             not_packages=not_packages,
             not_categories=not_categories,
             not_topics=not_topics,
+            not_agents=not_agents,
         )
     except Exception as e:
         traceback.print_exc()
@@ -433,6 +439,7 @@ def make_charts(chart_type):
     packages = flask.request.args.getlist("package")
     categories = flask.request.args.getlist("category")
     topics = flask.request.args.getlist("topic")
+    agents = flask.request.args.getlist("agent")
     contains = flask.request.args.getlist("contains")
 
     # Still more filters.. negations of the previous ones.
@@ -440,6 +447,7 @@ def make_charts(chart_type):
     not_packages = flask.request.args.getlist("not_package")
     not_categories = flask.request.args.getlist("not_category")
     not_topics = flask.request.args.getlist("not_topic")
+    not_agents = flask.request.args.getlist("not_agent")
 
     end = end and datetime.fromtimestamp(end)
     start = start and datetime.fromtimestamp(start)
@@ -523,6 +531,7 @@ def make_charts(chart_type):
             packages=packages,
             categories=categories,
             topics=topics,
+            agents=agents,
             contains=contains,
         )
 
@@ -548,6 +557,7 @@ def make_charts(chart_type):
                     not_packages=not_packages,
                     not_categories=not_categories,
                     not_topics=not_topics,
+                    not_agents=not_agents,
                     **kwargs,
                 )
                 values.append(count)
