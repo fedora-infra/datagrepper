@@ -51,11 +51,13 @@ class TestAPI(unittest.TestCase):
             "packages",
             "categories",
             "topics",
+            "agents",
             "contains",
             "not_users",
             "not_packages",
             "not_categories",
             "not_topics",
+            "not_agents",
         ]:
             self.assertEqual(kws[arg], [])
 

@@ -72,10 +72,12 @@ Limit the number of results to make it more digestable::
             "order": "desc",
             "start": 1364493938.0,
             "topics": [],
+            "agents": [],
             "categories": [],
             "users": []
             "packages": [],
             "not_topics": [],
+            "not_agents": [],
             "not_categories": [],
             "not_users": []
             "not_packages": [],
@@ -116,10 +118,12 @@ Use this command to get to the next page::
             "order": "desc",
             "start": 1364493938.0,
             "topics": [],
+            "agents": [],
             "categories": [],
             "users": []
             "packages": [],
             "not_topics": [],
+            "not_agents": [],
             "not_categories": [],
             "not_users": []
             "not_packages": [],
