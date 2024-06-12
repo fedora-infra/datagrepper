@@ -41,7 +41,7 @@ psycopg2 = "^2.9.1"
 cffi = "^1.14.6"
 gunicorn = {version = "^20.0 || ^21.0.0 || ^22.0.0", optional = true}
 SQLAlchemy = "^1.4.0 || ^2.0.0"
-flask-healthz = "^0.0.3 || ^1.0.0"
+flask-healthz = "^1.0.0"
 
 # Message schemas. The reference list of all message schemas is in
 # https://github.com/fedora-infra/fedora-messaging/blob/develop/docs/schema-packages.txt
