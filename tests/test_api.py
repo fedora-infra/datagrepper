@@ -210,7 +210,7 @@ class TestAPI(unittest.TestCase):
         target = b"size must be in one of these:"
         assert target in resp.data, f"{target!r} not in {resp.data!r}"
 
-    @patch("datagrepper.app.dm.Message.query", autospec=True)
+    @patch("datagrepper.app.dm.Message.query")
     def test_id(self, query):
         msg = query.filter_by.return_value.first.return_value
         msg.as_dict = MagicMock(return_value={"key": "value"})
