@@ -33,6 +33,7 @@ import pygal
 import pygments
 import pygments.formatters
 import pygments.lexers
+import sqlalchemy
 from flask import Flask
 from flask_healthz import HealthError, healthz
 from pkg_resources import get_distribution
@@ -649,6 +650,8 @@ def liveness():
 
 def readiness():
     try:
-        dm.session.execute("SELECT 1")
+        result = dm.session.scalar(sqlalchemy.text("SELECT 1"))
     except Exception:
         raise HealthError("Can't connect to the database")
+    if result != 1:
+        raise HealthError("The dummy query returned a wrong result")

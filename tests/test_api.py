@@ -253,15 +253,15 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data, b'{"status": 200, "title": "OK"}')
 
-    @patch("datagrepper.app.dm.session.execute")
-    def test_healthz_readiness_ok(self, execute):
+    @patch("datagrepper.app.dm.session.scalar", return_value=1)
+    def test_healthz_readiness_ok(self, scalar):
         """Test the /healthz/ready check endpoint"""
         resp = self.client.get("/healthz/ready")
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data, b'{"status": 200, "title": "OK"}')
 
-    @patch("datagrepper.app.dm.session.execute", side_effect=Exception)
-    def test_healthz_readiness_not_ok(self, execute):
+    @patch("datagrepper.app.dm.session.scalar", side_effect=Exception)
+    def test_healthz_readiness_not_ok(self, scalar):
         """Test the /healthz/ready check endpoint when not ready"""
         resp = self.client.get("/healthz/ready")
         self.assertEqual(resp.status_code, 503)
