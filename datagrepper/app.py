@@ -213,7 +213,7 @@ def count_all_messages():
     """
 
     if app.config.get("DATAGREPPER_APPROXIMATE_COUNT"):
-        query = "SELECT * FROM approximate_row_count('messages');"
+        query = sqlalchemy.text("SELECT * FROM approximate_row_count('messages');")
         total = dm.session.execute(query).first()[0]
     else:
         total = dm.Message.grep(defer=True)[0]
