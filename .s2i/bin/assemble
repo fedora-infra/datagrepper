@@ -13,7 +13,7 @@ echo "---> Upgrade Poetry's pip to the latest version ..."
 $VENV_DIR/bin/pip install --upgrade pip
 
 echo "---> Installing application and dependencies ..."
-poetry install --no-dev --extras deploy --extras schemas
+poetry install --only main --extras deploy --extras schemas
 
 # set permissions for any installed artifacts
 fix-permissions /opt/app-root -P
