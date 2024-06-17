@@ -706,23 +706,23 @@ fedora-messaging = "*"
 
 [[package]]
 name = "fedora-messaging"
-version = "3.5.0"
+version = "3.6.0"
 description = "A set of tools for using Fedora's messaging infrastructure"
 optional = false
-python-versions = "<4.0,>=3.8"
+python-versions = "<4.0.0,>=3.8.10"
 files = [
-    {file = "fedora_messaging-3.5.0-py3-none-any.whl", hash = "sha256:47edb6951f979e0c0646905dcda1f6decff65b115eb98eed94cbc54e4eb6c6b5"},
-    {file = "fedora_messaging-3.5.0.tar.gz", hash = "sha256:5b4f3c8c6d5f4c78d0a76563c01b49aefffd12a30fa0cf043fe5facc2c12b939"},
+    {file = "fedora_messaging-3.6.0-py3-none-any.whl", hash = "sha256:8e53d1d117d0de4b3a9642ce961c2fae851db924d4bff17e680eb1a6e83b4259"},
+    {file = "fedora_messaging-3.6.0.tar.gz", hash = "sha256:ecdb220e774d1d37fc199e2e20dd47bf864cbb1c008c74ff0a690d5bbe47609e"},
 ]
 
 [package.dependencies]
 blinker = ">=1.5,<2.0"
-click = ">=8.1.3,<9.0.0"
+click = ">=8.0.3,<9.0.0"
 crochet = ">=1.12.0"
-jsonschema = ">=4.17.3,<5.0.0"
-pika = ">=1.3.0,<2.0.0"
+jsonschema = ">=3.2.0,<5.0.0"
+pika = ">=1.2.1,<2.0.0"
 pyopenssl = ">=21.0.0"
-pytz = ">=2023.3"
+requests = ">=2.5.0"
 service-identity = ">=21.1.0"
 tomli = ">=2.0.1,<3.0.0"
 twisted = ">=22.4.0"
@@ -788,34 +788,34 @@ fedora-messaging = "*"
 
 [[package]]
 name = "filelock"
-version = "3.14.0"
+version = "3.15.1"
 description = "A platform independent file lock."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "filelock-3.14.0-py3-none-any.whl", hash = "sha256:43339835842f110ca7ae60f1e1c160714c5a6afd15a2873419ab185334975c0f"},
-    {file = "filelock-3.14.0.tar.gz", hash = "sha256:6ea72da3be9b8c82afd3edcf99f2fffbb5076335a5ae4d03248bb5b6c3eae78a"},
+    {file = "filelock-3.15.1-py3-none-any.whl", hash = "sha256:71b3102950e91dfc1bb4209b64be4dc8854f40e5f534428d8684f953ac847fac"},
+    {file = "filelock-3.15.1.tar.gz", hash = "sha256:58a2549afdf9e02e10720eaa4d4470f56386d7a6f72edd7d0596337af8ed7ad8"},
 ]
 
 [package.extras]
 docs = ["furo (>=2023.9.10)", "sphinx (>=7.2.6)", "sphinx-autodoc-typehints (>=1.25.2)"]
-testing = ["covdefaults (>=2.3)", "coverage (>=7.3.2)", "diff-cover (>=8.0.1)", "pytest (>=7.4.3)", "pytest-cov (>=4.1)", "pytest-mock (>=3.12)", "pytest-timeout (>=2.2)"]
+testing = ["covdefaults (>=2.3)", "coverage (>=7.3.2)", "diff-cover (>=8.0.1)", "pytest (>=7.4.3)", "pytest-asyncio (>=0.21)", "pytest-cov (>=4.1)", "pytest-mock (>=3.12)", "pytest-timeout (>=2.2)"]
 typing = ["typing-extensions (>=4.8)"]
 
 [[package]]
 name = "flake8"
-version = "7.0.0"
+version = "7.1.0"
 description = "the modular source code checker: pep8 pyflakes and co"
 optional = false
 python-versions = ">=3.8.1"
 files = [
-    {file = "flake8-7.0.0-py2.py3-none-any.whl", hash = "sha256:a6dfbb75e03252917f2473ea9653f7cd799c3064e54d4c8140044c5c065f53c3"},
-    {file = "flake8-7.0.0.tar.gz", hash = "sha256:33f96621059e65eec474169085dc92bf26e7b2d47366b70be2f67ab80dc25132"},
+    {file = "flake8-7.1.0-py2.py3-none-any.whl", hash = "sha256:2e416edcc62471a64cea09353f4e7bdba32aeb079b6e360554c659a122b1bc6a"},
+    {file = "flake8-7.1.0.tar.gz", hash = "sha256:48a07b626b55236e0fb4784ee69a465fbf59d79eec1f5b4785c3d3bc57d17aa5"},
 ]
 
 [package.dependencies]
 mccabe = ">=0.7.0,<0.8.0"
-pycodestyle = ">=2.11.0,<2.12.0"
+pycodestyle = ">=2.12.0,<2.13.0"
 pyflakes = ">=3.2.0,<3.3.0"
 
 [[package]]
@@ -1582,13 +1582,13 @@ pyasn1 = ">=0.4.6,<0.7.0"
 
 [[package]]
 name = "pycodestyle"
-version = "2.11.1"
+version = "2.12.0"
 description = "Python style guide checker"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pycodestyle-2.11.1-py2.py3-none-any.whl", hash = "sha256:44fe31000b2d866f2e41841b18528a505fbd7fef9017b04eff4e2648a0fadc67"},
-    {file = "pycodestyle-2.11.1.tar.gz", hash = "sha256:41ba0e7afc9752dfb53ced5489e89f8186be00e599e712660695b7a75ff2663f"},
+    {file = "pycodestyle-2.12.0-py2.py3-none-any.whl", hash = "sha256:949a39f6b86c3e1515ba1787c2022131d165a8ad271b11370a8819aa070269e4"},
+    {file = "pycodestyle-2.12.0.tar.gz", hash = "sha256:442f950141b4f43df752dd303511ffded3a04c2b6fb7f65980574f0c31e6e79c"},
 ]
 
 [[package]]
@@ -1755,6 +1755,7 @@ files = [
     {file = "PyYAML-6.0.1-cp311-cp311-win_amd64.whl", hash = "sha256:bf07ee2fef7014951eeb99f56f39c9bb4af143d8aa3c21b1677805985307da34"},
     {file = "PyYAML-6.0.1-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:855fb52b0dc35af121542a76b9a84f8d1cd886ea97c84703eaa6d88e37a2ad28"},
     {file = "PyYAML-6.0.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:40df9b996c2b73138957fe23a16a4f0ba614f4c0efce1e9406a184b6d07fa3a9"},
+    {file = "PyYAML-6.0.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a08c6f0fe150303c1c6b71ebcd7213c2858041a7e01975da3a99aed1e7a378ef"},
     {file = "PyYAML-6.0.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6c22bec3fbe2524cde73d7ada88f6566758a8f7227bfbf93a408a9d86bcc12a0"},
     {file = "PyYAML-6.0.1-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:8d4e9c88387b0f5c7d5f281e55304de64cf7f9c0021a3525bd3b1c542da3b0e4"},
     {file = "PyYAML-6.0.1-cp312-cp312-win32.whl", hash = "sha256:d483d2cdf104e7c9fa60c544d92981f12ad66a457afae824d146093b8c294c54"},
