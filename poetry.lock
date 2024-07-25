@@ -1169,13 +1169,13 @@ files = [
 
 [[package]]
 name = "koji-fedoramessaging-messages"
-version = "1.2.4"
+version = "1.2.5"
 description = "A schema package for messages sent by the koji-fedoramessaging plugin"
 optional = true
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "koji_fedoramessaging_messages-1.2.4-py3-none-any.whl", hash = "sha256:2fdac132c46f6aad4e2d0639f32ead4e0250ff3a6b12a6f9049e21975118c816"},
-    {file = "koji_fedoramessaging_messages-1.2.4.tar.gz", hash = "sha256:c9b321fbb6d17cb297ef3a27460147eb3aca303a2efe5627515ba1ba42423578"},
+    {file = "koji_fedoramessaging_messages-1.2.5-py3-none-any.whl", hash = "sha256:9c43244da36b06431e5e1b6d3e815bd7f15ba362578b8315f0e5ac31b1bab421"},
+    {file = "koji_fedoramessaging_messages-1.2.5.tar.gz", hash = "sha256:d91b63d49001438e6eef2c5d0b53c7b963dc8e5043e2390961b5cda11b63e05f"},
 ]
 
 [package.dependencies]
