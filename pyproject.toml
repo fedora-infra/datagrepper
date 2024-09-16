@@ -54,6 +54,7 @@ discourse2fedmsg-messages = {version = "*", optional = true}
 fedocal-messages = {version = "*", optional = true}
 fedorainfra-ansible-messages = {version = "*", optional = true}
 fedora-elections-messages = {version = "*", optional = true}
+fedora-image-uploader-messages = {version = "*", optional = true}
 fedora-messaging-git-hook-messages = {version = "*", optional = true}
 fedora-messaging-the-new-hotness-schema = {version = "*", optional = true}
 fedora-planet-messages = {version = "*", optional = true}
@@ -93,6 +94,7 @@ schemas = [
   "fedocal-messages",
   "fedorainfra-ansible-messages",
   "fedora-elections-messages",
+  "fedora-image-uploader-messages",
   "fedora-messaging-git-hook-messages",
   "fedora-messaging-the-new-hotness-schema",
   "fedora-planet-messages",
