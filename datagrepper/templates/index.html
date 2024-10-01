@@ -1,129 +1,61 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <title>Datagrepper</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    {% if config.CONTENT_SECURITY_POLICY %}
-    <meta http-equiv="Content-Security-Policy" content="{{ config.CONTENT_SECURITY_POLICY }}">
-    {% endif %}
-
-    <!-- Styles -->
-    <link href="{{config.THEME_CSS_URL}}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5shiv.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <!--
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-57-precomposed.png">
-    -->
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/fedora-bootstrap-fonts.css') }}">
-    <!-- Odometr includes -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/odometer.css') }}">
-    <script src="{{ url_for('static', filename='odometer.js') }}"></script>
-  </head>
-
+<html lang="en">
+  {% include '_head.html' %}
   <body>
-
-                <div class="masthead">
-                  <div class="container-narrow">
-                    <img src="{{ url_for('static', filename='datagrepper.png') }}" height=40px />
-                  </div>
-                </div>
-                <nav class="navbar navbar-light navbar-underline p-t-0 p-b-0">
-                <div class="container-narrow">
-                        <ul class="nav navbar-nav nav-justified nav-underline">
-                            <li{% if request.endpoint == 'index' %} class="active nav-item"{% else %} class="nav-item" {% endif %}><a class="nav-link" href="{{ url_for('index') }}">Getting&nbsp;started</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('raw') }}?rows_per_page=1&delta=127800">Feed</a></li>
-                            <!-- <li{% if request.endpoint == 'charts' %} class="active"{% endif %}><a href="{{ url_for('doc', page='charts') }}">Charts</a></li> -->
-                            <li{% if request.endpoint == 'reference' %} class="active nav-item" {% else %} class="nav-item" {% endif %}><a class="nav-link" href="{{ url_for('doc', page='reference') }}">Reference</a></li>
-                            <li{% if request.endpoint == 'widget' %} class="active nav-item" {% else %} class="nav-item" {% endif %}><a class="nav-link" href="{{ url_for('doc', page='widget') }}">Embedding</a></li>
-                            <li class="nav-item"><a class="nav-link" href="https://github.com/fedora-infra/datagrepper">Source</a></li>
-                            <li class="nav-item"><a class="nav-link" href="https://github.com/fedora-infra/datagrepper/issues">Issues</a></li>
-                        </ul>
-                </div>
-                </nav>
-                <div class="bodycontent p-t-lg p-b-lg">
-                <div class="container-narrow">
-
+    {% include '_header.html' %}
+    <div class="bodycontent pt-5 pb-5">
+      <div class="container">
       {% if request.endpoint == 'index' %}
-      <div class="page-header">
-        <h1>JSON {{config.BUS_INFO.shortname}} API</h1>
-        <p class="lead">Using HTTP GET requests, you can query for all
-        kinds of historical data from the <a href="{{config.BUS_INFO.docs}}">
-        {{config.BUS_INFO.longname}}</a>: events by username, by package, by message
-        source, by topic&hellip; you name it.</p>
-        <div class="text-center">
-          <span id="odometer" class="odometer">{{ total }}</span>
+        <div class="page-header">
+          <h1>JSON {{config.BUS_INFO.shortname}} API</h1>
+          <p class="lead">Using HTTP GET requests, you can query for all
+          kinds of historical data from the <a href="{{config.BUS_INFO.docs}}">
+          {{config.BUS_INFO.longname}}</a>: events by username, by package, by message
+          source, by topic&hellip; you name it.</p>
+          <div class="text-center">
+            <span id="odometer" class="odometer">{{ total }}</span>
+          </div>
         </div>
-      </div>
 
-      {% if config.WEBSOCKET_URL %}
-      <script>
-          var count = {{total}};
-          $(document).ready(function() {
-             WebSocketSetup();
-          });
+        {% if config.WEBSOCKET_URL %}
+        <script>
+            var count = {{total}};
+            $(document).ready(function() {
+              WebSocketSetup();
+            });
 
-          function WebSocketSetup()
-          {
-            if ("WebSocket" in window)
+            function WebSocketSetup()
             {
-                var element = document.getElementById("odometer");
-                // Let us open a web socket
-                var ws = new WebSocket("{{ config.WEBSOCKET_URL }}");
-                ws.onopen = function(e)
-                {
-                    // Web Socket is connected, send data using send()
-                    ws.send(JSON.stringify({topic: '__topic_subscribe__', body: '*'}));
-                };
-                ws.onmessage = function (evt)
-                {
-                    count = count + 1;
-                    element.innerHTML = count;
-                };
-                ws.onclose = function(e){ws=null;};
-                ws.onerror = function(e){ws=null;};
+              if ("WebSocket" in window)
+              {
+                  var element = document.getElementById("odometer");
+                  // Let us open a web socket
+                  var ws = new WebSocket("{{ config.WEBSOCKET_URL }}");
+                  ws.onopen = function(e)
+                  {
+                      // Web Socket is connected, send data using send()
+                      ws.send(JSON.stringify({topic: '__topic_subscribe__', body: '*'}));
+                  };
+                  ws.onmessage = function (evt)
+                  {
+                      count = count + 1;
+                      element.innerHTML = count;
+                  };
+                  ws.onclose = function(e){ws=null;};
+                  ws.onerror = function(e){ws=null;};
+              }
             }
-          }
-      </script>
+        </script>
+        {% endif %}
       {% endif %}
-      {% endif %}
-
-      <div class="row marketing">
-        <div class="col-md-12">
-          {{ docs }}
+        <div class="row">
+          <div class="col-md-12">
+            {{ docs }}
+          </div>
         </div>
       </div>
-</div>
-</div>
-    <div class="footer p-t p-b text-center">
-        <div class="container-narrow">
-            <p class="text-muted credit">
-            Datagrepper is Powered by <a href="{{config.BUS_INFO.docs}}">{{config.BUS_INFO.shortname}}</a>. The
-            <a href="https://github.com/fedora-infra/datagrepper">source</a>
-            and
-            <a href="https://github.com/fedora-infra/datagrepper/issues">issue tracker</a>
-            are available on github.
-            </p>
-            <p class="text-muted">
-            Running <code>datagrepper-{{grepper_version}}</code>,
-            <code>datanommer-models-{{models_version}}</code>
-            </p>
-        </div>
     </div>
-
+    {% include '_footer.html' %}  
     <script src="{{ url_for('static', filename='jquery-2.1.0.min.js') }}"></script>
-</body></html>
-{# vim: set ts=2 sw=2 sta et syn=htmldjango: #}
+  </body>
+</html>

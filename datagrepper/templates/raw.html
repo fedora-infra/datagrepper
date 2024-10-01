@@ -1,5 +1,6 @@
 {% for msg_card in response %}
-    <tr><td class="raw-icons">
+    <li class="list-group-item d-flex align-content-center">
+      <div class="raw-icons">
         {% if msg_card.get("url") %}
           {% if msg_card.get("app_icon") and size in ("medium", "large", "extra-large") %}
           <a href="{{msg_card['url']}}"><img src="{{msg_card['app_icon']}}"></a>
@@ -14,23 +15,21 @@
         {% if msg_card.get("agent_avatar") and size in ("large", "extra-large") %}
         <img src="{{msg_card['agent_avatar']}}">
         {% endif %}
-      </td>
-        <td class="raw-message">
+      </div>
+        <div class="me-auto">
           <a href="{{url_for('raw')}}?topic={{msg_card['topic']}}"><b>{{ msg_card['topic'] }}</b></a>
           {% if size in ("medium", "large", "extra-large") %}
           {{ msg_card["summary"] }}
           {% endif %}
-          <a href="{{url_for('msg_id')}}?id={{msg_card['msg_id']}}&is_raw=true&size=extra-large">
-            <span class="details-history">JSON</span>
-          </a>
-        {% if is_raw %}
-            <a href="#" onclick="history.go(-1)">Go Back</a>
-        {% endif %}
-        </td>
-
-    <td class="datetime">
+        </div>
+    <div class="text-muted">
         {{ msg_card["date"] }}
         {% if size in ('large', 'extra-large') %} - {{ msg_card["timestamp"].strftime('%Y-%m-%d %H:%M:%S') }} UTC{% endif %}
-    </td>
-          </tr>
+    </div>
+  {% if is_raw %}
+    <a class="ms-2" href="#" onclick="history.go(-1)" >Go Back</a>
+  {% else %}
+    <a class="ms-2" href="{{url_for('msg_id')}}?id={{msg_card['msg_id']}}&is_raw=true&size=extra-large">View JSON</a>
+  {% endif %}
+  </li>
 {% endfor %}

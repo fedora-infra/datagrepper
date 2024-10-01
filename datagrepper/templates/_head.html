@@ -1,0 +1,21 @@
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="History of the fedmsg bus" />
+    <meta name="author" content="Ralph Bean" />
+
+    {% if config.CONTENT_SECURITY_POLICY %}
+    <meta http-equiv="Content-Security-Policy" content="{{ config.CONTENT_SECURITY_POLICY }}" />
+    {% endif %}
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" />
+    <link href="{{ url_for('static', filename='fedora/fedora-bootstrap/fedora-bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='fedora/fonts/open-sans.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='fedora/fonts/font-awesome.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/raw.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/odometer.css') }}">
+    <script src="{{ url_for('static', filename='odometer.js') }}"></script>
+    <title>Datagrepper</title>
+</head>

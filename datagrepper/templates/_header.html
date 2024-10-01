@@ -1,0 +1,24 @@
+<div class="masthead">
+    <div class="container">
+      <img src="{{ url_for('static', filename='datagrepper.png') }}" height="40px" />
+    </div>
+</div>
+
+<nav class="navbar bg-secondary-subtle border-secondary-subtle border-bottom navbar-underline pt-0 pb-0 justify-content-center">
+    <div class="container-narrow">
+        <ul class="nav nav-underline">
+        <li class="nav-item">
+            <a class="nav-link {{'active' if request.endpoint == 'index'}}" href="{{ url_for('index') }}">Getting&nbsp;started</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{'active' if request.endpoint == 'raw'}}" href="{{ url_for('raw') }}?rows_per_page=1&delta=127800">Feed</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{'active' if docname == 'reference'}}" href="{{ url_for('doc', page='reference') }}">Reference</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{'active' if docname == 'widget'}}" href="{{ url_for('doc', page='widget') }}">Embedding</a>
+        </li>
+        </ul>
+    </div>
+</nav>

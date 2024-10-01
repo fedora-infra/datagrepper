@@ -1,0 +1,62 @@
+<div class="footer py-5 text-white">
+    <div class="container">
+        <div class="row footerlinks justify-content-center">
+            <div class="col-sm-3 col-4 mt-3">
+                <div>
+                    <dl>
+                        <dt class="text-uppercase h4"><strong>About</strong></dt>
+                        <dd><a href="https://getfedora.org/">Get Fedora Linux</a></dd>
+                        <dd><a href="https://getfedora.org/en/sponsors/">Sponsors</a></dd>
+                        <dd><a href="https://fedoramagazine.org">Fedora Magazine</a></dd>
+                        <dd><a href="https://fedoraproject.org/wiki/Legal:Main#Legal">Legal</a></dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="col-sm-3 col-4 mt-3">
+                <div>
+                    <dl>
+                        <dt class="text-uppercase h4"><strong>Support</strong></dt>
+                        <dd><a href="https://fedoraproject.org/wiki/Communicating_and_getting_help">Get Help</a></dd>
+                        <dd><a href="https://ask.fedoraproject.org/">Ask Fedora</a></dd>
+                        <dd><a href="https://discussion.fedoraproject.org/c/ask/common-issues/">Common Issues</a></dd>
+                        <dd><a href="https://developer.fedoraproject.org/">Fedora Developer Portal</a></dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="col-sm-3 col-4 mt-3">
+                <div>
+                    <dl>
+                        <dt class="text-uppercase h4"><strong>Community</strong></dt>
+                        <dd><a href="https://fedoraproject.org/wiki/Join">Join Fedora</a></dd>
+                        <dd><a href="https://fedoraproject.org/wiki/Overview">About Fedora</a></dd>
+                        <dd><a href="http://fedoraplanet.org">Planet Fedora</a></dd>
+                        <dd><a href="https://accounts.fedoraproject.org/">Fedora Accounts</a></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="row footerlinks">
+            <div class="col-12 text-center">
+                <p> Fedora is sponsored by Red Hat. <a href="https://www.redhat.com/en/technologies/linux-platforms/articles/relationship-between-fedora-and-rhel">Learn more about the relationship between Red Hat and Fedora »</a> </p>
+                <div class="py-3"> <a href="https://www.redhat.com/" class="border-0"><img class="rh-logo" height=34px src="{{ url_for('static', filename='fedora/redhat.png') }}" alt="Red Hat Logo"></a> </div>
+                <p> © 2014 - 2024 Red Hat, Inc. and others. </p>
+            </div>
+            <div class="col-12 text-center">
+                <p>
+                    Datagrepper is Powered by
+                    <a href="{{config.BUS_INFO.docs}}">{{config.BUS_INFO.shortname}}</a>.
+                    The
+                    <a href="https://github.com/fedora-infra/datagrepper">source</a>
+                    and
+                    <a href="https://github.com/fedora-infra/datagrepper/issues"
+                      >issue tracker</a
+                    >
+                    are available on github.
+                  </p>
+                  <p>
+                    Running <code>datagrepper-{{grepper_version}}</code>,
+                    <code>datanommer-models-{{models_version}}</code>
+                  </p>
+        </div>
+    </div>
+</div>
