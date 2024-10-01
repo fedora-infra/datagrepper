@@ -164,6 +164,7 @@ def modify_html(html):
     substitutions = {
         '<tt class="docutils literal">': "<code>",
         "</tt>": "</code>",
+        '<pre class="literal-block">': '<pre class="bg-light p-3 border">',
     }
     for old, new in substitutions.items():
         html = html.replace(old, new)
@@ -617,7 +618,7 @@ def messagecount():
 def doc(page):
     if page not in htmldocs:
         flask.abort(404)
-    return flask.render_template("index.html", docs=load_docs(page))
+    return flask.render_template("index.html", docs=load_docs(page), docname=page)
 
 
 @app.errorhandler(404)

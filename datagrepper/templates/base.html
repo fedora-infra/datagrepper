@@ -1,93 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="History of the fedmsg bus" />
-    <meta name="author" content="Ralph Bean" />
-
-    {% if config.CONTENT_SECURITY_POLICY %}
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="{{ config.CONTENT_SECURITY_POLICY }}"
-    />
-    {% endif %}
-
-    <link
-      rel="shortcut icon"
-      href="{{ url_for('static', filename='favicon.png') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/fedora-bootstrap-fonts.css') }}"
-    />
-
-    <title>Datagrepper</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="{{config.THEME_CSS_URL}}" rel="stylesheet" />
-    <link
-      href="{{ url_for('static', filename='css/raw.css') }}"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/main.css') }}"
-    />
-  </head>
-
+  {% include '_head.html' %}
   <body>
-    <div class="masthead">
-      <div class="container">
-        <img
-          src="{{ url_for('static', filename='datagrepper.png') }}"
-          height="40px"
-        />
-      </div>
-    </div>
-
-    <nav class="navbar navbar-light navbar-underline p-t-0 p-b-0">
-      <div class="container-narrow">
-        <ul class="nav navbar-nav nav-justified nav-underline">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('index') }}"
-              >Getting&nbsp;started</a
-            >
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="{{ url_for('raw') }}?rows_per_page=1"
-              >Feed</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('doc', page='reference') }}"
-              >Reference</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('doc', page='widget') }}"
-              >Embedding</a
-            >
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              href="https://github.com/fedora-infra/datagrepper"
-              >Source</a
-            >
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              href="https://github.com/fedora-infra/datagrepper/issues"
-              >Issues</a
-            >
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <div class="bodycontent p-t-lg">
+    {% include '_header.html' %}
+    <div class="bodycontent pt-5 pb-5">
       <div class="container">
         <div class="page-header row">
           <div class="col-md-6">
@@ -124,9 +40,9 @@
               role="button"
             ></span>
           </div>
-          <table class="table table-sm" id="message-container">
+          <ul class="list-group" id="message-container">
             {% include 'raw.html' %}
-          </table>
+          </ul>
           {% if size == 'extra-large' %} {% autoescape false %} {{msg_string}}
           {% endautoescape %} {% endif %}
         </div>
@@ -143,25 +59,7 @@
       </div>
     </div>
 
-    <div class="footer p-t p-b text-center">
-      <div class="container">
-        <p class="text-muted credit">
-          Datagrepper is Powered by
-          <a href="{{config.BUS_INFO.docs}}">{{config.BUS_INFO.shortname}}</a>.
-          The
-          <a href="https://github.com/fedora-infra/datagrepper">source</a>
-          and
-          <a href="https://github.com/fedora-infra/datagrepper/issues"
-            >issue tracker</a
-          >
-          are available on github.
-        </p>
-        <p class="text-muted">
-          Running <code>datagrepper-{{grepper_version}}</code>,
-          <code>datanommer-models-{{models_version}}</code>
-        </p>
-      </div>
-    </div>
+    {% include '_footer.html' %}
 
     <script src="{{ url_for('static', filename='jquery-2.1.0.min.js') }}"></script>
     {% if autoscroll %}
@@ -177,5 +75,6 @@
     <script>
       $("#messages-pending").hide();
     </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='fedora-bootstrap/fedora-bootstrap.min.js') }}"/>
   </body>
 </html>
