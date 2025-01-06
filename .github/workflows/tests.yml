@@ -19,8 +19,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          dnf install -y git krb5-devel libpq-devel
-          pip install poetry>=1.2
+          dnf install -y krb5-devel libpq-devel poetry python3-poetry-plugin-export
 
       - name: Mark the working directory as safe for Git
         run: git config --global --add safe.directory $PWD
@@ -41,8 +40,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          dnf install -y krb5-devel libpq-devel
-          pip install poetry>=1.2
+          dnf install -y krb5-devel libpq-devel poetry python3-poetry-plugin-export
 
       - name: Check licenses
         run: tox -e licenses
@@ -56,8 +54,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          dnf install -y krb5-devel libpq-devel
-          pip install poetry>=1.2
+          dnf install -y krb5-devel libpq-devel poetry python3-poetry-plugin-export
 
       - name: Build the docs
         run: tox -e docs
@@ -78,8 +75,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          dnf install -y krb5-devel libpq-devel
-          pip install poetry>=1.2
+          dnf install -y krb5-devel libpq-devel poetry python3-poetry-plugin-export
 
       - name: Build the docs
         run: tox -e ${{ matrix.tox_env }}
