@@ -1,4 +1,4 @@
-""" Contains code for producing embeddable widgets """
+"""Contains code for producing embeddable widgets"""
 
 import flask
 
