@@ -188,7 +188,7 @@ def preload_docs(endpoint):
 
     api_docs = modify_html(api_docs)
 
-    api_docs = markupsafe.Markup(api_docs)
+    api_docs = markupsafe.Markup(api_docs)  # nosec B704
     return api_docs
 
 
@@ -201,7 +201,7 @@ def load_docs(page):
     URL = app.config.get("DATAGREPPER_BASE_URL", flask.request.url_root)
     docs = htmldocs[page]
     docs = jinja2.Template(docs).render(URL=URL)
-    return markupsafe.Markup(docs)
+    return markupsafe.Markup(docs)  # nosec B704
 
 
 def count_all_messages():
