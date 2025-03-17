@@ -1,17 +1,17 @@
 # datagrepper
 
-Datagrepper is a web application and JSON API to retrieve historical messages sent via Fedora Messaging. [Datanommer](https://github.com/fedora-infra/datanommer/) is a seperate project and service that consumes messages from the Fedora Messaging queue and puts them in a database. These messages is what datagrepper queries. 
+Datagrepper is a web application and JSON API to retrieve historical messages sent via Fedora Messaging. [Datanommer](https://github.com/fedora-infra/datanommer/) is a separate project and service that consumes messages from the Fedora Messaging queue and puts them in a database. These messages are what Datagrepper queries. 
 
-Datagrepper is curently running in production at https://apps.fedoraproject.org/datagrepper/
+Datagrepper is currently running in production at https://apps.fedoraproject.org/datagrepper/.
 
 ## Development Environment
 
-Vagrant allows contributors to get quickly up and running with a datagrepper development environment by automatically configuring a virtual machine. 
+Vagrant allows contributors to get quickly up and running with a Datagrepper development environment by automatically configuring a virtual machine. 
 
-The datagrepper Vagrant environment configures configures and enables a datanommer service and database. The datanommer instance is configured to be empty when first provisioned, but to consume messages from the stage Fedora Messaging queue.
+The Datagrepper Vagrant environment configures and enables a Datanommer service and database. The Datanommer instance is configured to be empty when first provisioned, but it will consume messages from the staging Fedora Messaging queue.
 
 ### Install vagrant
-To get started, run the following commands to install the Vagrant and Virtualization packages needed, and start the libvirt service:
+To get started, run the following commands to install the Vagrant and Virtualization packages needed, and start the Libvirt service:
 
     $ sudo dnf install ansible libvirt vagrant-libvirt vagrant-sshfs vagrant-hostmanager
     $ sudo systemctl enable libvirtd
@@ -25,7 +25,7 @@ Next, check out the datagrepper code and run vagrant up:
     $ vagrant up
 
 ### Interacting with your development datagrepper
-After successful provisioning of the Datagrepper vagrant setup, the datagrepper web application will be accessible from your host machine's web browser at
+After successful provisioning of the Datagrepper Vagrant setup, the Datagrepper web application will be accessible from your host machine's web browser at:
 
 http://datagrepper.test:5000/
 
@@ -42,9 +42,9 @@ The vagrant setup also defines 4 handy commands to interact with the service tha
     $ datagrepper-start
     $ datagrepper-stop
     $ datagrepper-restart
-    $ dataprepper-logs
+    $ datagrepper-logs
 
-Additionally, the following commands are also available for interacting with the datanommer service:
+Additionally, the following commands are also available for interacting with the Datanommer service:
 
     $ datanommer-consumer-start
     $ datanommer-consumer-stop
