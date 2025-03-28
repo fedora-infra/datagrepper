@@ -1173,6 +1173,20 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "journal-to-fedora-messaging-messages"
+version = "1.0.0"
+description = "A schema package for messages sent by Journal to Fedora Messaging"
+optional = true
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "journal_to_fedora_messaging_messages-1.0.0-py3-none-any.whl", hash = "sha256:11f7cea79361a7b5dd689cddc2f4636b2da1e4b5e83226d2fd4f048757810f8e"},
+    {file = "journal_to_fedora_messaging_messages-1.0.0.tar.gz", hash = "sha256:c58d13008fc4d16dd93eb3117af798241a9ec5095368d393e236d205729a123d"},
+]
+
+[package.dependencies]
+fedora-messaging = ">=3.3.0,<4.0.0"
+
+[[package]]
 name = "jsonref"
 version = "1.1.0"
 description = "jsonref is a library for automatic dereferencing of JSON Reference objects for Python."
@@ -2805,9 +2819,9 @@ testing = ["coverage[toml]", "zope.event", "zope.testing"]
 
 [extras]
 deploy = ["gunicorn"]
-schemas = ["anitya-schema", "bodhi-messages", "bugzilla2fedmsg-schema", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-image-uploader-messages", "fedora-messaging-git-hook-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "fmn-messages", "kerneltest-messages", "koji-fedoramessaging-messages", "koschei-messages", "mailman3-fedmsg-plugin-schemas", "maubot-fedora-messages", "mdapi-messages", "mediawiki-messages", "meetbot-messages", "noggin-messages", "nuancier-messages", "pagure-messages", "tahrir-messages", "webhook-to-fedora-messaging-messages"]
+schemas = ["anitya-schema", "bodhi-messages", "bugzilla2fedmsg-schema", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-image-uploader-messages", "fedora-messaging-git-hook-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "fmn-messages", "journal-to-fedora-messaging-messages", "kerneltest-messages", "koji-fedoramessaging-messages", "koschei-messages", "mailman3-fedmsg-plugin-schemas", "maubot-fedora-messages", "mdapi-messages", "mediawiki-messages", "meetbot-messages", "noggin-messages", "nuancier-messages", "pagure-messages", "tahrir-messages", "webhook-to-fedora-messaging-messages"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "9ab9ec738ae1f875e7467677d1a6d4faddba32e566c77333cf1a20cc455fb5e2"
+content-hash = "529498b203947599388b671aae6a77972155c17ab072a55a7d21caacc0a853d3"

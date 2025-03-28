@@ -59,6 +59,7 @@ fedora-messaging-git-hook-messages = {version = "*", optional = true}
 fedora-messaging-the-new-hotness-schema = {version = "*", optional = true}
 fedora-planet-messages = {version = "*", optional = true}
 fmn-messages = {version = "*", optional = true}
+journal-to-fedora-messaging-messages = {version = "*", optional = true}
 kerneltest-messages = {version = "*", optional = true}
 koji-fedoramessaging-messages = {version = "*", optional = true}
 koschei-messages = {version = "*", optional = true}
@@ -101,6 +102,7 @@ schemas = [
   "fedora-messaging-the-new-hotness-schema",
   "fedora-planet-messages",
   "fmn-messages",
+  "journal-to-fedora-messaging-messages",
   "kerneltest-messages",
   "koji-fedoramessaging-messages",
   "koschei-messages",
