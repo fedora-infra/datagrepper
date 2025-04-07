@@ -1174,13 +1174,13 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "journal-to-fedora-messaging-messages"
-version = "1.0.1"
+version = "1.0.2"
 description = "A schema package for messages sent by Journal to Fedora Messaging"
 optional = true
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "journal_to_fedora_messaging_messages-1.0.1-py3-none-any.whl", hash = "sha256:6eb7b01054b89bd304d16105066e47a15f6627ef022c56f4c3d05e48519a7ecf"},
-    {file = "journal_to_fedora_messaging_messages-1.0.1.tar.gz", hash = "sha256:e9cc8295095fadf19285bb0b9439dca2db06dda2bf64fc96f521fa52f85c9d57"},
+    {file = "journal_to_fedora_messaging_messages-1.0.2-py3-none-any.whl", hash = "sha256:28748804119ee730563dc56d6788620bb69f474a38594877684efb6d53428437"},
+    {file = "journal_to_fedora_messaging_messages-1.0.2.tar.gz", hash = "sha256:48283d6db059537f2a77e4ce8300abe3c175297ccd4d2280449e205aeee22e84"},
 ]
 
 [package.dependencies]
@@ -1792,13 +1792,13 @@ dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments
 
 [[package]]
 name = "pytest-cov"
-version = "6.1.0"
+version = "6.1.1"
 description = "Pytest plugin for measuring coverage."
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "pytest_cov-6.1.0-py3-none-any.whl", hash = "sha256:cd7e1d54981d5185ef2b8d64b50172ce97e6f357e6df5cb103e828c7f993e201"},
-    {file = "pytest_cov-6.1.0.tar.gz", hash = "sha256:ec55e828c66755e5b74a21bd7cc03c303a9f928389c0563e50ba454a6dbe71db"},
+    {file = "pytest_cov-6.1.1-py3-none-any.whl", hash = "sha256:bddf29ed2d0ab6f4df17b4c55b0a657287db8684af9c42ea546b21b1041b3dde"},
+    {file = "pytest_cov-6.1.1.tar.gz", hash = "sha256:46935f7aaefba760e716c2ebfbe1c216240b9592966e7da99ea8292d4d3e2a0a"},
 ]
 
 [package.dependencies]
@@ -2590,13 +2590,13 @@ files = [
 
 [[package]]
 name = "typing-extensions"
-version = "4.13.0"
+version = "4.13.1"
 description = "Backported and Experimental Type Hints for Python 3.8+"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "typing_extensions-4.13.0-py3-none-any.whl", hash = "sha256:c8dd92cc0d6425a97c18fbb9d1954e5ff92c1ca881a309c45f06ebc0b79058e5"},
-    {file = "typing_extensions-4.13.0.tar.gz", hash = "sha256:0a4ac55a5820789d87e297727d229866c9650f6521b64206413c4fbada24d95b"},
+    {file = "typing_extensions-4.13.1-py3-none-any.whl", hash = "sha256:4b6cf02909eb5495cfbc3f6e8fd49217e6cc7944e145cdda8caa3734777f9e69"},
+    {file = "typing_extensions-4.13.1.tar.gz", hash = "sha256:98795af00fb9640edec5b8e31fc647597b4691f099ad75f469a2616be1a76dff"},
 ]
 
 [[package]]
