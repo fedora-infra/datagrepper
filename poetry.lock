@@ -13,13 +13,13 @@ files = [
 
 [[package]]
 name = "alembic"
-version = "1.16.1"
+version = "1.16.2"
 description = "A database migration tool for SQLAlchemy."
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "alembic-1.16.1-py3-none-any.whl", hash = "sha256:0cdd48acada30d93aa1035767d67dff25702f8de74d7c3919f2e8492c8db2e67"},
-    {file = "alembic-1.16.1.tar.gz", hash = "sha256:43d37ba24b3d17bc1eb1024fe0f51cd1dc95aeb5464594a02c6bb9ca9864bfa4"},
+    {file = "alembic-1.16.2-py3-none-any.whl", hash = "sha256:5f42e9bd0afdbd1d5e3ad856c01754530367debdebf21ed6894e34af52b3bb03"},
+    {file = "alembic-1.16.2.tar.gz", hash = "sha256:e53c38ff88dadb92eb22f8b150708367db731d58ad7e9d417c9168ab516cbed8"},
 ]
 
 [package.dependencies]
@@ -654,6 +654,26 @@ SQLAlchemy = ">=1.3.24,<3.0.0"
 schemas = ["anitya-schema", "bodhi-messages", "bugzilla2fedmsg-schema", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-image-uploader-messages", "fedora-messaging-git-hook-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "fmn-messages", "journal-to-fedora-messaging-messages", "kerneltest-messages (>=1.0.0,<2.0.0)", "koji-fedoramessaging-messages (>=1.2.6,<2.0.0)", "koschei-messages", "mailman3-fedmsg-plugin-schemas", "maubot-fedora-messages", "mdapi-messages", "mediawiki-messages", "meetbot-messages", "noggin-messages", "nuancier-messages", "pagure-messages", "tahrir-messages", "webhook-to-fedora-messaging-messages"]
 
 [[package]]
+name = "datanommer-models"
+version = "1.4.4"
+description = "SQLAlchemy models for datanommer"
+optional = false
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "datanommer_models-1.4.4-py3-none-any.whl", hash = "sha256:13079eb09ced0d70b9430a4048c7c1ac6e3e1048e1da485aceef1a272fe0ccda"},
+    {file = "datanommer_models-1.4.4.tar.gz", hash = "sha256:2c5b04289778d369cef9675d4e99f96df479e24a3f1f33d6d6c74ee40c6ca4bf"},
+]
+
+[package.dependencies]
+alembic = ">=1.6.5,<2.0.0"
+fedora-messaging = ">=2.1.0"
+psycopg2 = {version = ">=2.9.0,<3.0.0", markers = "python_version >= \"3.11\""}
+SQLAlchemy = ">=1.3.24,<3.0.0"
+
+[package.extras]
+schemas = ["anitya-schema", "bodhi-messages", "bugzilla2fedmsg-schema", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-image-uploader-messages", "fedora-messaging-git-hook-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "fmn-messages", "journal-to-fedora-messaging-messages", "kerneltest-messages (>=1.0.0,<2.0.0)", "koji-fedoramessaging-messages (>=1.2.6,<2.0.0)", "koschei-messages", "mailman3-fedmsg-plugin-schemas", "maubot-fedora-messages", "mdapi-messages", "mediawiki-messages", "meetbot-messages", "noggin-messages", "nuancier-messages", "pagure-messages", "tahrir-messages", "webhook-to-fedora-messaging-messages"]
+
+[[package]]
 name = "decorator"
 version = "5.2.1"
 description = "Decorators for Humans"
@@ -765,13 +785,13 @@ test = ["coverage", "pytest", "pytest-cov"]
 
 [[package]]
 name = "fedora-messaging"
-version = "3.7.1"
+version = "3.8.0"
 description = "A set of tools for using Fedora's messaging infrastructure"
 optional = false
-python-versions = "<4.0.0,>=3.8.10"
+python-versions = "<4.0.0,>=3.9.0"
 files = [
-    {file = "fedora_messaging-3.7.1-py3-none-any.whl", hash = "sha256:e32e5bfd5f119ebacf05c100268487a1778e3dc99c4332e1ac271e846673d3bd"},
-    {file = "fedora_messaging-3.7.1.tar.gz", hash = "sha256:edb592e21927ab2f0999d670701907b178c37a77eceb6599b382f9ea4fcc1829"},
+    {file = "fedora_messaging-3.8.0-py3-none-any.whl", hash = "sha256:ba178db2f6070350bfe4ca4d3a4e3e910d25985b3f268acb331783c9d1ca13e7"},
+    {file = "fedora_messaging-3.8.0.tar.gz", hash = "sha256:31413f1e28b0a5b1f79c42cf04e57232d75b9193a24b4ac4d6c0acb8bcb45c4e"},
 ]
 
 [package.dependencies]
@@ -863,19 +883,19 @@ typing = ["typing-extensions (>=4.12.2)"]
 
 [[package]]
 name = "flake8"
-version = "7.2.0"
+version = "7.3.0"
 description = "the modular source code checker: pep8 pyflakes and co"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "flake8-7.2.0-py2.py3-none-any.whl", hash = "sha256:93b92ba5bdb60754a6da14fa3b93a9361fd00a59632ada61fd7b130436c40343"},
-    {file = "flake8-7.2.0.tar.gz", hash = "sha256:fa558ae3f6f7dbf2b4f22663e5343b6b6023620461f8d4ff2019ef4b5ee70426"},
+    {file = "flake8-7.3.0-py2.py3-none-any.whl", hash = "sha256:b9696257b9ce8beb888cdbe31cf885c90d31928fe202be0889a7cdafad32f01e"},
+    {file = "flake8-7.3.0.tar.gz", hash = "sha256:fe044858146b9fc69b551a4b490d69cf960fcb78ad1edcb84e7fbb1b4a8e3872"},
 ]
 
 [package.dependencies]
 mccabe = ">=0.7.0,<0.8.0"
-pycodestyle = ">=2.13.0,<2.14.0"
-pyflakes = ">=3.3.0,<3.4.0"
+pycodestyle = ">=2.14.0,<2.15.0"
+pyflakes = ">=3.4.0,<3.5.0"
 
 [[package]]
 name = "flask"
@@ -1675,13 +1695,13 @@ pyasn1 = ">=0.6.1,<0.7.0"
 
 [[package]]
 name = "pycodestyle"
-version = "2.13.0"
+version = "2.14.0"
 description = "Python style guide checker"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "pycodestyle-2.13.0-py2.py3-none-any.whl", hash = "sha256:35863c5974a271c7a726ed228a14a4f6daf49df369d8c50cd9a6f58a5e143ba9"},
-    {file = "pycodestyle-2.13.0.tar.gz", hash = "sha256:c8415bf09abe81d9c7f872502a6eee881fbe85d8763dd5b9924bb0a01d67efae"},
+    {file = "pycodestyle-2.14.0-py2.py3-none-any.whl", hash = "sha256:dd6bf7cb4ee77f8e016f9c8e74a35ddd9f67e1d5fd4184d86c3b98e07099f42d"},
+    {file = "pycodestyle-2.14.0.tar.gz", hash = "sha256:c4b5b517d278089ff9d0abdec919cd97262a3367449ea1c8b49b91529167b783"},
 ]
 
 [[package]]
@@ -1697,13 +1717,13 @@ files = [
 
 [[package]]
 name = "pyflakes"
-version = "3.3.2"
+version = "3.4.0"
 description = "passive checker of Python programs"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "pyflakes-3.3.2-py2.py3-none-any.whl", hash = "sha256:5039c8339cbb1944045f4ee5466908906180f13cc99cc9949348d10f82a5c32a"},
-    {file = "pyflakes-3.3.2.tar.gz", hash = "sha256:6dfd61d87b97fba5dcfaaf781171ac16be16453be6d816147989e7f6e6a9576b"},
+    {file = "pyflakes-3.4.0-py2.py3-none-any.whl", hash = "sha256:f742a7dbd0d9cb9ea41e9a24a918996e8170c799fa528688d40dd582c8265f4f"},
+    {file = "pyflakes-3.4.0.tar.gz", hash = "sha256:b24f96fafb7d2ab0ec5075b7350b3d2d2218eab42003821c06344973d3ea2f58"},
 ]
 
 [[package]]
@@ -1729,13 +1749,13 @@ test = ["cairosvg", "coveralls", "lxml", "pyquery", "pytest", "pytest-cov", "ruf
 
 [[package]]
 name = "pygments"
-version = "2.19.1"
+version = "2.19.2"
 description = "Pygments is a syntax highlighting package written in Python."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pygments-2.19.1-py3-none-any.whl", hash = "sha256:9ea1544ad55cecf4b8242fab6dd35a93bbce657034b0611ee383099054ab6d8c"},
-    {file = "pygments-2.19.1.tar.gz", hash = "sha256:61c16d2a8576dc0649d9f39e089b5f02bcd27fba10d8fb4dcc28173f7a45151f"},
+    {file = "pygments-2.19.2-py3-none-any.whl", hash = "sha256:86540386c03d588bb81d44bc3928634ff26449851e99741617ecb9037ee5ec0b"},
+    {file = "pygments-2.19.2.tar.gz", hash = "sha256:636cb2477cec7f8952536970bc533bc43743542f70392ae026374600add5b887"},
 ]
 
 [package.extras]
@@ -1761,14 +1781,34 @@ docs = ["sphinx (!=5.2.0,!=5.2.0.post0,!=7.2.5)", "sphinx_rtd_theme"]
 test = ["pretend", "pytest (>=3.0.1)", "pytest-rerunfailures"]
 
 [[package]]
+name = "pyright"
+version = "1.1.402"
+description = "Command line wrapper for pyright"
+optional = true
+python-versions = ">=3.7"
+files = [
+    {file = "pyright-1.1.402-py3-none-any.whl", hash = "sha256:2c721f11869baac1884e846232800fe021c33f1b4acb3929cff321f7ea4e2982"},
+    {file = "pyright-1.1.402.tar.gz", hash = "sha256:85a33c2d40cd4439c66aa946fd4ce71ab2f3f5b8c22ce36a623f59ac22937683"},
+]
+
+[package.dependencies]
+nodeenv = ">=1.6.0"
+typing-extensions = ">=4.1"
+
+[package.extras]
+all = ["nodejs-wheel-binaries", "twine (>=3.4.1)"]
+dev = ["twine (>=3.4.1)"]
+nodejs = ["nodejs-wheel-binaries"]
+
+[[package]]
 name = "pytest"
-version = "8.4.0"
+version = "8.4.1"
 description = "pytest: simple powerful testing with Python"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "pytest-8.4.0-py3-none-any.whl", hash = "sha256:f40f825768ad76c0977cbacdf1fd37c6f7a468e460ea6a0636078f8972d4517e"},
-    {file = "pytest-8.4.0.tar.gz", hash = "sha256:14d920b48472ea0dbf68e45b96cd1ffda4705f33307dcc86c676c1b5104838a6"},
+    {file = "pytest-8.4.1-py3-none-any.whl", hash = "sha256:539c70ba6fcead8e78eebbf1115e8b589e7565830d7d006a8723f19ac8a0afb7"},
+    {file = "pytest-8.4.1.tar.gz", hash = "sha256:7c67fd69174877359ed9371ec3af8a3d2b04741818c51e5e99cc1742251fa93c"},
 ]
 
 [package.dependencies]
@@ -2611,13 +2651,13 @@ files = [
 
 [[package]]
 name = "urllib3"
-version = "2.4.0"
+version = "2.5.0"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "urllib3-2.4.0-py3-none-any.whl", hash = "sha256:4e16665048960a0900c702d4a66415956a584919c03361cac9f1df5c5dd7e813"},
-    {file = "urllib3-2.4.0.tar.gz", hash = "sha256:414bc6535b787febd7567804cc015fee39daab8ad86268f1310a9250697de466"},
+    {file = "urllib3-2.5.0-py3-none-any.whl", hash = "sha256:e6b01673c0fa6a13e374b50871808eb3bf7046c4b125b216f6bf1cc604cff0dc"},
+    {file = "urllib3-2.5.0.tar.gz", hash = "sha256:3fc47733c7e419d4bc3f6b3dc2b4f890bb743906a30d56ba4a5bfa4bbff92760"},
 ]
 
 [package.extras]
@@ -2648,17 +2688,18 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 
 [[package]]
 name = "webhook-to-fedora-messaging-messages"
-version = "1.2.1"
+version = "1.3.0"
 description = "A schema package for messages sent by Webhook To Fedora Messaging"
 optional = true
-python-versions = "<4.0,>=3.8"
+python-versions = "<4.0,>=3.9"
 files = [
-    {file = "webhook_to_fedora_messaging_messages-1.2.1-py3-none-any.whl", hash = "sha256:b51b79925763feaeab4f5a81e046268a621ac7bc26ed70ef04df49fc7ee062e7"},
-    {file = "webhook_to_fedora_messaging_messages-1.2.1.tar.gz", hash = "sha256:b09475622da4d8035744542c847b36ebd98d840f89ad397d29ec22c07d2bf756"},
+    {file = "webhook_to_fedora_messaging_messages-1.3.0-py3-none-any.whl", hash = "sha256:e72355b00bf11542cb290153d484bf16eefb2cd45045def60f19b115144ec315"},
+    {file = "webhook_to_fedora_messaging_messages-1.3.0.tar.gz", hash = "sha256:81362ab7b839da6972ea5bba1db25c20d3310574be96db69d5e6c554b158a1a8"},
 ]
 
 [package.dependencies]
-fedora-messaging = ">=3.3.0,<4.0.0"
+fedora-messaging = ">=3.8.0,<4.0.0"
+pyright = ">=1.1.402,<2.0.0"
 
 [[package]]
 name = "werkzeug"
