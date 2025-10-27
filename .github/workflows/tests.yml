@@ -60,7 +60,7 @@ jobs:
         run: tox -e docs
 
       - name: Save the docs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: docs
           path: datagrepper/docs/_build/html
