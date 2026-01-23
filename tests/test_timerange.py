@@ -7,7 +7,6 @@ from dateutil import tz
 import datagrepper.app
 from datagrepper.util import assemble_timerange, datetime_to_seconds
 
-
 utc = datetime.timezone.utc
 
 

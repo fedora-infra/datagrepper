@@ -49,7 +49,6 @@ from datagrepper.util import (
     request_wants_html,
 )
 
-
 app = Flask(__name__)
 app.config.from_object("datagrepper.default_config")
 if "DATAGREPPER_CONFIG" in os.environ:

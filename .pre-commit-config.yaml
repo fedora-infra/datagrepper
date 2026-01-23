@@ -11,7 +11,6 @@ repos:
     hooks:
       - id: black
         language_version: python3
-        args: ["--check", "--diff"]
 
   - repo: https://github.com/pycqa/flake8
     rev: 7.3.0
