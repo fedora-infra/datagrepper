@@ -16,7 +16,6 @@ import os
 from argparse import ArgumentParser
 from subprocess import check_output
 
-
 EXCLUDE = ["dependabot[bot]", "renovate[bot]", "Weblate (bot)"]
 
 last_tag = check_output("git tag | sort -n | tail -n 1", shell=True, text=True).strip()

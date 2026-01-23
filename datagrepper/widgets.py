@@ -4,7 +4,6 @@ import flask
 
 from datagrepper.app import app
 
-
 js_helpers = """
 function include_js(url, success) {
     var script     = document.createElement('script');

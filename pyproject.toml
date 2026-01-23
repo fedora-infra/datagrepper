@@ -126,7 +126,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
 profile = "black"
-lines_after_imports = 2
 force_alphabetical_sort_within_sections = true
 
 [tool.black]
