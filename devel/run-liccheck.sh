@@ -13,11 +13,10 @@ curl -o $STRATEGY_TMPFILE $STRATEGY_URL
 
 poetry export --with dev --without-hashes -f requirements.txt -o $TMPFILE
 
-# liccheck requires pkg_resources
-# https://github.com/dhatim/python-license-check/issues/114
-poetry run pip install setuptools
-
 # Use pip freeze instead of poetry when it fails
 # poetry run pip freeze --exclude-editable --isolated > $TMPFILE
+
+# Liccheck requires pkg_resources: https://github.com/dhatim/python-license-check/issues/117
+poetry run pip install "setuptools<82.0.0"
 
 poetry run liccheck -r $TMPFILE -s $STRATEGY_TMPFILE
