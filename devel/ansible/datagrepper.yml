@@ -2,6 +2,8 @@
 - hosts: datagrepper
   become: true
   become_method: sudo
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
   roles:
     - postgresql
     - venv
