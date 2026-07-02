@@ -21,6 +21,7 @@ import os
 import re
 import traceback
 from datetime import datetime, timedelta
+from importlib.metadata import version
 
 import arrow
 import datanommer.models as dm
@@ -36,7 +37,6 @@ import pygments.lexers
 import sqlalchemy
 from flask import Flask
 from flask_healthz import HealthError, healthz
-from pkg_resources import get_distribution
 from werkzeug.exceptions import BadRequest
 
 from datagrepper.util import (
@@ -69,8 +69,8 @@ import datagrepper.widgets  # noqa: E402,F401
 def inject_variable():
     """Inject some global variables into all templates"""
     extras = {
-        "models_version": get_distribution("datanommer-models").version,
-        "grepper_version": get_distribution("datagrepper").version,
+        "models_version": version("datanommer-models"),
+        "grepper_version": version("datagrepper"),
     }
     return extras
 
